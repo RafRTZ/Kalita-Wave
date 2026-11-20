@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f4ede2">
+<title>Kalita sound test</title>
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="app/ui/styles.css">
+</head>
+<body>
+<div id="app"><main class="screen" id="root"><p class="lead">Loading.</p></main></div>
+<script type="module">
+// Sound test for a real iPhone (docs/BUILD_BRIEF.md section 5.3).
+// It answers one question: which audio session type lets cues be heard with the ringer switch on silent,
+// and does that type stop music from other apps? A Mac cannot answer it.
+
+import { audioSessionSupported, createCuePlayer, SESSION_TYPES, setSessionType } from './app/platform/audio.js';
+import { APP_VERSION, currentChannel, isHomeScreenApp } from './app/platform/channel.js';
+import { createStore } from './app/platform/storage.js';
+import { wakeLockSupported } from './app/platform/wakelock.js';
+import { h, mount, segmented } from './app/ui/dom.js';
+
+const SITUATIONS = [
+  { id: 'silent_music', label: 'Silent ON, music playing', music: true },
+  { id: 'silent_quiet', label: 'Silent ON, no music', music: false },
+  { id: 'ring_music', label: 'Silent OFF, music playing', music: true },
+  { id: 'ring_quiet', label: 'Silent OFF, no music', music: false },
+];
+const YES_NO = [
+  { value: 'yes', label: 'Heard it' },
+  { value: 'no', label: 'Silent' },
+];
+const MUSIC = [
+  { value: 'kept', label: 'Music on' },
+  { value: 'stopped', label: 'Music off' },
+];
+
+const store = createStore(currentChannel());
+const player = createCuePlayer();
+const root = document.getElementById('root');
+const saved = store.get('audiotest', {});
+const state = {
+  situation: SITUATIONS[0].id,
+  results: saved && typeof saved === 'object' ? saved : {},
+  playing: null,
+  message: '',
+};
+
+function cell(situation, type) {
+  return (state.results[situation] && state.results[situation][type]) || {};
+}
+
+function record(type, key, value) {
+  const forSituation = { ...(state.results[state.situation] || {}) };
+  forSituation[type] = { ...(forSituation[type] || {}), [key]: value };
+  state.results = { ...state.results, [state.situation]: forSituation };
+  store.set('audiotest', state.results);
+  draw();
+}
+
+function play(type) {
+  const applied = setSessionType(type);
+  player.close(); // a fresh AudioContext for every try
+  state.playing = type;
+  state.message = applied ? `Playing with session type "${applied}".` : 'Playing. This browser has no audio session control.';
+  draw();
+  player.unlock().then((running) => {
+    if (!running) {
+      state.playing = null;
+      state.message = 'The phone did not let audio start. Tap Play again.';
+      draw();
+      return;
+    }
+    player.playNow('headsup', 0.1);
+    player.playNow('tick', 1.6);
+    player.playNow('tick', 2.6);
+    player.playNow('tick', 3.6);
+    player.playNow('pour', 4.6);
+    setTimeout(() => {
+      if (state.playing !== type) return;
+      player.close();
+      state.playing = null;
+      state.message = 'Finished. Mark what happened. If music stopped, start it again before the next row.';
+      draw();
+    }, 6200);
+  });
+}
+
+function resultsText() {
+  const lines = [
+    `Kalita sound test, version ${APP_VERSION}`,
+    `Home Screen app: ${isHomeScreenApp() ? 'yes' : 'no'}. Audio session control: ${audioSessionSupported() ? 'yes' : 'no'}. Wake lock: ${wakeLockSupported() ? 'yes' : 'no'}.`,
+  ];
+  for (const situation of SITUATIONS) {
+    const rows = SESSION_TYPES.map((type) => {
+      const c = cell(situation.id, type);
+      if (!c.heard && !c.music) return null;
+      const heard = c.heard === 'yes' ? 'heard' : c.heard === 'no' ? 'silent' : 'not marked';
+      const music = situation.music ? `, music ${c.music === 'kept' ? 'kept on' : c.music === 'stopped' ? 'stopped' : 'not marked'}` : '';
+      return `  ${type}: ${heard}${music}`;
+    }).filter(Boolean);
+    if (rows.length) lines.push(situation.label, ...rows);
+  }
+  if (lines.length === 2) lines.push('Nothing marked yet.');
+  return lines.join('\n');
+}
+
+function verdict() {
+  const heardOnSilent = SESSION_TYPES.filter(
+    (type) => cell('silent_music', type).heard === 'yes' || cell('silent_quiet', type).heard === 'yes',
+  );
+  if (!heardOnSilent.length) return 'No type is marked as heard with the switch on silent yet.';
+  const keepsMusic = heardOnSilent.filter((type) => cell('silent_music', type).music === 'kept');
+  if (keepsMusic.length) return `Heard on silent without stopping music: ${keepsMusic.join(', ')}. That is the one to use.`;
+  return `Heard on silent: ${heardOnSilent.join(', ')}. None of them is marked as keeping music on, so the app keeps "playback" with its on-silent setting.`;
+}
+
+function copyResults() {
+  const text = resultsText();
+  const done = (ok) => {
+    state.message = ok ? 'Results copied. Paste them into the chat.' : 'Could not copy. Take a screenshot of the results instead.';
+    draw();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), () => done(false));
+  else done(false);
+}
+
+function draw() {
+  const situation = SITUATIONS.find((s) => s.id === state.situation);
+  mount(
+    root,
+    h('header', { class: 'top' }, h('h1', {}, 'Sound test'), h('a', { class: 'btn', href: './' }, 'Back to app')),
+    h(
+      'section',
+      { class: 'card pad' },
+      h('p', { class: 'lead' }, 'Which audio setting lets you hear cues with the ringer switch on silent, and does it stop your music?'),
+      h(
+        'ul',
+        { class: 'about-list' },
+        h('li', {}, isHomeScreenApp() ? 'Opened from the Home Screen: good.' : 'Not opened from the Home Screen. Add this page to the Home Screen and run it from there.'),
+        h('li', {}, audioSessionSupported() ? 'This phone lets a web app choose its audio session.' : 'This browser has no audio session control, so every row will behave the same.'),
+        h('li', {}, wakeLockSupported() ? 'Screen wake lock is available.' : 'Screen wake lock is not available on this phone.'),
+      ),
+    ),
+    h('div', { class: 'section-title' }, '1. Set the phone up, then pick that situation'),
+    segmented({
+      label: 'Situation',
+      extraClass: 'wrap',
+      value: state.situation,
+      options: SITUATIONS.map((s) => ({ value: s.id, label: s.label })),
+      onChange: (id) => {
+        state.situation = id;
+        state.message = '';
+        draw();
+      },
+    }),
+    h('div', { class: 'section-title' }, '2. Play each row and mark what happened'),
+    h('p', { class: 'note' }, 'Each row plays a soft tone, three ticks, and a chime: about five seconds. Turn the volume up first.'),
+    state.message ? h('p', { class: 'advisory caution', role: 'status' }, state.message) : null,
+    h(
+      'section',
+      { class: 'card pad' },
+      SESSION_TYPES.map((type) => {
+        const c = cell(state.situation, type);
+        return h(
+          'div',
+          { class: 'test-row' },
+          h('div', { class: 'test-name' }, type, type === 'play-and-record' ? ' (may use the earpiece)' : ''),
+          h(
+            'div',
+            { class: 'test-controls' },
+            h('button', { class: `btn${state.playing === type ? ' primary' : ''}`, type: 'button', onclick: () => play(type) }, state.playing === type ? 'Playing' : 'Play'),
+          ),
+          h(
+            'div',
+            { class: 'test-marks' },
+            segmented({ label: `Heard ${type}`, value: c.heard || null, options: YES_NO, onChange: (v) => record(type, 'heard', v) }),
+            situation.music ? segmented({ label: `Music with ${type}`, value: c.music || null, options: MUSIC, onChange: (v) => record(type, 'music', v) }) : null,
+          ),
+        );
+      }),
+    ),
+    h('div', { class: 'section-title' }, '3. Results'),
+    h('p', { class: 'lead' }, verdict()),
+    h('pre', { class: 'results' }, resultsText()),
+    h(
+      'div',
+      { class: 'btn-row' },
+      h('button', { class: 'btn primary grow', type: 'button', onclick: copyResults }, 'Copy results'),
+      h(
+        'button',
+        {
+          class: 'btn danger',
+          type: 'button',
+          onclick: () => {
+            if (!window.confirm('Clear every mark?')) return;
+            state.results = {};
+            store.remove('audiotest');
+            draw();
+          },
+        },
+        'Clear',
+      ),
+    ),
+  );
+}
+
+draw();
+</script>
+</body>
+</html>

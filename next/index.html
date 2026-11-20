@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kalita Wave">
+<meta name="theme-color" content="#f4ede2">
+<meta name="format-detection" content="telephone=no">
+<title>Kalita Wave</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="stylesheet" href="app/ui/styles.css">
+</head>
+<body>
+<div id="app">
+  <main id="view">
+    <div class="screen">
+      <h1>Kalita Wave</h1>
+      <p class="lead">Loading.</p>
+      <p class="note">If this stays on screen, the app did not load. The original calculator still works:</p>
+      <p><a class="btn" href="classic.html" id="classic-link">Open the original calculator</a></p>
+    </div>
+  </main>
+  <div id="sheet" class="sheet-layer" hidden></div>
+</div>
+<script>
+  // The same file is served at the root and under next/. Point the fallback link at the frozen original.
+  if (/(^|\/)next(\/|$)/.test(location.pathname)) document.getElementById('classic-link').setAttribute('href', '../classic.html');
+</script>
+<script type="module" src="app/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+# Decisions
+
+Answers to questions the build brief left open. Newest section last. If something here disagrees with
+`BUILD_BRIEF.md`, this file wins, because it records what the owner said after the brief was written.
+
+## Kickoff, 2026-11-20 (owner: "OK, use defaults")
+
+### Questions with an agreed default
+
+1. **Service worker versus "must open with no network".** Milestone 1 ships with no service worker, as the
+   brief says. A cold start in airplane mode is on the device checklist so the real behaviour is seen. To be
+   settled before Milestone 2, whose checklist requires airplane mode to work. The likely fix is a small
+   service worker that prefers the network and uses its saved copy only when offline.
+2. **Finer and coarser buttons before beans exist.** In Milestone 1 the per-bag offset is stored against the
+   house default recipe (storage name `house`). From Milestone 2 each bean has its own `grind_offset`.
+3. **Typical total brew time.** Not asked for. The one-time question asks only for the grind setting.
+4. **Recording actual time.** Shown on the Done screen and kept on the phone in the Milestone 2 `brews`
+   shape (storage name `brews`). There is no history screen yet.
+5. **Dose limits.** Every brewer accepts 5 to 60 g in 1 g steps. Advisories warn; nothing blocks. Each
+   brewer remembers its own last dose. The Wave 155 starts at 20 g until the owner gives a usual dose.
+6. **Cue overlaps.** With a 3 s heads-up, the heads-up tone replaces the T-3 tick. The count-in ticks for
+   its last 3 seconds and the pour chime plays at 0:00.
+7. **Sound after a reload or force-quit.** The run resumes at the right second straight away and shows a
+   "Tap to turn sound back on" bar, because iPhone audio needs a tap.
+8. **"Repo root otherwise untouched".** Read as: `index.html` is unchanged. Milestone 1 adds `classic.html`,
+   `CLAUDE.md`, `.gitignore`, `.nojekyll`, `docs/`, `tests/`, `scripts/`, `next/`, and `.claude/launch.json`.
+9. **Custom grinder default.** `micronsPerUnit` = 1000 / (max - min + step). Gives 25 for the Virtuoso.
+10. **Meaning of `verified`.** True means the fact is in a manufacturer-authored document, wherever it is
+    hosted. The Virtuoso `micronsPerUnit` of 25 is an estimate and is marked unverified.
+11. **The brief is public.** `docs/BUILD_BRIEF.md` is committed and will be public after the first push.
+
+### Readings of the brief
+
+- "Total" in the R1 and R2 formulas is the rounded total. T3 only matches that way.
+- Identity (R0) leaves water, steps, and time unchanged. Grind still goes through the grinder formula. When
+  a card prints no drain time, the finish time is the baseline formula.
+- Advisory limits are inclusive: a dose equal to a hard limit is a caution, not a warning. "The other Wave
+  fits" means the dose is inside that brewer's hard limits.
+- R1 does not enforce the 20 s minimum gap. Inside hard limits this only shows up on the provisional V60 at
+  10 g (pours at 0:25 and 0:40). Left as is.
+- "17-19 is normal" is the shown setting plus or minus one grinder step.
+- Calibration stores the grinder offset in whole steps: the owner's setting minus the app's setting for the
+  same brew with zero offsets.
+- In ounces, targets and water show one decimal; the dose shows two (36 g is 1.27 oz).
+- The channel comes from the URL: a path containing `/next/` is `next`, anything else is `live`. Settings
+  and calibration entered on `/next/` do not carry to the live icon. In Milestone 1 each phone holds its own.
+- Milestone 1 gear screens: view gear, switch brewer and grinder, add the provisional V60 and Chemex, custom
+  grinder, scale notes, calibration. No custom brewer or custom scale form.
+- "Brew screen" and "timer screen" are one screen in different states.
+
+## Milestone 1 build, 2026-11-20
+
+### Decisions made while building (the brief did not specify these)
+
+- **Where numbers live.** Engine constants, the house recipe, and timer constants are in
+  `next/app/engine/constants.js`. Brewer, grinder, and scale profiles are catalog data in
+  `next/app/data/catalog/`. Catalog files are `.js` modules that export plain data.
+- **Done button.** It appears once the last pour has started. "Back to timer" on the Done screen undoes a
+  Done tapped by accident; the clock carries on as if it had not been tapped.
+- **A brew nobody finishes.** It ends itself 10 minutes after the target with no time recorded, and the
+  screen is allowed to sleep. A run left paused for 30 minutes, or left on the Done screen for 30 minutes,
+  is dropped the next time the app is opened.
+- **Pause** works during the count-in too. The screen is kept awake while paused.
+- **Late cues.** A cue up to 0.3 seconds late still plays at once. Anything older is a missed cue and is
+  never replayed.
+- **Audio hand-back.** The app closes its audio at Done, Reset, and when sound is switched off, so other
+  apps get the phone's audio back.
+- **Audio session type, provisional.** "Play cues when the phone is on silent" on uses `playback`; off uses
+  `ambient`. To be confirmed or changed by the sound test in `docs/TESTING.md`.
+- **Reset** is a one-second press and hold. A keyboard gets a confirm box instead.
+- **Dose entry.** Typed doses are rounded to whole grams and kept within 5 to 60 g.
+- **Per-recipe grind adjustment** is cleared when the active grinder changes, because it is counted in the
+  old grinder's numbers.
+- **Custom grinder.** Saving one does not make it active; "Use this" does.
+- **Cards for an "other" device.** The rebuilt recipe's intermediate targets are rounded to 5 g.
+- **Test copy name.** One manifest serves both copies. On `/next/` the page suggests the name
+  "Kalita Next" for the Home Screen.
+- **Records kept on the phone** use the field names planned for the Milestone 2 tables: gear has `kind`,
+  `catalog_id`, `custom`, `offset`, `note`, `active`; a brew has `bean_id`, `member_id`, `brewed_at`,
+  `brewer_id`, `dose_g`, `water_g`, `grind_setting`, `target_s`, `actual_s`, `rating`, `taste`, `note`.
+- **Extra files.** `.claude/launch.json` lets Claude Code start the local server. `scripts/make-icons.mjs`
+  draws the icon. `scripts/serve.mjs` is the local server.
+
+### Gear sources checked on 2026-11-20
+
+- **Baratza Virtuoso.** Baratza's chart (as republished by Clive Coffee) lists Virtuoso: espresso 8,
+  AeroPress 12, Hario V60 15, automatic brewer 18, Chemex 20, French press 28. It does not separate the
+  original Virtuoso from the Virtuoso+. Baratza's manual confirms 40 settings and the ranges 1 to 14
+  espresso, 16 to 32 filter or drip, 34 to 40 press. The manual prints no model number and no micron
+  figures, so "model 586" rests on the owner and 25 microns per setting stays an unverified estimate.
+- **Acaia Lunar 2021.** Every step in the brief matches Acaia's manual for firmware 1.0.016. Added from the
+  manual: a double tap on Power switches the scale off by default; the sleep timer can be 5, 10, 20, 30, or
+  60 minutes, or off; zero tracking, filter, and calibration steps for a drifting reading.
+- **Eureka Precisa.** The brief said its manual could not be retrieved. It was found: Eureka's own
+  "Digital scale Precisa" user handbook (Conti Valerio S.r.l., 11-2021), on a third-party host. The entry
+  is now marked verified from that handbook: double tap the right-hand TARE button to switch grams and
+  ounces. Still unconfirmed: whether a Bluetooth version switches units the same way, and whether
+  starting the scale's timer keeps it from switching off after 3 minutes.
+
+### Open questions for the owner
+
+1. **Service worker** (kickoff item 1). Needed before Milestone 2 if a cold start in airplane mode must
+   work.
+2. **Audio session type.** Waiting for the sound test results.
+3. **Rounding collisions in R1.** For some future card, scaling to a small dose could round two pours to
+   the same target or the same second. Milestone 1 cannot reach that case (it only has the house recipe).
+   Proposed for Milestone 2: merge the two pours. Needs a yes.
+4. **Origami with no filter named.** The engine returns "unknown" for that device, so the bean form will
+   have to ask which filter. Milestone 2.
+5. **Usual dose on the Wave 155.** 20 g is assumed.
+6. **Draft tips** for the V60 and the Chemex wait for review.
+7. **Commit history shows a personal email address.** The two commits already on GitHub carry it as the
+   author, and new commits will too unless git is switched to GitHub's no-reply address.
+8. **Commit trailer.** Local commits end with a "Co-Authored-By: Claude" line, which contains a no-reply
+   address. Say so if it should be dropped before the first push.
