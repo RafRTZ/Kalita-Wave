@@ -14,7 +14,7 @@ export const BREWERS = Object.freeze([
     pulseG: 120,
     minPulses: 3,
     lastPourFraction: 0.6,
-    defaultDoseG: 36,
+    defaultDoseG: 36, // the owner's usual brew for two
     provisional: false,
     tipsStatus: 'owner',
     tips: [
@@ -34,7 +34,7 @@ export const BREWERS = Object.freeze([
     pulseG: 70,
     minPulses: 3,
     lastPourFraction: 0.6,
-    defaultDoseG: 20,
+    defaultDoseG: 18, // the owner's usual single cup (2026-11-20)
     provisional: false,
     tipsStatus: 'owner',
     tips: [

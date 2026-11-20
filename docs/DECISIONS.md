@@ -107,9 +107,28 @@ Answers to questions the build brief left open. Newest section last. If somethin
    Proposed for Milestone 2: merge the two pours. Needs a yes.
 4. **Origami with no filter named.** The engine returns "unknown" for that device, so the bean form will
    have to ask which filter. Milestone 2.
-5. **Usual dose on the Wave 155.** 20 g is assumed.
+5. **Usual dose on the Wave 155.** 20 g is assumed. (Answered below: 18 g.)
 6. **Draft tips** for the V60 and the Chemex wait for review.
 7. **Commit history shows a personal email address.** The two commits already on GitHub carry it as the
-   author, and new commits will too unless git is switched to GitHub's no-reply address.
+   author, and new commits will too unless git is switched to GitHub's no-reply address. (Answered below:
+   accepted for now, with a reminder owed.)
 8. **Commit trailer.** Local commits end with a "Co-Authored-By: Claude" line, which contains a no-reply
-   address. Say so if it should be dropped before the first push.
+   address. Say so if it should be dropped before the first push. (No objection; kept.)
+
+## Owner answers after the Checkpoint 1 report, 2026-11-20
+
+- **Usual doses.** 36 g when brewing for two, on the Wave 185. 18 g for a single cup, on the Wave 155. The
+  155 now starts at 18 g (it was 20 g by assumption).
+- **Eureka Precisa.** Not a Bluetooth version, as far as the owner knows. The double tap on TARE is the
+  expected fix for ounces.
+- **Personal email in commit history.** Accepted for now, because the app is only for the owner's
+  household. A reminder is owed: before any step toward other households or a public release, raise this
+  again. At that point new commits should use GitHub's no-reply address, and the older commits need a
+  decision (rewrite the history, or leave it). The owner has been told that the repo is public today, so
+  the address is already readable in the history.
+- **Service worker and draft tips.** Explained in chat. No decision yet: the service worker question stays
+  open for Milestone 2, and the V60 and Chemex tips stay marked as drafts.
+- **How pushes happen.** git on this Mac has no saved GitHub sign-in, so the command-line push was refused.
+  Until that changes, the owner pushes by clicking Push origin in GitHub Desktop after Claude has shown
+  what the push would change. Installing GitHub's command-line tool (`gh`) would let Claude push directly;
+  that needs the owner's OK, like any install.

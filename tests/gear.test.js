@@ -58,6 +58,11 @@ test('every brewer has three or four tips, and the untested ones are marked as d
   }
 });
 
+test("the Waves start at the owner's usual doses: 36 g for two on the 185, 18 g for one on the 155", () => {
+  assert.equal(brewerById('wave185').defaultDoseG, 36);
+  assert.equal(brewerById('wave155').defaultDoseG, 18);
+});
+
 test('the seeded grinder is the original Virtuoso: 40 settings, step 1, higher is coarser, V60 at 15', () => {
   const v = grinderById('baratza_virtuoso');
   assert.equal(v.min, 1);

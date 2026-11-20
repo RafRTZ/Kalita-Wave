@@ -53,3 +53,7 @@ The owner is not a developer: explain in plain language, and ask when unsure.
 - Colours are tokens in the `:root` block of `styles.css`; no raw colour values anywhere else. Text is at
   least 14 px (body 16 px), contrast at least 4.5:1, touch targets at least 56 px. Tests enforce these.
 - Writing style everywhere (UI text, comments, docs): no en dashes or em dashes, no emojis, no filler.
+- Pushing: git on this Mac has no GitHub sign-in. After approving a push, the owner clicks Push origin in
+  GitHub Desktop. Then check that `/next/` is live and the root app is unchanged.
+- Owed reminder: before any step toward other households or a public release, tell the owner again that
+  the commit history carries a personal email address (see `docs/DECISIONS.md`).

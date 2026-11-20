@@ -16,7 +16,7 @@ until it has been tried on a real phone. Do every item on both phones.
    be mixed up with the live icon.
 3. Open it from the new icon. From here on, always use the icon, not Safari.
 4. Tap the settings button (three sliders, top right) and scroll to "About this copy". It should say
-   version 2.0.0-m1.1, "Test copy (next)", and "Opened from the Home Screen".
+   version 2.0.0-m1.2, "Test copy (next)", and "Opened from the Home Screen".
 5. Note each phone's iOS version (Settings app, General, About). Keeping the screen awake needs iOS 18.4
    or later.
 
@@ -61,7 +61,7 @@ Use a real brew where it says so. Tick each box on each phone.
 | 8 | Scale help, ounces | Put each scale into ounces on purpose, tap ?, follow "Scale is showing ounces" | The steps get that scale back to grams. If not, write what worked in "Our note" |
 | 9 | Grind calibration | First open asks once. Or: Settings, Grinders, Calibrate | After you enter your real setting, the brew screen shows that number for that brew |
 | 10 | The house recipe | No changes: Wave 185 at 36 g | Water 576 g, Virtuoso 18 before calibration, finish 4:25, pours at 0:00 to 90, 0:40 to 210, 1:20 to 335, 2:00 to 455, 2:40 to 576 |
-| 11 | Brewer switch | Tap Wave 155, set its dose, tap Wave 185 | Each brewer remembers its own dose. 36 g on the 155 shows a warning that names the Wave 185, and Start still works |
+| 11 | Brewer switch | Tap Wave 155, change its dose, tap Wave 185, tap Wave 155 again | The 155 starts at 18 g and the 185 at 36 g, and each remembers its own dose. 36 g on the 155 shows a warning that names the Wave 185, and Start still works |
 | 12 | Reset is hard to hit by accident | During a brew, tap Reset quickly, then hold it | A quick tap does nothing. Holding for one second resets |
 | 13 | Pause and Done | Pause, wait, resume. Tap Done at the end | The clock picks up where it paused. Done shows target next to actual. "Back to timer" undoes a Done tapped by accident |
 | 14 | Wet-hand taps | Use the app with wet fingers | Buttons are big enough to hit first time |
@@ -79,9 +79,9 @@ Use a real brew where it says so. Tick each box on each phone.
 
 - The sound test results from Part 1.
 - For anything that failed: which phone, its iOS version, and what happened instead.
-- Your real grind setting, and your usual dose on the Wave 155.
-- For item 8: which scale had flipped to ounces, and whether the steps fixed it. If your Eureka has
-  Bluetooth and a double tap on TARE did nothing, say so.
+- Your real grind setting.
+- For item 8: which scale had flipped to ounces, and whether the steps fixed it. If a double tap on the
+  Eureka's TARE button did nothing, say so.
 - Whether music stopped when a brew started.
 
 ## Not verified yet
