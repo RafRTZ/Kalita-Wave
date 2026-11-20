@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f4ede2">
+<title>Kalita Wave Calculator</title>
+<style>
+  :root {
+    --bg:#f4ede2; --card:#fffdf9; --border:#e0d5c4; --line:#ece3d5;
+    --ink:#2e2418; --sub:#7a6a54; --faint:#a89a85; --accent:#b25e2e; --accentSoft:#f0e0d0;
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body {
+    margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+    padding:36px 20px calc(48px + env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .wrap { width:100%; max-width:440px; }
+  .eyebrow { font-size:13px; letter-spacing:.28em; color:var(--accent); text-transform:uppercase; margin-bottom:10px; text-align:center; }
+  h1 { font-size:40px; font-weight:400; margin:0 0 32px; letter-spacing:.01em; line-height:1.15; text-align:center; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:0 1px 3px rgba(60,40,20,.06); }
+  .controls { padding:30px 28px 26px; margin-bottom:22px; }
+  .lbl { font-size:13px; letter-spacing:.18em; color:var(--sub); text-transform:uppercase; margin-bottom:12px; }
+  .toggle { display:flex; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:4px; gap:4px; }
+  .toggle button {
+    flex:1; padding:13px; background:transparent; color:var(--sub); border:none; cursor:pointer;
+    font-size:17px; font-family:Georgia,serif; letter-spacing:.04em; border-radius:4px; transition:all .2s;
+  }
+  .toggle button.active { background:var(--accent); color:#fff; font-weight:600; }
+  .hint { font-size:14px; color:var(--faint); margin-top:10px; }
+  .dose-row { display:flex; align-items:center; gap:16px; }
+  .step-btn {
+    width:46px; height:46px; background:var(--bg); border:1px solid var(--border); border-radius:6px;
+    color:var(--accent); font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .dose-mid { flex:1; text-align:center; }
+  #dose {
+    background:transparent; border:none; color:var(--ink); font-size:46px; font-family:Georgia,serif;
+    text-align:center; width:120px; outline:none;
+  }
+  .grams { font-size:14px; color:var(--faint); margin-top:-6px; letter-spacing:.12em; }
+  .summary { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:14px; }
+  .stat { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:16px 10px; text-align:center; }
+  .stat .v { font-size:21px; margin-bottom:5px; }
+  .stat .k { font-size:11px; color:var(--faint); letter-spacing:.16em; text-transform:uppercase; }
+  .grind { padding:16px 20px; background:var(--accentSoft); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:6px; margin-bottom:22px; }
+  .grind-top { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+  .grind-top .t { font-size:13px; letter-spacing:.14em; color:var(--sub); text-transform:uppercase; }
+  .grind-top .d { font-size:26px; color:var(--accent); font-weight:600; }
+  .grind .note { font-size:14px; color:var(--sub); margin-top:4px; }
+  .seq { overflow:hidden; margin-bottom:20px; }
+  .seq-head, .seq-row { display:grid; grid-template-columns:64px 1fr 74px; gap:12px; }
+  .seq-head { padding:16px 22px 12px; border-bottom:1px solid var(--line); font-size:12px; letter-spacing:.16em; color:var(--faint); text-transform:uppercase; }
+  .seq-head .r { text-align:right; }
+  .seq-row { padding:16px 22px; border-bottom:1px solid var(--line); align-items:center; }
+  .seq-row:last-child { border-bottom:none; }
+  .seq-row.bloom { background:#faf4ea; }
+  .seq-row .time { font-size:17px; color:var(--accent); font-family:'Courier New',monospace; letter-spacing:.03em; font-weight:600; }
+  .seq-row .label { font-size:18px; color:var(--ink); margin-bottom:3px; font-weight:600; }
+  .seq-row .detail { font-size:15px; color:var(--sub); line-height:1.35; }
+  .seq-row .total { text-align:right; font-size:19px; color:var(--ink); font-family:'Courier New',monospace; }
+  .seq-row .total.dash { font-size:15px; color:var(--faint); }
+  .foot { font-size:13px; color:var(--faint); letter-spacing:.08em; text-align:center; }
+  .err { font-size:14px; color:#b34a3a; margin-top:10px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Pour Over Calculator</div>
+  <h1>Kalita Wave</h1>
+
+  <div class="card controls">
+    <div style="margin-bottom:30px;">
+      <div class="lbl">Dripper Model</div>
+      <div class="toggle" id="toggle">
+        <button data-model="155">Wave 155</button>
+        <button data-model="185" class="active">Wave 185</button>
+      </div>
+      <div class="hint" id="modelHint">Larger bed · 4 pour stages · slower drain</div>
+    </div>
+    <div>
+      <div class="lbl">Coffee Dose</div>
+      <div class="dose-row">
+        <button class="step-btn" id="minus">−</button>
+        <div class="dose-mid">
+          <input id="dose" type="number" value="36" min="10" max="60" inputmode="numeric">
+          <div class="grams">GRAMS</div>
+        </div>
+        <button class="step-btn" id="plus">+</button>
+      </div>
+      <div class="err" id="err" style="display:none;">Enter a dose between 10–60g</div>
+    </div>
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<script>
+  var RATIO = 16, TEMP = "203°F";
+  var coffee = 36, model = "185";
+
+  function grindFor(m){
+    return m === "185"
+      ? { dial:"16–17", note:"~750µm · flat bed, slightly coarser than V60" }
+      : { dial:"15–16", note:"~700µm · standard pour-over" };
+  }
+
+  function getSequence(c, m){
+    var water = Math.round(c * RATIO);
+    var bloom = Math.round(c * 2);
+    var rem = water - bloom;
+    var grind = grindFor(m);
+    if (m === "185") {
+      return { water:water, grind:grind, drainTime:"4:00–4:30", steps:[
+        { time:"0:00", label:"Bloom", detail:"Saturate all grounds, center outward", cumulative:bloom },
+        { time:"0:45", label:"Center Pour", detail:"Steady stream into the center", cumulative:Math.round(bloom + rem*0.25) },
+        { time:"1:30", label:"Spiral Pour", detail:"Center, spiral out, return to center", cumulative:Math.round(bloom + rem*0.50) },
+        { time:"2:15", label:"Spiral Pour", detail:"Center, spiral out, return to center", cumulative:Math.round(bloom + rem*0.75) },
+        { time:"3:00", label:"Final Spiral", detail:"Gentle spiral, stay off the walls", cumulative:water },
+        { time:"~4:15", label:"Drain Complete", detail:"Target draw-down finished", cumulative:null }
+      ]};
+    }
+    return { water:water, grind:grind, drainTime:"3:00–3:45", steps:[
+      { time:"0:00", label:"Bloom", detail:"Saturate all grounds, center outward", cumulative:bloom },
+      { time:"0:40", label:"Center Pour", detail:"Steady stream into the center", cumulative:Math.round(bloom + rem*0.33) },
+      { time:"1:25", label:"Spiral Pour", detail:"Center, spiral out, return to center", cumulative:Math.round(bloom + rem*0.67) },
+      { time:"2:10", label:"Final Spiral", detail:"Gentle spiral, stay off the walls", cumulative:water },
+      { time:"~3:20", label:"Drain Complete", detail:"Target draw-down finished", cumulative:null }
+    ]};
+  }
+
+  function render(){
+    var out = document.getElementById("output");
+    var err = document.getElementById("err");
+    if (coffee < 10 || coffee > 60 || isNaN(coffee)) {
+      err.style.display = "block"; out.innerHTML = ""; return;
+    }
+    err.style.display = "none";
+    var b = getSequence(coffee, model);
+
+    var stats = [
+      { k:"Water", v:b.water + "g" },
+      { k:"Temp", v:TEMP },
+      { k:"Drain", v:b.drainTime }
+    ].map(function(s){
+      return '<div class="stat"><div class="v">'+s.v+'</div><div class="k">'+s.k+'</div></div>';
+    }).join("");
+
+    var rows = b.steps.map(function(s, i){
+      var total = s.cumulative !== null
+        ? '<div class="total">'+s.cumulative+'g</div>'
+        : '<div class="total dash">—</div>';
+      return '<div class="seq-row'+(i===0?' bloom':'')+'">'
+        + '<div class="time">'+s.time+'</div>'
+        + '<div><div class="label">'+s.label+'</div><div class="detail">'+s.detail+'</div></div>'
+        + total + '</div>';
+    }).join("");
+
+    out.innerHTML =
+      '<div class="summary">'+stats+'</div>'
+      + '<div class="grind"><div class="grind-top"><span class="t">Baratza Virtuoso Dial</span>'
+        + '<span class="d">'+b.grind.dial+'</span></div>'
+        + '<div class="note">'+b.grind.note+'</div></div>'
+      + '<div class="card seq"><div class="seq-head"><span>Time</span><span>Action</span>'
+        + '<span class="r">Total</span></div>'+rows+'</div>'
+      + '<div class="foot">1:'+RATIO+' ratio · bloom at 2× dose · adapted from Hario V60 guide</div>';
+  }
+
+  document.getElementById("toggle").addEventListener("click", function(e){
+    var btn = e.target.closest("button");
+    if (!btn) return;
+    model = btn.getAttribute("data-model");
+    document.querySelectorAll("#toggle button").forEach(function(x){ x.classList.remove("active"); });
+    btn.classList.add("active");
+    document.getElementById("modelHint").textContent =
+      model === "155" ? "Smaller bed · 3 pour stages · faster drain"
+                       : "Larger bed · 4 pour stages · slower drain";
+    render();
+  });
+  document.getElementById("minus").addEventListener("click", function(){
+    coffee = Math.max(10, coffee - 1); document.getElementById("dose").value = coffee; render();
+  });
+  document.getElementById("plus").addEventListener("click", function(){
+    coffee = Math.min(60, coffee + 1); document.getElementById("dose").value = coffee; render();
+  });
+  document.getElementById("dose").addEventListener("input", function(e){
+    coffee = Number(e.target.value); render();
+  });
+
+  render();
+</script>
+</body>
+</html>

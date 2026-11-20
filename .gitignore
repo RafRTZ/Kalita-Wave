@@ -1,0 +1,15 @@
+# Secrets: never commit (BUILD_BRIEF.md rule 3)
+.env
+.env.*
+*.pem
+*.key
+
+# Card photos and private test fixtures (Milestone 2)
+tests/fixtures/private/
+*.heic
+*.HEIC
+
+# Local machine files
+.DS_Store
+node_modules/
+.claude/settings.local.json
