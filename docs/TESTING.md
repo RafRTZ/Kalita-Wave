@@ -43,7 +43,7 @@ Use a real brew where it says so. Tick each box on each phone.
 | # | Check | How | Pass looks like |
 |---|---|---|---|
 | 1 | Cues with the silent switch on | Ringer on silent, volume up, on-silent setting on (its default), start a brew | You hear ticks in the count-in, a chime at 0:00, and a tone, ticks, and chime before each pour |
-| 2 | Cues with music playing | Start music in another app, then start a brew. Then switch the on-silent setting off, ringer on, and do it again | Setting on: you hear the cues and the music stops, which is expected. Setting off: the music keeps playing and you hear the cues over it. Note whether the music comes back by itself after Done |
+| 2 | Cues with music playing | Start music in another app, then start a brew. Then switch the on-silent setting off, ringer on, and do it again | Setting on: you hear the cues and the music stops, which is expected. Setting off: the music keeps playing and you hear the cues over it. Known, and not a failure: with the setting on, the music stays off after Done until you start it again |
 | 3 | Screen stays on for a whole brew | Start a brew and do not touch the phone | The screen is still on at the finish time, about four and a half minutes later |
 | 4 | Switch apps for 20 seconds | Mid-brew, open another app, wait 20 s, come back | The clock is right to the second. No pile-up of late sounds. If sound is off, a red bar says so and one tap brings it back |
 | 5 | Force-quit mid-brew | Mid-brew, swipe the app away, then open it again | The timer comes back at the right second with the red "Sound is off" bar. One tap brings sound back |
@@ -68,12 +68,11 @@ Use a real brew where it says so. Tick each box on each phone.
 
 ## What to send back
 
-- The iOS version of each phone.
+- The iOS version of the second phone. The first is on 27.2.1.
 - For anything that failed: which phone, its iOS version, and what happened instead.
 - Your real grind setting.
 - For item 8: which scale had flipped to ounces, and whether the steps fixed it. If a double tap on the
   Eureka's TARE button did nothing, say so.
-- Whether your music came back by itself after Done.
 
 ## Not verified yet
 

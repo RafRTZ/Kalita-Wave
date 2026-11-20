@@ -160,6 +160,7 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
   stops the music when the ringer is on. The app sets `playback` or `ambient` before every sound.
 - **`transient`** behaved the same as `ambient` here. `ambient` is kept. If cues prove hard to hear over
   music, `transient` is the one to try next.
-- **Still unknown.** Whether music comes back by itself after Done. The iOS version of the phone used.
+- **After Done.** Music does not come back by itself. Reported by the owner on iOS 27.2.1 with the
+  on-silent setting on, and found annoying. See "Music after a brew" below.
 - **Also reported by the phone.** It offers the audio session and wake lock controls in Home Screen mode.
   Whether the screen really stays on for a whole brew is checklist item 3.
