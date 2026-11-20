@@ -2,6 +2,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -57,6 +58,32 @@ test('rule 5: every import points at a file that exists, inside next/', () => {
     }
   }
   assert.ok(count > 30);
+});
+
+test('every script parses, so a typo in a screen file cannot reach a phone', () => {
+  // The other tests only load the engine and data files. Screens need a browser, so they are checked here
+  // for syntax at least: a broken screen file would leave the phone on the "Loading" page.
+  const parses = (code, kind, label) => {
+    const result = spawnSync(process.execPath, [`--input-type=${kind}`, '--check', '-'], { input: code, encoding: 'utf8' });
+    assert.equal(result.status, 0, `${label} has a syntax error:\n${result.stderr}`);
+  };
+  let checked = 0;
+  for (const file of [...nextScripts, ...filesUnder(join(ROOT, 'scripts'), ['.mjs'])]) {
+    parses(readFileSync(file, 'utf8'), 'module', short(file));
+    checked++;
+  }
+  for (const file of filesUnder(NEXT, ['.html'])) {
+    const html = readFileSync(file, 'utf8');
+    for (const match of html.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)) {
+      parses(match[1], 'module', `${short(file)} (inline module)`);
+      checked++;
+    }
+    for (const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
+      parses(match[1], 'commonjs', `${short(file)} (inline script)`);
+      checked++;
+    }
+  }
+  assert.ok(checked >= 26, `only ${checked} scripts were checked`);
 });
 
 test('rule 6: the engine is pure: no DOM, storage, network, or clock of its own', () => {
