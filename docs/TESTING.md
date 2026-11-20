@@ -3,8 +3,10 @@
 This is the owner's checklist. Nothing on it can be proven on a Mac, so nothing on it counts as working
 until it has been tried on a real phone. Do every item on both phones.
 
-**Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on a phone running
-iOS 27.2.1. Still to confirm: that the second phone was checked too.
+**Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on one phone,
+running iOS 27.2.1. The second phone is still to do. The quickest useful test there: its owner makes one
+real brew from the Home Screen icon without help (that covers checks 1, 3, 6, and 12 to 14), then tries
+checks 4, 5, and 9. Note that phone's iOS version.
 
 ## Where things are
 

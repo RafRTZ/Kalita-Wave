@@ -168,7 +168,7 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
 ## Checkpoint 1 device results, 2026-11-20
 
 - The owner ran the 16 checks in `docs/TESTING.md` from the Home Screen icon and reported every one as
-  passing, on a phone running iOS 27.2.1. Whether the second phone was also checked is not recorded yet.
+  passing, on a phone running iOS 27.2.1. Only that phone has been checked so far; the second is still to do.
 - The sound test (Part 1) is complete; see "Sound test result" above.
 - Known: with the on-silent setting on, music stops at Start and stays off after Done. The owner finds
   that annoying. Whether a web app can hand the music back is still being looked into.
