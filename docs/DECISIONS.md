@@ -164,3 +164,15 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
   on-silent setting on, and found annoying. See "Music after a brew" below.
 - **Also reported by the phone.** It offers the audio session and wake lock controls in Home Screen mode.
   Whether the screen really stays on for a whole brew is checklist item 3.
+
+## Checkpoint 1 device results, 2026-11-20
+
+- The owner ran the 16 checks in `docs/TESTING.md` from the Home Screen icon and reported every one as
+  passing, on a phone running iOS 27.2.1. Whether the second phone was also checked is not recorded yet.
+- The sound test (Part 1) is complete; see "Sound test result" above.
+- Known: with the on-silent setting on, music stops at Start and stays off after Done. The owner finds
+  that annoying. Whether a web app can hand the music back is still being looked into.
+- Not reported yet: the two checks that are expected to fail for now (a cold start in airplane mode, and
+  cues while the phone is locked).
+- Nothing at the repo root has changed. The next step is the owner's: say "promote" when ready.
+

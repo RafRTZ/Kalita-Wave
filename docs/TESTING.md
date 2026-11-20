@@ -3,6 +3,9 @@
 This is the owner's checklist. Nothing on it can be proven on a Mac, so nothing on it counts as working
 until it has been tried on a real phone. Do every item on both phones.
 
+**Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on a phone running
+iOS 27.2.1. Still to confirm: that the second phone was checked too.
+
 ## Where things are
 
 - **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ (only exists after a push).
