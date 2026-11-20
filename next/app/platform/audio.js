@@ -9,13 +9,14 @@
 // Whether cues are audible with the ringer switch on silent, and whether they stop other apps' audio,
 // depends on navigator.audioSession.type. A Mac cannot show that; next/audio-test.html on a real iPhone can.
 //
-// Tried on the owner's iPhone on 2026-11-20 (ringer on silent, music playing; docs/DECISIONS.md):
-//   playback                 heard, and the music stopped
-//   auto, ambient, transient muted by the switch, music kept playing
-//   transient-solo, play-and-record   muted by the switch, and the music stopped
+// Tried on the owner's iPhone on 2026-11-20, all four situations (full table in docs/DECISIONS.md):
+//   playback            heard even on silent; always stops other apps' music
+//   ambient, transient  muted by the silent switch; never stop the music; heard over it with the ringer on
+//   auto                muted by the silent switch, and stops the music when the ringer is on
+//   transient-solo, play-and-record   muted by the silent switch, and stop the music
 // So no type is both heard on silent and friendly to other audio. The app uses 'playback' when the user
-// wants cues on silent (the default) and 'ambient' when they would rather keep their music.
-// Still to try: that 'ambient' cues are heard over music when the ringer is on.
+// wants cues on silent (the default) and 'ambient' when they would rather keep their music. It never
+// leaves the type on 'auto', which is the worst of both.
 
 export const SESSION_TYPES = Object.freeze(['auto', 'ambient', 'transient', 'transient-solo', 'playback', 'play-and-record']);
 

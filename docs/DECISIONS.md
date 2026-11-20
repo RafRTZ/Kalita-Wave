@@ -136,27 +136,30 @@ Answers to questions the build brief left open. Newest section last. If somethin
 ## Sound test result, 2026-11-20
 
 Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2, with the page
-`next/audio-test.html`. Situation tested: ringer switch on silent, music playing in another app.
+`next/audio-test.html`. All four situations were tried. "Heard" means the cues were audible.
 
-| Audio session type | Cues | Music |
-|---|---|---|
-| auto | silent | kept playing |
-| ambient | silent | kept playing |
-| transient | silent | kept playing |
-| transient-solo | silent | stopped |
-| playback | heard | stopped |
-| play-and-record | silent | stopped |
+| Audio session type | Silent ON, music playing | Silent ON, no music | Silent OFF, music playing | Silent OFF, no music |
+|---|---|---|---|---|
+| auto | silent, music kept on | silent | heard, music stopped | heard |
+| ambient | silent, music kept on | silent | heard, music kept on | heard |
+| transient | silent, music kept on | silent | heard, music kept on | heard |
+| transient-solo | silent, music stopped | silent | heard, music stopped | heard |
+| playback | heard, music stopped | heard | heard, music stopped | heard |
+| play-and-record | silent, music stopped | silent | heard, music stopped | heard |
 
 - **Finding.** No type is both heard on silent and friendly to other audio. Only `playback` is heard with
-  the switch on silent, and it stops the music.
-- **Decision.** The brief's fallback applies, and it is what was already built: the setting "Play cues when
-  the phone is on silent" is on by default and uses `playback`. Switched off, it uses `ambient`: music
-  keeps playing and the silent switch mutes the cues.
-- **What that means in the kitchen.** With the setting on, starting a brew stops music or a podcast. With
-  it off and the phone on silent, there is no sound at all, only the on-screen cues. A web app cannot do
-  better: sound that mixes with music while ignoring the silent switch needs the native app in brief
-  section 7.
-- **Still to check.** With the ringer on and music playing, that `ambient` cues are heard over the music.
-  Whether music comes back by itself after Done. The iOS version of the phone used was not recorded.
+  the switch on silent, and it always stops the music. `ambient` and `transient` never stop the music and
+  are heard over it when the ringer is on, but the silent switch mutes them.
+- **Decision (final).** The brief's fallback applies, and it is what was built. The setting "Play cues when
+  the phone is on silent" is on by default and uses `playback`. Switched off, it uses `ambient`.
+- **What that means in the kitchen.** Setting on: cues are always heard, and music or a podcast stops when
+  a brew starts. Setting off: music keeps playing with the cues over it, and with the phone on silent
+  there is no sound, only the on-screen cues. A web app cannot do better: sound that mixes with music
+  while ignoring the silent switch needs the native app in brief section 7.
+- **Why the app never leaves the type on `auto`.** `auto` is the worst of both: muted on silent, and it
+  stops the music when the ringer is on. The app sets `playback` or `ambient` before every sound.
+- **`transient`** behaved the same as `ambient` here. `ambient` is kept. If cues prove hard to hear over
+  music, `transient` is the one to try next.
+- **Still unknown.** Whether music comes back by itself after Done. The iOS version of the phone used.
 - **Also reported by the phone.** It offers the audio session and wake lock controls in Home Screen mode.
   Whether the screen really stays on for a whole brew is checklist item 3.

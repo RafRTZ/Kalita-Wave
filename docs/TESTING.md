@@ -24,22 +24,17 @@ until it has been tried on a real phone. Do every item on both phones.
 After any later push: wait two minutes, close the app fully, and reopen it. If "About this copy" still
 shows the old version, wait ten minutes and try again. GitHub lets phones keep files for ten minutes.
 
-## Part 1: the sound test (mostly done)
+## Part 1: the sound test (done)
 
-Done on 2026-11-20 for the situation that matters most: ringer on silent with music playing. Only one
-audio type was heard, and it stops the music. So the app stays as built: cues ignore the silent switch,
-music stops when a brew starts, and Settings has a switch ("Play cues when the phone is on silent") to
-turn that off. The full result is in `DECISIONS.md`.
+Done on 2026-11-20, all four situations. The full table is in `DECISIONS.md`. What it settled:
 
-One situation is still worth two taps. In the app: Settings, "About this copy", Sound test page.
+- Only one audio type is heard with the ringer on silent, and it stops music from other apps.
+- So the app keeps its switch, in Settings: "Play cues when the phone is on silent".
+  - **On (the default):** cues are always heard, and music or a podcast stops when a brew starts.
+  - **Off:** music keeps playing with the cues over it, and the silent switch mutes the cues.
 
-1. Ringer switch on ring (not silent). Start music or a podcast in another app.
-2. On the page, pick "Silent OFF, music playing".
-3. Tap Play on the `ambient` row and mark what happened. Do the same for `auto`.
-4. Tap "Copy results" and paste them into the chat.
-
-What we hope to find: `ambient` is heard and the music keeps playing. That is what the app uses when the
-on-silent setting is switched off.
+The Sound test page is still there (Settings, "About this copy") if a new phone or a new iOS version
+needs checking.
 
 ## Part 2: Checkpoint 1 checklist
 
@@ -73,7 +68,7 @@ Use a real brew where it says so. Tick each box on each phone.
 
 ## What to send back
 
-- The two remaining sound test rows from Part 1, and the iOS version of each phone.
+- The iOS version of each phone.
 - For anything that failed: which phone, its iOS version, and what happened instead.
 - Your real grind setting.
 - For item 8: which scale had flipped to ounces, and whether the steps fixed it. If a double tap on the

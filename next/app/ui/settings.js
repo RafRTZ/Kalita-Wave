@@ -39,7 +39,7 @@ function soundSection(app) {
         'Play cues when the phone is on silent',
         segmented({ label: 'Play cues when the phone is on silent', value: s.playOnSilent, options: ON_OFF, onChange: (v) => app.setSetting('playOnSilent', v) }),
         audioSessionSupported()
-          ? 'On: cues play even with the ringer switch on silent, but music or a podcast from another app stops when a brew starts. Off: your other audio keeps playing, and the silent switch mutes the cues. A web app cannot do both.'
+          ? 'On: cues play even with the ringer switch on silent, but music or a podcast from another app stops when a brew starts. Off: your music keeps playing with the cues over it, but the silent switch mutes the cues. A web app cannot do both.'
           : 'This browser gives a web app no say over the silent switch, so this setting does nothing here.',
       ),
       setting(
