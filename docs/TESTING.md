@@ -64,6 +64,15 @@ Use a real brew where it says so. Tick each box on each phone.
 | 15 | Home Screen icon | Look at the icon | A brown dripper with wave lines on cream |
 | 16 | The live app is untouched | Open your usual Kalita icon or the live link | It is exactly the old calculator |
 
+## Part 3: two checks for version 2.0.0-m1.4
+
+This version changes how the app lets go of the phone's audio when a brew ends. One phone is enough.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| A | Music after a brew | On-silent setting on, music playing, start a brew, tap Done. Then press play on the lock screen, in Control Center, or on headphones | The music restarts with that one tap. Say so if it ever comes back by itself |
+| B | Two brews in a row | Finish a brew, tap New brew, and start another straight away | You hear the cues in the second brew too |
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |

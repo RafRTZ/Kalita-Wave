@@ -227,7 +227,7 @@ function testSound() {
     audio.playNow('finish', 6);
     // Hand the phone's audio back afterwards, unless a brew has started in the meantime.
     setTimeout(() => {
-      if (!state.run) audio.close();
+      if (!state.run) audio.release();
     }, 8500);
   });
 }
@@ -261,8 +261,7 @@ function togglePause() {
     audio.refresh();
   } else {
     setRun(resumeRun(run, now));
-    if (audio.state() === 'running') audio.refresh();
-    else armSound();
+    armSound(); // re-applies the audio type too, in case the sound settings changed while paused
     wake.acquire();
   }
   renderView();
@@ -274,7 +273,7 @@ function endRun(finished) {
     state.brews = addBrew(state.brews, brewRecord(finished, { grindSetting: finished.plan.grindSetting }));
     saveBrews(store, state.brews);
   }
-  audio.close();
+  audio.release();
   wake.release();
   renderView();
 }
@@ -299,7 +298,7 @@ function reopen() {
 
 function clearRun() {
   setRun(null);
-  audio.close();
+  audio.release();
   wake.release();
   renderView();
 }
@@ -356,7 +355,11 @@ function setUnit(unit) {
 function setSetting(key, value) {
   state.settings = { ...state.settings, [key]: value };
   saveSettings(store, state.settings);
-  if (key === 'sound' && !value) audio.close();
+  // Sound settings changed in the middle of a brew take effect at once. The tap on the switch is what
+  // lets the phone start audio, so this is the moment to do it.
+  const brewing = Boolean(state.run) && isActive(state.run, Date.now());
+  if (key === 'sound' && !value) audio.release();
+  else if ((key === 'sound' || key === 'playOnSilent') && brewing) armSound();
   render();
 }
 

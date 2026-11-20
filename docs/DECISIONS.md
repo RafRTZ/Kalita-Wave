@@ -176,3 +176,30 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
   cues while the phone is locked).
 - Nothing at the repo root has changed. The next step is the owner's: say "promote" when ready.
 
+## Music after a brew, 2026-11-20
+
+The owner's report: with the on-silent setting on, music stops at Start and does not come back after Done.
+
+- **Why.** When Safari's engine lets go of the phone's audio, it does not tell other apps that they may
+  resume. That was a deliberate change in 2020: WebKit commit "Do not notify other applications when
+  deactivating the audio session" (https://commits.webkit.org/220003@main). A web page cannot change it.
+- **Why not both at once.** WebKit's engineers describe two fixed behaviours: audio that mixes with other
+  apps and obeys the silent switch, or audio that interrupts other apps and ignores the switch
+  (https://bugs.webkit.org/show_bug.cgi?id=252746, the comments by Jer Noble).
+- **How this was checked.** Claude read that commit and those bug comments directly. A research pass over
+  the Safari 27 source reported that the same call is still in place in iOS 27.0 to 27.2, and that a request
+  for mixing options is still open (https://github.com/w3c/audio-session/issues/18); those two points
+  were not re-checked line by line.
+- **So.** No web app can make the music come back by itself. The native app in brief section 7 could.
+- **What the app now does (from version 2.0.0-m1.4).** At Done, Reset, and New brew it first switches to
+  the music-friendly audio type, then closes its audio half a second later. The aim is to be fully out of
+  the way, so one tap on play (lock screen, Control Center, or headphones) restarts the music. Not yet
+  tried on a phone. It is a long shot that this also brings the music back by itself.
+- **Ways to ease it, for the owner to choose.**
+  1. On days with music or a podcast, use the "Off" side of the on-silent switch: nothing stops, and the
+     cues play over it when the ringer is on.
+  2. A one-tap sound choice on the brew screen (cues even on silent, cues over music, or no sound), so the
+     choice is made per brew without opening Settings. Not built; it needs a yes.
+  3. A "Resume music" button on the Done screen that runs an Apple Shortcut the owner creates once. Not
+     built, not tested from a Home Screen app, and one more moving part.
+

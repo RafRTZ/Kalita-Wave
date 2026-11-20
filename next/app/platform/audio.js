@@ -44,6 +44,7 @@ export function setSessionType(type) {
 const MASTER_GAIN = 0.9;
 const LEAD_S = 0.04; // schedule slightly ahead so the first sample is never cut off
 const LATE_OK_S = 0.3; // a cue this late still plays at once; anything older is a missed cue
+const RELEASE_DELAY_MS = 500; // at the end of a brew: time for the type change to take hold before closing
 
 // Each sound is a list of partials: when it starts (s), frequency (Hz), length (s), loudness, wave shape.
 // The heads-up is soft and low, ticks are short and high, the pour chime is a two-note bell, and the
@@ -77,6 +78,7 @@ export function createCuePlayer() {
   let master = null;
   let provider = null;
   let built = false; // true once the schedule has been built for the current stretch of running audio
+  let releaseTimer = null; // set while release() is waiting to close the context
   const voices = new Set();
   const listeners = new Set();
 
@@ -90,8 +92,14 @@ export function createCuePlayer() {
     for (const listener of listeners) listener(state());
   }
 
+  function clearRelease() {
+    if (releaseTimer != null) clearTimeout(releaseTimer);
+    releaseTimer = null;
+  }
+
   function ensureContext() {
     if (!Ctor) return null;
+    clearRelease(); // a new brew started before the last one finished letting go: keep the context
     if (!ctx || ctx.state === 'closed') {
       ctx = new Ctor();
       master = ctx.createGain();
@@ -227,9 +235,30 @@ export function createCuePlayer() {
     return true;
   }
 
-  /** Close the context so the phone's audio goes back to other apps. */
+  /**
+   * Let go of the phone's audio at the end of a brew.
+   * Other apps' music does not restart by itself: since 2020 Safari's engine no longer tells other apps
+   * that they may resume (WebKit commit 220003@main), and a page cannot change that. What a page can do is
+   * step out of the way, so one tap on play brings the music back. So this first switches to the
+   * music-friendly session type, which also gives up the phone's "now playing" slot, and closes the audio
+   * a moment later. NOT verified on a Mac: see docs/TESTING.md.
+   */
+  function release(delayMs = RELEASE_DELAY_MS) {
+    cancel();
+    clearRelease();
+    if (!ctx) return;
+    setSessionType(SESSION_FOR_SILENT_SWITCH.obey);
+    const old = ctx;
+    releaseTimer = setTimeout(() => {
+      releaseTimer = null;
+      if (ctx === old) close();
+    }, delayMs);
+  }
+
+  /** Close the context at once. */
   function close() {
     cancel();
+    clearRelease();
     const old = ctx;
     ctx = null;
     master = null;
@@ -249,6 +278,7 @@ export function createCuePlayer() {
     refresh,
     cancel,
     playNow,
+    release,
     close,
     setProvider(fn) {
       provider = fn;
