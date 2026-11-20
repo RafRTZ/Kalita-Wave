@@ -168,7 +168,8 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
 ## Checkpoint 1 device results, 2026-11-20
 
 - The owner ran the 16 checks in `docs/TESTING.md` from the Home Screen icon and reported every one as
-  passing, on a phone running iOS 27.2.1. Only that phone has been checked so far; the second is still to do.
+  passing, on a phone running iOS 27.2.1. Only that phone had been checked at that point. (Updated below:
+  second phone.)
 - The sound test (Part 1) is complete; see "Sound test result" above.
 - Known: with the on-silent setting on, music stops at Start and stays off after Done. The owner finds
   that annoying. A web app cannot hand the music back: see "Music after a brew" below.
@@ -206,4 +207,16 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   (option 2). It is not being added. The on-silent switch stays where it is, in Settings, and the app stays
   as version 2.0.0-m1.4 has it. Option 3 was not asked for either. Neither is to be offered again unless
   the owner brings the music up, or the two checks in Part 3 of `TESTING.md` change the picture.
+
+## Second phone, and the 2.0.0-m1.4 push, 2026-11-20
+
+- **Second phone.** The owner's report, in full: "worked on 2nd phone". Taken as: the app was used on the
+  second phone and nothing went wrong. Not stated, so not assumed: which of the checks were run there,
+  that phone's iOS version, and whether it was on version 2.0.0-m1.3 or 2.0.0-m1.4.
+- **Push.** The owner pushed 2.0.0-m1.4. Checked straight after: the test copy on the site serves
+  2.0.0-m1.4, all 32 files under `next/` match the repo, and `index.html` and `classic.html` on the site
+  are still the original calculator.
+- **Where Checkpoint 1 stands.** Both phones are now reported as working. The audio change in 2.0.0-m1.4
+  (Part 3 of `TESTING.md`, checks A and B) has not been reported on a phone yet. The next step is the
+  owner's: say "promote" when ready.
 

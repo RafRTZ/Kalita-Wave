@@ -4,9 +4,8 @@ This is the owner's checklist. Nothing on it can be proven on a Mac, so nothing 
 until it has been tried on a real phone. Do every item on both phones.
 
 **Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on one phone,
-running iOS 27.2.1. The second phone is still to do. The quickest useful test there: its owner makes one
-real brew from the Home Screen icon without help (that covers checks 1, 3, 6, and 12 to 14), then tries
-checks 4, 5, and 9. Note that phone's iOS version.
+running iOS 27.2.1. The second phone was reported as working; which checks were run there, and its iOS
+version, have not been noted. Part 3 (two checks for version 2.0.0-m1.4) has not been reported yet.
 
 ## Where things are
 
@@ -90,9 +89,8 @@ This version changes how the app lets go of the phone's audio when a brew ends. 
 
 ## Not verified yet
 
-- **On the second phone:** all of Part 2. One phone has passed the 16 checks; the other has not been tried.
-  There, these are still built but unproven: sound with the ringer on silent, sound alongside music, the
-  screen staying awake, resuming after an app switch or a force-quit, the Home Screen icon and name,
-  readability at arm's length, and tap sizes under wet fingers.
+- **On the second phone:** it was reported as working, with no list of which checks were run. Any check
+  not tried there is still unproven on that phone. The ones that depend most on the phone itself are 1 to
+  5: sound on silent, sound with music, the screen staying on, switching apps, and a force-quit.
 - **On any phone:** the change in version 2.0.0-m1.4, which is Part 3, checks A and B.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
