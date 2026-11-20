@@ -90,6 +90,9 @@ This version changes how the app lets go of the phone's audio when a brew ends. 
 
 ## Not verified yet
 
-Until the items above are done, these are built but unproven: sound with the ringer on silent, sound
-alongside music, the screen staying awake, resuming after an app switch or a force-quit on iOS, the Home
-Screen icon and name, readability at arm's length, and tap sizes under wet fingers.
+- **On the second phone:** all of Part 2. One phone has passed the 16 checks; the other has not been tried.
+  There, these are still built but unproven: sound with the ringer on silent, sound alongside music, the
+  screen staying awake, resuming after an app switch or a force-quit, the Home Screen icon and name,
+  readability at arm's length, and tap sizes under wet fingers.
+- **On any phone:** the change in version 2.0.0-m1.4, which is Part 3, checks A and B.
+- **Not reported yet:** items 17 and 18, the two that are expected to fail for now.

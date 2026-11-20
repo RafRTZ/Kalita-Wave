@@ -171,7 +171,7 @@ Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2,
   passing, on a phone running iOS 27.2.1. Only that phone has been checked so far; the second is still to do.
 - The sound test (Part 1) is complete; see "Sound test result" above.
 - Known: with the on-silent setting on, music stops at Start and stays off after Done. The owner finds
-  that annoying. Whether a web app can hand the music back is still being looked into.
+  that annoying. A web app cannot hand the music back: see "Music after a brew" below.
 - Not reported yet: the two checks that are expected to fail for now (a cold start in airplane mode, and
   cues while the phone is locked).
 - Nothing at the repo root has changed. The next step is the owner's: say "promote" when ready.
@@ -195,11 +195,15 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   the music-friendly audio type, then closes its audio half a second later. The aim is to be fully out of
   the way, so one tap on play (lock screen, Control Center, or headphones) restarts the music. Not yet
   tried on a phone. It is a long shot that this also brings the music back by itself.
-- **Ways to ease it, for the owner to choose.**
+- **Ways to ease it, as put to the owner.**
   1. On days with music or a podcast, use the "Off" side of the on-silent switch: nothing stops, and the
-     cues play over it when the ringer is on.
+     cues play over it when the ringer is on. This works today.
   2. A one-tap sound choice on the brew screen (cues even on silent, cues over music, or no sound), so the
-     choice is made per brew without opening Settings. Not built; it needs a yes.
+     choice is made per brew without opening Settings. Not built.
   3. A "Resume music" button on the Done screen that runs an Apple Shortcut the owner creates once. Not
      built, not tested from a Home Screen app, and one more moving part.
+- **Owner's answer, 2026-11-20: "No, leave it."** Asked whether to add the sound choice to the brew screen
+  (option 2). It is not being added. The on-silent switch stays where it is, in Settings, and the app stays
+  as version 2.0.0-m1.4 has it. Option 3 was not asked for either. Neither is to be offered again unless
+  the owner brings the music up, or the two checks in Part 3 of `TESTING.md` change the picture.
 
