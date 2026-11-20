@@ -16,34 +16,30 @@ until it has been tried on a real phone. Do every item on both phones.
    be mixed up with the live icon.
 3. Open it from the new icon. From here on, always use the icon, not Safari.
 4. Tap the settings button (three sliders, top right) and scroll to "About this copy". It should say
-   version 2.0.0-m1.2, "Test copy (next)", and "Opened from the Home Screen".
+   "Test copy (next)", "Opened from the Home Screen", and the version named in the chat after the latest
+   push (2.0.0-m1.2 after the first one).
 5. Note each phone's iOS version (Settings app, General, About). Keeping the screen awake needs iOS 18.4
    or later.
 
 After any later push: wait two minutes, close the app fully, and reopen it. If "About this copy" still
 shows the old version, wait ten minutes and try again. GitHub lets phones keep files for ten minutes.
 
-## Part 1: the sound test (do this first)
+## Part 1: the sound test (mostly done)
 
-It decides how the cues are played. In the app: Settings, "About this copy", Sound test page.
+Done on 2026-11-20 for the situation that matters most: ringer on silent with music playing. Only one
+audio type was heard, and it stops the music. So the app stays as built: cues ignore the silent switch,
+music stops when a brew starts, and Settings has a switch ("Play cues when the phone is on silent") to
+turn that off. The full result is in `DECISIONS.md`.
 
-For each of the four situations, set the phone up that way, pick the situation on the page, then go down
-the rows: tap Play, listen for about five seconds, and mark what happened.
+One situation is still worth two taps. In the app: Settings, "About this copy", Sound test page.
 
-| Situation | Ringer switch | Music or a podcast in another app |
-|---|---|---|
-| Silent ON, music playing | silent | playing |
-| Silent ON, no music | silent | off |
-| Silent OFF, music playing | ring | playing |
-| Silent OFF, no music | ring | off |
+1. Ringer switch on ring (not silent). Start music or a podcast in another app.
+2. On the page, pick "Silent OFF, music playing".
+3. Tap Play on the `ambient` row and mark what happened. Do the same for `auto`.
+4. Tap "Copy results" and paste them into the chat.
 
-If music stops during a row, start it again before the next row. When all four are done, tap
-"Copy results" and paste them into the chat. One phone is enough for this part unless the two phones run
-different iOS versions.
-
-What we hope to find: a row that is heard with the switch on silent and leaves the music playing. If no
-row does both, the app stays as built: cues ignore the silent switch, music may pause, and Settings has a
-switch to turn that off.
+What we hope to find: `ambient` is heard and the music keeps playing. That is what the app uses when the
+on-silent setting is switched off.
 
 ## Part 2: Checkpoint 1 checklist
 
@@ -51,8 +47,8 @@ Use a real brew where it says so. Tick each box on each phone.
 
 | # | Check | How | Pass looks like |
 |---|---|---|---|
-| 1 | Cues with the silent switch on | Ringer on silent, volume up, start a brew | You hear ticks in the count-in, a chime at 0:00, and a tone, ticks, and chime before each pour |
-| 2 | Cues with music playing | Start music in another app, then start a brew | You hear the cues. Note whether the music kept playing |
+| 1 | Cues with the silent switch on | Ringer on silent, volume up, on-silent setting on (its default), start a brew | You hear ticks in the count-in, a chime at 0:00, and a tone, ticks, and chime before each pour |
+| 2 | Cues with music playing | Start music in another app, then start a brew. Then switch the on-silent setting off, ringer on, and do it again | Setting on: you hear the cues and the music stops, which is expected. Setting off: the music keeps playing and you hear the cues over it. Note whether the music comes back by itself after Done |
 | 3 | Screen stays on for a whole brew | Start a brew and do not touch the phone | The screen is still on at the finish time, about four and a half minutes later |
 | 4 | Switch apps for 20 seconds | Mid-brew, open another app, wait 20 s, come back | The clock is right to the second. No pile-up of late sounds. If sound is off, a red bar says so and one tap brings it back |
 | 5 | Force-quit mid-brew | Mid-brew, swipe the app away, then open it again | The timer comes back at the right second with the red "Sound is off" bar. One tap brings sound back |
@@ -77,12 +73,12 @@ Use a real brew where it says so. Tick each box on each phone.
 
 ## What to send back
 
-- The sound test results from Part 1.
+- The two remaining sound test rows from Part 1, and the iOS version of each phone.
 - For anything that failed: which phone, its iOS version, and what happened instead.
 - Your real grind setting.
 - For item 8: which scale had flipped to ounces, and whether the steps fixed it. If a double tap on the
   Eureka's TARE button did nothing, say so.
-- Whether music stopped when a brew started.
+- Whether your music came back by itself after Done.
 
 ## Not verified yet
 

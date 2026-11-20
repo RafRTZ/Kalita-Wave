@@ -6,14 +6,19 @@
 // - After the app comes back from the background the schedule is thrown away and rebuilt from the
 //   wall-clock position, so nothing plays late and missed cues are never replayed.
 //
-// NOT verified on a Mac: whether cues are audible with the ringer switch on silent, and whether they stop
-// other apps' audio. That depends on navigator.audioSession.type and must be tried on a real iPhone with
-// next/audio-test.html. The result belongs in docs/DECISIONS.md.
+// Whether cues are audible with the ringer switch on silent, and whether they stop other apps' audio,
+// depends on navigator.audioSession.type. A Mac cannot show that; next/audio-test.html on a real iPhone can.
+//
+// Tried on the owner's iPhone on 2026-11-20 (ringer on silent, music playing; docs/DECISIONS.md):
+//   playback                 heard, and the music stopped
+//   auto, ambient, transient muted by the switch, music kept playing
+//   transient-solo, play-and-record   muted by the switch, and the music stopped
+// So no type is both heard on silent and friendly to other audio. The app uses 'playback' when the user
+// wants cues on silent (the default) and 'ambient' when they would rather keep their music.
+// Still to try: that 'ambient' cues are heard over music when the ringer is on.
 
 export const SESSION_TYPES = Object.freeze(['auto', 'ambient', 'transient', 'transient-solo', 'playback', 'play-and-record']);
 
-// Used until the iPhone test says otherwise. 'playback' is expected to be audible on silent but may pause
-// other apps' audio. 'ambient' is expected to mix with other audio and to obey the silent switch.
 export const SESSION_FOR_SILENT_SWITCH = Object.freeze({ ignore: 'playback', obey: 'ambient' });
 
 export function sessionTypeFor(playOnSilent) {

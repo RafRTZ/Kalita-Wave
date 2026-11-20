@@ -101,7 +101,7 @@ Answers to questions the build brief left open. Newest section last. If somethin
 
 1. **Service worker** (kickoff item 1). Needed before Milestone 2 if a cold start in airplane mode must
    work.
-2. **Audio session type.** Waiting for the sound test results.
+2. **Audio session type.** Waiting for the sound test results. (Answered below: sound test result.)
 3. **Rounding collisions in R1.** For some future card, scaling to a small dose could round two pours to
    the same target or the same second. Milestone 1 cannot reach that case (it only has the house recipe).
    Proposed for Milestone 2: merge the two pours. Needs a yes.
@@ -132,3 +132,31 @@ Answers to questions the build brief left open. Newest section last. If somethin
   Until that changes, the owner pushes by clicking Push origin in GitHub Desktop after Claude has shown
   what the push would change. Installing GitHub's command-line tool (`gh`) would let Claude push directly;
   that needs the owner's OK, like any install.
+
+## Sound test result, 2026-11-20
+
+Run by the owner on an iPhone, from the Home Screen icon, on version 2.0.0-m1.2, with the page
+`next/audio-test.html`. Situation tested: ringer switch on silent, music playing in another app.
+
+| Audio session type | Cues | Music |
+|---|---|---|
+| auto | silent | kept playing |
+| ambient | silent | kept playing |
+| transient | silent | kept playing |
+| transient-solo | silent | stopped |
+| playback | heard | stopped |
+| play-and-record | silent | stopped |
+
+- **Finding.** No type is both heard on silent and friendly to other audio. Only `playback` is heard with
+  the switch on silent, and it stops the music.
+- **Decision.** The brief's fallback applies, and it is what was already built: the setting "Play cues when
+  the phone is on silent" is on by default and uses `playback`. Switched off, it uses `ambient`: music
+  keeps playing and the silent switch mutes the cues.
+- **What that means in the kitchen.** With the setting on, starting a brew stops music or a podcast. With
+  it off and the phone on silent, there is no sound at all, only the on-screen cues. A web app cannot do
+  better: sound that mixes with music while ignoring the silent switch needs the native app in brief
+  section 7.
+- **Still to check.** With the ringer on and music playing, that `ambient` cues are heard over the music.
+  Whether music comes back by itself after Done. The iOS version of the phone used was not recorded.
+- **Also reported by the phone.** It offers the audio session and wake lock controls in Home Screen mode.
+  Whether the screen really stays on for a whole brew is checklist item 3.
