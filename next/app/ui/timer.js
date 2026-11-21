@@ -4,13 +4,15 @@
 // on the "next" strip, then a flash when the step starts. Each row of the step list is shaded from left to
 // right as its time runs, so the list shows at a glance how far the brew has come.
 // The screen fits one phone screen with no scrolling: the step list gives up height first.
+// The step list and the buttons under it are built and placed exactly as on the brew screen, and the list
+// is given the height it had there, so a tap on Start changes only the upper part (owner, 2026-11-21).
 
 import { DRAIN, drainByClock } from '../engine/dialin.js';
 import { formatSetting } from '../engine/grind.js';
 import { PHASE, snapshot } from '../engine/timeline.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
 import { h, segmented, setAttr, setText, toggleClass } from './dom.js';
-import { finishRow, stepRow, topActions } from './parts.js';
+import { planCard, topActions, usePlanHeight } from './parts.js';
 import { stepLabel } from './text.js';
 
 const DRAIN_OPTIONS = Object.freeze([
@@ -212,27 +214,34 @@ export function createTimerView(app) {
       h('div', { class: 'next-strip' }, r.nextFill, r.nextLabel, r.nextIn, r.nextCount),
     );
 
-    r.rows = plan.steps.map((step) => stepRow(step, unit));
-    r.finishRow = finishRow(plan);
+    // The same pour plan as on the brew screen.
+    const list = planCard(plan, unit);
+    r.rows = list.rows;
+    r.finishRow = list.finish;
+    r.plan = list.node;
 
     r.pause = h('button', { class: 'btn grow', type: 'button', onclick: () => app.togglePause() });
     r.done = h('button', { class: 'btn primary grow', type: 'button', hidden: true, onclick: () => app.done() }, 'Done');
 
-    const list = h('section', { class: 'card timer-steps', 'aria-label': 'Pour plan' }, h('ol', { class: 'steps' }, r.rows, r.finishRow));
-    // The stylesheet uses the row count to know how small the list may get before the screen scrolls.
-    list.style.setProperty('--rows', String(plan.steps.length + 1));
-
     node.replaceChildren(
-      topBar(app, r.phase),
-      r.soundBar,
-      r.wakeNote,
-      h('div', { class: 'clock-block' }, r.clock, r.clockSub),
-      r.nowCard,
-      list,
+      // The upper part is this screen's own. The pour plan and the buttons are the same as on the brew screen.
+      h('div', { class: 'upper' }, topBar(app, r.phase), r.soundBar, r.wakeNote, h('div', { class: 'clock-block' }, r.clock, r.clockSub), r.nowCard),
+      r.plan,
       h('div', { class: 'bottom-bar' }, holdToReset(app), r.pause, r.done),
     );
     refs = r;
     builtFor = 'active';
+    fit();
+  }
+
+  /**
+   * Give the pour plan the height it had on the brew screen, if there is one for this screen size. While
+   * it holds that height the screen is marked "held", and the stylesheet lets the upper part pack tighter
+   * to make room for it. Called again when the screen changes size.
+   */
+  function fit() {
+    const held = builtFor === 'active' && refs ? usePlanHeight(refs.plan) : false;
+    node.classList.toggle('held', held);
   }
 
   /** Rebuild for the current run and settings. Call after any change of state, unit, or sound. */
@@ -244,6 +253,7 @@ export function createTimerView(app) {
       node.dataset.phase = PHASE.DONE;
       refs = null;
       builtFor = 'done';
+      fit();
       return;
     }
     buildActive(run);
@@ -318,5 +328,5 @@ export function createTimerView(app) {
     if (r.wakeNote.hidden === wakeMissing) r.wakeNote.hidden = !wakeMissing;
   }
 
-  return { node, sync, update };
+  return { node, sync, update, fit };
 }

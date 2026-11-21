@@ -2,15 +2,17 @@
 // "Grind" is what happens at the grinder, on one row: the dose with its minus and plus, and beside it the
 // grind as a recommendation to read. The grind is not set here. It moves after a brew, from the answer to
 // "How did it drain?" on the Done screen, and a line under the row says so until the next brew starts.
-// "Brew" is what happens at the kettle: water, temperature, finish time, and the pour plan.
+// "Brew" is what happens at the kettle: water, temperature, and finish time, then the pour plan.
 // The screen fits one phone screen with no scrolling: the pour plan gives up height first.
+// The pour plan and the buttons under it are built and placed exactly as on the timer, so a tap on Start
+// changes the upper part of the screen and nothing else is seen to move (owner, 2026-11-21).
 
 import { DOSE_MAX_G, DOSE_MIN_G } from '../engine/constants.js';
 import { DRAIN } from '../engine/dialin.js';
 import { formatSetting } from '../engine/grind.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
 import { h, icon, segmented } from './dom.js';
-import { finishRow, stepRow, topActions } from './parts.js';
+import { notePlanHeight, planCard, topActions } from './parts.js';
 import { temperature } from './text.js';
 
 function header(app, c) {
@@ -126,12 +128,13 @@ function grindChangeLine(app, c) {
   );
 }
 
+/** Water, temperature, and finish time: a strip of three numbers in a card of its own. */
 function stats(c) {
   const { plan, unit } = c;
   const stat = (value, key) => h('div', { class: 'stat' }, h('div', { class: 'v' }, value), h('div', { class: 'k' }, key));
   return h(
     'div',
-    { class: 'stats', role: 'group', 'aria-label': 'Recipe summary' },
+    { class: 'card stats', role: 'group', 'aria-label': 'Recipe summary' },
     stat(formatWeight(plan.waterG, unit), 'water'),
     stat(temperature(plan.tempF), 'water temp'),
     stat(formatClock(plan.totalS), 'finish, start here'),
@@ -158,41 +161,31 @@ function grindGroup(app, c) {
   );
 }
 
-/** At the kettle: water, temperature, and finish time on top, the pour plan under them. */
+/** At the kettle: water, temperature, and finish time. The pour plan follows it as a card of its own. */
 function brewGroup(app, c) {
-  const { plan, unit, brewer } = c;
-  const tips = h('button', { class: 'link', type: 'button', onclick: () => app.openSheet('technique') }, `${brewer.shortName} tips`);
-  const section = group(
-    'Brew',
-    'brew-group',
-    tips,
-    h(
-      'div',
-      { class: 'card plan' },
-      stats(c),
-      h('ol', { class: 'steps', 'aria-label': 'Pour plan' }, plan.steps.map((step) => stepRow(step, unit)), finishRow(plan)),
-    ),
-  );
-  // The stylesheet uses the row count to know how small this part may get before the screen scrolls.
-  section.style.setProperty('--rows', String(plan.steps.length + 1));
-  return section;
+  const tips = h('button', { class: 'link', type: 'button', onclick: () => app.openSheet('technique') }, `${c.brewer.shortName} tips`);
+  return group('Brew', 'brew-group', tips, stats(c));
 }
 
 export function renderBrew(app) {
   const c = app.brewContext();
+  const plan = planCard(c.plan, c.unit);
+  const start = () => {
+    // The timer puts its copy of the pour plan exactly where this one is, so note its height first.
+    notePlanHeight(plan.node);
+    app.start();
+  };
   return h(
     'div',
     { class: 'screen brew' },
-    header(app, c),
-    brewerSwitch(app, c),
-    notices(c),
-    grindGroup(app, c),
-    brewGroup(app, c),
+    // The upper part is this screen's own. The pour plan and the buttons are the same as on the timer.
+    h('div', { class: 'upper' }, header(app, c), brewerSwitch(app, c), notices(c), grindGroup(app, c), brewGroup(app, c)),
+    plan.node,
     h(
       'div',
       { class: 'bottom-bar' },
       h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Settings', onclick: () => app.openSheet('settings') }, icon('settings')),
-      h('button', { class: 'btn primary big grow', type: 'button', onclick: () => app.start() }, 'Start'),
+      h('button', { class: 'btn primary big grow', type: 'button', onclick: start }, 'Start'),
     ),
   );
 }

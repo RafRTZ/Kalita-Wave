@@ -567,6 +567,10 @@ function boot() {
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) onVisible();
   });
+  // A turned phone or a resized window: the timer's pour plan stops using a height noted at another size.
+  window.addEventListener('resize', () => {
+    if (timerView) timerView.fit();
+  });
   render();
   if (state.run && state.run.doneAtMs == null) wake.acquire();
   if (!state.run && !state.settings.calibrationAsked) openSheet('calibrate', { first: true });

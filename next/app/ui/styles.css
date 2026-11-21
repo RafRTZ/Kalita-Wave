@@ -4,9 +4,12 @@
    - every text token reaches 4.5:1 on every surface token it may sit on
    - no text under 14 px; body text is 17 px
    - controls are at least 56 px tall (--tap)
-   One more rule, from the owner (2026-11-21): the brew screen and the timer each fit one phone screen.
-   Both are columns exactly as tall as the screen, and their step lists shrink to take up the slack. They
-   scroll only when a screen is too small for even the shrunken list. Sheets are lists and still scroll. */
+   Two more rules, from the owner (2026-11-21):
+   - The brew screen and the timer each fit one phone screen. Both are columns exactly as tall as the
+     screen, and the pour plan shrinks to take up the slack. They scroll only when a screen is too small
+     for even the shrunken plan. Sheets are lists and still scroll.
+   - The pour plan and the buttons under it do not move when Start is tapped. Both screens share one set
+     of rules for them, and none of those rules is written for one screen alone (tests/layout.test.js). */
 
 :root {
   /* surfaces */
@@ -30,6 +33,7 @@
   /* type and sizes: one typeface everywhere, the phone's own */
   --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --tap: 56px;
+  --bar: 64px; /* the buttons along the bottom of the brew screen and the timer */
   --radius: 16px;
   --radius-card: 20px;
 }
@@ -121,11 +125,35 @@ a {
   overflow-y: auto;
 }
 
-/* Nothing in the column shrinks or carries a margin of its own, except the step lists further down. */
+/* Nothing in the column shrinks or carries a margin of its own, except the pour plan further down. */
 .screen.brew > *,
 .screen.timer > * {
   flex: 0 0 auto;
   margin: 0;
+}
+
+/* Both screens are built the same way: an upper part that is the screen's own, then the pour plan and the
+   row of buttons, which sit in the same place on both. The upper part takes all the height the other two
+   leave and spreads its own pieces over it, so no spare room ever lands between the plan and the buttons. */
+.screen > .upper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.screen > .upper > * {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+/* On the timer the pour plan may be holding the height it had on the brew screen (parts.js). The upper
+   part then packs as tightly as it has to, so that the plan can keep that height: its pieces may come
+   within 2 px of each other. Room that is left over is still shared out between them, so on most phones
+   the screen looks no different. */
+.screen.timer.held > .upper {
+  gap: 2px;
 }
 
 /* ---------- shared pieces ---------- */
@@ -273,9 +301,8 @@ a {
   font-weight: 700;
 }
 
+/* Start. Its height and corners come from the row of buttons it sits in (.bottom-bar). */
 .btn.big {
-  min-height: 64px;
-  border-radius: var(--radius-card);
   font-size: 22px;
 }
 
@@ -472,7 +499,7 @@ a {
 
 /* ---------- brew screen ---------- */
 
-.screen.brew > .note {
+.upper > .note {
   text-align: center;
   text-wrap: balance;
 }
@@ -594,9 +621,8 @@ a {
   flex-shrink: 0;
 }
 
-/* Water, temperature, and finish time: the top strip of the Brew card. */
+/* Water, temperature, and finish time: a strip in a card of its own, just above the pour plan. */
 .stats {
-  flex: 0 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: 8px 0;
@@ -627,40 +653,16 @@ a {
   color: var(--sub);
 }
 
-/* ---------- the pour plan, on the brew screen and on the timer ---------- */
-
-.plan,
-.timer-steps {
-  display: flex;
-  flex-direction: column;
-}
-
-/* These two give up height when the screen is short. Their rows shrink from the size they would like to
-   the smallest they stay readable at, and --rows (set by the screen) keeps the part from going below
-   that: past it the whole screen scrolls instead of cutting rows off. The 84 px is what sits around the
-   rows of the Brew part: its label, the strip of three numbers, and the card's border. */
-.screen.brew > .brew-group {
-  flex: 0 1 auto;
-  min-height: calc(var(--rows, 6) * 24px + 84px);
-  /* A little more air above "Brew" than between other things, so the two parts read as two. */
-  margin-top: 6px;
-}
-
-.brew-group > .plan {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.screen.timer > .timer-steps {
-  flex: 0 1 auto;
-  min-height: calc(var(--rows, 6) * 34px);
-}
-
 /* The two labelled parts of the brew screen, "Grind" and "Brew": a small label, then one card. A label
    sits closer to its own card than the two parts sit to each other, so each reads as one thing. */
 .group {
   display: flex;
   flex-direction: column;
+}
+
+/* A little more air above "Brew" than between other things, so the two parts read as two. */
+.screen > .upper > .brew-group {
+  margin-top: 6px;
 }
 
 .group-head {
@@ -691,6 +693,24 @@ a {
   margin: 0;
 }
 
+/* ---------- the pour plan and the buttons under it: the same on the brew screen and on the timer ---------- */
+
+.plan {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The plan is the part of both screens that gives up height. It is as tall as its rows would like to be,
+   and on a short screen the rows shrink to the smallest they stay readable at. --rows (set with the card)
+   keeps the card from going below that: past it the whole screen scrolls instead of cutting rows off.
+   --plan-h is the height the card had on the brew screen when Start was tapped. The timer's card takes it
+   (parts.js), so a plan that had to shrink there is the same size here. */
+.screen.brew > .plan,
+.screen.timer > .plan {
+  flex: 0 1 var(--plan-h, auto);
+  min-height: calc(var(--rows, 6) * 24px + 2px);
+}
+
 .steps {
   list-style: none;
   margin: 0;
@@ -701,8 +721,11 @@ a {
   min-height: 0;
 }
 
+/* A row is also a progress bar. --p is how far its time has run: timer.js sets it, and the brew screen
+   never does, so there the rows stay clear. The shading ends in a thin line of the accent colour, so the
+   moving edge is easy to see from a distance. */
 .step-row {
-  flex: 1 1 44px;
+  flex: 1 1 52px;
   min-height: 24px;
   display: grid;
   grid-template-columns: 50px 1fr auto;
@@ -711,26 +734,28 @@ a {
   padding: 0 16px;
   border-top: 1px solid var(--line);
   line-height: 1.2;
-}
-
-/* On the brew screen the rows take up the height that the slim Grind row gave back. */
-.plan .step-row {
-  flex-basis: 52px;
+  background-image: linear-gradient(
+    90deg,
+    var(--fill) calc(var(--p, 0%) - 2px),
+    var(--accent) calc(var(--p, 0%) - 2px),
+    var(--accent) var(--p, 0%),
+    transparent var(--p, 0%)
+  );
 }
 
 .step-row .t {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
 .step-row .name {
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .step-row .g {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -748,38 +773,14 @@ a {
   color: var(--sub);
 }
 
-/* The cards have round corners and the rows are shaded, so the end rows are rounded to match. */
-.step-row:last-child {
-  border-radius: 0 0 19px 19px;
-}
-
-/* On the timer each row is also a progress bar. --p is how far its time has run, set by timer.js. The
-   shading ends in a thin line of the accent colour, so the moving edge is easy to see from a distance. */
-.timer-steps .step-row {
-  flex-basis: 56px;
-  min-height: 34px;
-  background-image: linear-gradient(
-    90deg,
-    var(--fill) calc(var(--p, 0%) - 2px),
-    var(--accent) calc(var(--p, 0%) - 2px),
-    var(--accent) var(--p, 0%),
-    transparent var(--p, 0%)
-  );
-}
-
-.timer-steps .step-row:first-child {
+/* The card has round corners and the rows can be shaded, so the end rows are rounded to match. */
+.step-row:first-child {
   border-top: 0;
   border-radius: 19px 19px 0 0;
 }
 
-.timer-steps .step-row .t,
-.timer-steps .step-row .name,
-.timer-steps .step-row .g {
-  font-size: 18px;
-}
-
-.timer-steps .step-row.finish .g {
-  font-size: 15px;
+.step-row:last-child {
+  border-radius: 0 0 19px 19px;
 }
 
 .step-row.is-done,
@@ -799,10 +800,18 @@ a {
   font-weight: 700;
 }
 
+/* The row of buttons at the bottom. It is one height wherever it appears, and so are the buttons in it,
+   so what sits above it does not move when the buttons change. */
 .bottom-bar {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: var(--bar);
+}
+
+.bottom-bar .btn {
+  min-height: var(--bar);
+  border-radius: var(--radius-card);
 }
 
 /* ---------- timer ---------- */
@@ -1365,6 +1374,10 @@ textarea.input {
     padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
 
+  .screen > .upper {
+    gap: 6px;
+  }
+
   .setup {
     padding: 4px 12px;
   }
@@ -1373,7 +1386,7 @@ textarea.input {
     padding-bottom: 2px;
   }
 
-  .screen.brew > .brew-group {
+  .screen > .upper > .brew-group {
     margin-top: 2px;
   }
 
@@ -1383,6 +1396,16 @@ textarea.input {
 
   .now-main {
     padding: 6px 16px;
+  }
+
+  /* The two large numbers of the timer go down to their smallest size, so that the upper part of the
+     timer is no taller than the upper part of the brew screen and the pour plan can stay where it was. */
+  .clock {
+    font-size: 64px;
+  }
+
+  .now-target {
+    font-size: 44px;
   }
 }
 

@@ -524,3 +524,63 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   771, the test link shows the one-row Grind part with no Finer or Coarser, fits with no scrolling, and
   reports no errors.
 
+
+## The pour plan stays put when Start is tapped, 2026-11-21 (version 2.0.0-m1.8)
+
+- **What the owner said.** With two screenshots of 2.0.0-m1.7 taken on a phone, the brew screen and the
+  timer just after Start: "see these screenshots. i'd like the bottom section to stay exactly the same
+  between the two after hitting start. it currently moves slightly enough that its disorienting. would
+  like it to appear as only the top portion changes".
+- **What was wrong.** Each screen had rules of its own for the list of pours. Its rows were 52 px tall on
+  the brew screen and 56 px on the timer, its words 17 px and 18 px, and the buttons under it 64 px and
+  56 px. Each screen also spread its spare room between all of its parts, the list and the buttons
+  included. Measured on the owner's two screenshots, the first row sat about 6 points higher on the
+  timer and the last row about 14 points lower.
+- **What changed.**
+  1. One pour plan. `planCard` in `parts.js` builds it for both screens, and the stylesheet has one set
+     of rules for it. A row is 52 px at most and its words are 18 px, on both.
+  2. Both screens are built the same way: an upper part that is the screen's own, then the pour plan,
+     then the row of buttons. The upper part takes all the spare room, so none lands around the plan.
+  3. The row of buttons is 64 px tall on the brew screen, the timer, and the Done screen.
+  4. The plan still gives up height when the brew screen is short of room: on a small phone, under the
+     message about a changed grind, or under a warning. Its height is then noted at the tap on Start,
+     and the timer gives its plan that same height. The upper part of the timer may pack its pieces
+     closer together to leave room for it.
+  5. On a screen under 700 px tall the timer's two large numbers go down to their smallest sizes, 64 px
+     for the clock and 44 px for the weight, so that the upper part of the timer is no taller than the
+     upper part of the brew screen.
+- **Decisions the owner did not specify.** Any of these can be undone.
+  1. Water, water temp, and finish left the card of the pour plan and sit in a card of their own just
+     above it. The plan has to be one whole card for it to look the same on both screens.
+  2. The words in the list are 18 px on the brew screen too (they were 17 px there).
+  3. On the timer the rows are 52 px at most (they were 56 px) and Reset, Pause, and Done are 64 px
+     tall (they were 56 px).
+  4. The buttons themselves still differ: Settings and Start on one screen, Reset and Pause on the
+     other. Their row is the same height in the same place, but the large button starts further right
+     on the timer, because Reset is wider than the settings button.
+  5. The timer cannot match a brew screen it never saw. After the page is loaded again in the middle
+     of a brew, or after the screen changes size, it lays the plan out by the shared rules alone.
+- **The owner's phone.** The screenshots are 920 by 2000 px, the shape of a screen 402 by 874 points.
+  That is my reading of the pictures, not something the owner said. Until now the first size checked
+  was 393 by 771, which stands for a 393 by 852 phone. A desktop browser at 402 by 790 stands for this
+  one: it has no status bar and no home bar, and 790 leaves the app the same 770 px of height.
+- **What the screenshots also show.** Version 2.0.0-m1.7 on a phone, from the Kalita Next icon: the
+  one-row Grind part as designed, with no Finer or Coarser, and both screens fitting with nothing cut
+  off at 36 g on the Wave 185. No check from Part 8 of `TESTING.md` was reported in words.
+- **Checked on the Mac.** In a desktop browser, the place and size of the plan, of each of its rows, of
+  every word in them, and of the row of buttons were read off the brew screen and again off the timer
+  straight after Start, and compared. They are identical in every case tried, and neither screen
+  scrolls: at 36 g and 40 g on the Wave 185 and at 18 g and 20 g on the Wave 155 (5, 6, and 7 rows),
+  and at 36 g with the grind message showing, at each of 375 by 647, 375 by 740, 390 by 775, 393 by
+  771, 402 by 790, 414 by 826, 430 by 851, 440 by 872, 393 by 706, and 430 by 740. At 402 by 790 also
+  in ounces and at 60 g with its warning (8 rows). On the timer the plan and the buttons stayed in
+  place while brewing, paused, with Done showing, and past the target, and again after "Back to timer".
+  When the screen changes size mid-brew the timer lets go of the noted height, and takes it back at the
+  first size. After a reload mid-brew the timer still fits. 153 tests pass, 8 of them new, in
+  `tests/layout.test.js`; each of four mistakes they guard against was made on purpose and caught.
+- **A limit of that check.** The desktop browser's engine is not Safari's. Both screens now get the
+  same rules and the same numbers, so they should agree in Safari as well, but that is reasoning and
+  not a measurement.
+- **Not verified.** Anything on an iPhone. Part 9 of `TESTING.md` is the phone checklist.
+- **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
+  "promote".

@@ -21,8 +21,15 @@ reported that the icon shows the new look on both phones, and nothing else from 
 **Also since 2026-11-21:** the owner asked for a smaller grind row and for the screen to be split into a
 part for grinding and a part for brewing. That was version 2.0.0-m1.6. The owner looked at it and did not
 love it, and asked for the grind beside the grams and a question after each brew instead. That is version
-2.0.0-m1.7, on the test copy only (the Kalita Next icon). Part 8 is its checklist, and nothing in it has
-been tried on a phone yet. Part 7 is kept as a record of the version it replaced.
+2.0.0-m1.7, on the test copy only (the Kalita Next icon). Part 8 is its checklist. Part 7 is kept as a
+record of the version it replaced.
+
+**And then, the same day:** the owner sent two screenshots of 2.0.0-m1.7 from a phone, the brew screen and
+the timer just after Start, and asked that the bottom section stay exactly the same between the two. The
+screenshots show the one-row Grind part as designed and both screens fitting at 36 g on the Wave 185; no
+check from Part 8 was reported in words. Version 2.0.0-m1.8 keeps the list of pours and the buttons in
+place. It is on the test copy only. Part 9 is its checklist, and nothing in it has been tried on a phone
+yet.
 
 ## Where things are
 
@@ -291,6 +298,10 @@ On 2026-11-21 the owner asked for the grind to sit beside the grams as a smaller
 a question after each brew that adjusts the grind for next time. This version is on the test copy only:
 use the Kalita Next icon. Close it fully first, then open it.
 
+Since 2.0.0-m1.8 the icon shows that version, so H1 reads 2.0.0-m1.8 now (S1 in Part 9 is the same
+check). One thing in H2 to H10 looks different: water, water temp, and finish sit in a strip of their own
+above the list. The rest still applies as written.
+
 What moved:
 
 - **The grind** is the smaller number at the right of the grams, on the same row. It has no buttons.
@@ -316,6 +327,31 @@ What moved:
 What to send back: for anything that fails, which phone it was and what you saw. A screenshot helps most.
 Also worth a word: whether the three answers are easy to hit with a wet finger, and whether one step per
 brew feels like the right size of change.
+
+## Part 9: the list stays put when Start is tapped (version 2.0.0-m1.8)
+
+On 2026-11-21 the owner sent a screenshot of the brew screen and one of the timer, and asked that the
+bottom section stay exactly the same between the two, so that only the top is seen to change. This
+version is on the test copy only: use the Kalita Next icon. Close it fully first, then open it.
+
+What moved:
+
+- **The list of pours** is one card, the same on both screens: same place, same size, same words.
+- **Water, water temp, and finish** are in a strip of their own, just above the list.
+- **Reset, Pause, and Done** are a little taller, the height Start already was.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| S1 | The right version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.8. Tap Done at the top right to close |
+| S2 | The list does not move | At 36 g on the Wave 185, keep your eye on the list of pours and tap Start | The top changes to the countdown. The list stays exactly where it was: no row shifts, grows, or shrinks |
+| S3 | The buttons stay in their row | Same tap, watching the bottom | Reset and Pause appear in the row where the settings button and Start were. Pause is as tall as Start was, and its top and bottom edges are where Start's were |
+| S4 | The other brewer | Hold Reset for one second, switch to the Wave 155 at 18 g, tap Start | The same: the list stays put |
+| S5 | With the grind message | After a brew answered "Too slow", tap New brew, look at the list, then tap Start | The list is a little shorter while the message shows, and still does not move when Start is tapped |
+| S6 | Still one screen | Try to drag the brew screen and the timer up and down | Nothing scrolls and nothing is cut off |
+| S7 | The list during a brew | Let a brew run | The shading moves across the rows as before, and the list stays where it is until Done |
+
+What to send back: if anything in the list still shifts, the same two screenshots as before, one just
+before Start and one just after. Which phone it was helps too.
 
 ## Expected to fail, by design for now
 
@@ -347,9 +383,13 @@ brew feels like the right size of change.
   (settings kept, one real brew, and the timer on the second phone). On the Mac it has only been seen in
   a desktop browser set to phone sizes, whose engine is not Safari's.
 - **Version 2.0.0-m1.6, Grind and Brew:** replaced by 2.0.0-m1.7 before any check was reported.
-- **Version 2.0.0-m1.7, grind beside the grams and the drain question:** all of Part 8. Seen only in a
-  desktop browser set to phone sizes. Whether one step per brew is the right size of change, and how the
-  three answers feel under a wet finger, are for real brews to say.
+- **Version 2.0.0-m1.7, grind beside the grams and the drain question:** the owner's two screenshots show
+  it running on a phone, with the one-row Grind part and both screens fitting. Nothing else from Part 8
+  has been reported. Whether one step per brew is the right size of change, and how the three answers
+  feel under a wet finger, are for real brews to say.
+- **Version 2.0.0-m1.8, the list staying put:** all of Part 9. Measured only in a desktop browser set to
+  phone sizes, where the list and the buttons land on the same pixels before and after Start. That
+  browser's engine is not Safari's, so the phone has the last word.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen
