@@ -416,3 +416,35 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   was looked at on the second phone, and that a real brew was run with it (L2 to L4 in Part 6 of
   `TESTING.md`).
 
+## Grind and Brew parts, 2026-11-21 (version 2.0.0-m1.6)
+
+- **What the owner asked for.** With a screenshot of the test copy, the grind row circled: "can we make
+  this part a little smaller. don't htink the grind size needs to be so large. we usually don't change
+  the grind size much. still want to see it there, but can be slightly smaller than the amount of beans
+  we are grinding. and is there something we can do to separate the top portion which is for grinding,
+  and bottom which is for brewing? do it and push to test site".
+- **The grind row.** The grind number is 24 px; the dose stays 34 px. Finer and Coarser are drawn as
+  outlines 44 px tall and 88 px wide, where they were 56 by 96. Their tap area is still 56 px tall, so
+  they are as easy to hit as before. The row is 12 px shorter.
+- **The two parts.** The brew screen now has two labelled parts. "Grind" is the card with the dose and
+  the grind setting. "Brew" is one card with water, water temperature, and finish time across its top
+  and the pour plan under them. Those three numbers used to stand alone between the two cards. There is
+  16 px between the two parts, against 10 px between other things.
+- **Decisions the owner did not specify.** Any of these can be undone.
+  1. The words "Grind" and "Brew" for the two parts.
+  2. The three numbers moved into the Brew card.
+  3. The label "Pour plan" is gone from the brew screen. "Brew" stands in its place, with the tips link
+     ("Wave 185 tips") to its right.
+  4. The sizes: 24 px for the grind number, 44 px for the outlines of Finer and Coarser.
+- **Checked on the Mac.** In a desktop browser at 393 by 771: the brew screen fits with no scrolling, in
+  grams and in ounces, at 36 g on the Wave 185 and 18 g on the Wave 155, with a caution showing (45 g on
+  the Wave 185), and with a grind adjustment showing. Where the tap areas of Undo and the tips link
+  meet, Undo keeps all of its own. 36 g on the Wave 155 still scrolls, by 28 px. It also fits at 393 by
+  706 (the height of the owner's screenshot, which was taken in Safari), at 375 by 647 (an iPhone SE),
+  and at 430 by 839. The tips page opens from its new place. The timer and Done are unchanged and were
+  run once. 133 tests pass. One is new: the grind number must stay smaller than the dose, and Finer and
+  Coarser must keep their full tap area.
+- **Not verified.** Anything on an iPhone. Part 7 of `TESTING.md` is the phone checklist.
+- **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
+  "promote".
+

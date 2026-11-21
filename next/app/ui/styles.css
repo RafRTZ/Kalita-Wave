@@ -425,6 +425,11 @@ a {
   margin: 0;
 }
 
+/* The grind setting changes rarely, so it is set smaller than the dose above it. */
+.grind-value {
+  font-size: 24px;
+}
+
 .dose-input {
   -moz-appearance: textfield;
   appearance: textfield;
@@ -488,10 +493,27 @@ a {
   padding-top: 8px;
 }
 
+/* Finer and Coarser are used rarely, so they are drawn smaller than they are. The outline is 44 px tall,
+   inside a tap area that keeps the full 56, and the row takes its height from the outline. */
 .nudge {
-  flex: 0 0 96px;
-  padding: 8px 6px;
-  font-size: 17px;
+  flex: 0 0 88px;
+  position: relative;
+  margin: -6px 0;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  font-size: 16px;
+}
+
+.nudge::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 0;
+  bottom: 6px;
+  left: 0;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
 }
 
 .grind-note {
@@ -505,21 +527,31 @@ a {
 
 /* A full-height tap area that does not make its line any taller. */
 .grind-note .link,
-.plan-head .link {
+.group-head .link {
   display: inline-flex;
   align-items: center;
   margin: -19px 0;
   vertical-align: middle;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* Undo sits just above the tips link. Where their tap areas meet, Undo keeps all of its own. */
+.grind-note .link {
+  position: relative;
+  z-index: 1;
 }
 
+/* Water, temperature, and finish time: the top strip of the Brew card. */
+.stats {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 8px 0;
+}
+
+/* Two px at the sides, no more: on a 375 px phone "finish, start here" needs the rest to stay on one line. */
 .stat {
   text-align: center;
-  padding: 0 4px;
+  padding: 0 2px;
   border-left: 1px solid var(--line);
 }
 
@@ -550,11 +582,19 @@ a {
 }
 
 /* These two give up height when the screen is short. Their rows shrink from the size they would like to
-   the smallest they stay readable at, and --rows (set by the screen) keeps the card from going below
-   that: past it the whole screen scrolls instead of cutting rows off. */
-.screen.brew > .plan {
+   the smallest they stay readable at, and --rows (set by the screen) keeps the part from going below
+   that: past it the whole screen scrolls instead of cutting rows off. The 84 px is what sits around the
+   rows of the Brew part: its label, the strip of three numbers, and the card's border. */
+.screen.brew > .brew-group {
   flex: 0 1 auto;
-  min-height: calc(var(--rows, 6) * 24px + 38px);
+  min-height: calc(var(--rows, 6) * 24px + 84px);
+  /* A little more air above "Brew" than between other things, so the two parts read as two. */
+  margin-top: 6px;
+}
+
+.brew-group > .plan {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .screen.timer > .timer-steps {
@@ -562,27 +602,39 @@ a {
   min-height: calc(var(--rows, 6) * 34px);
 }
 
-.plan-head {
+/* The two labelled parts of the brew screen, "Grind" and "Brew": a small label, then one card. A label
+   sits closer to its own card than the two parts sit to each other, so each reads as one thing. */
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-head {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px 8px 16px;
+  padding: 0 12px 4px 16px;
 }
 
-.plan-head .lbl {
+.group-head .lbl {
   margin: 0;
 }
 
-.plan-head .link {
+.group-head .link {
   text-decoration: none;
 }
 
-.plan-head .link::after {
+.group-head .link::after {
   content: '\203A';
   margin-left: 5px;
   font-size: 20px;
   line-height: 1;
+}
+
+.group > .card {
+  margin: 0;
 }
 
 .steps {
@@ -1228,8 +1280,16 @@ textarea.input {
     padding-top: 4px;
   }
 
-  .plan-head {
-    padding: 6px 12px 4px 16px;
+  .group-head {
+    padding-bottom: 2px;
+  }
+
+  .screen.brew > .brew-group {
+    margin-top: 2px;
+  }
+
+  .stats {
+    padding: 5px 0;
   }
 
   .now-main {

@@ -128,13 +128,28 @@ test('the brew screen and the timer are columns exactly as tall as the screen, s
   assert.match(rule[1], /flex-direction:\s*column/);
   assert.match(rule[1], /height:\s*100dvh/);
   // The step lists are what gives up height, down to a floor the screens set with --rows.
-  for (const selector of ['.screen.brew > .plan', '.screen.timer > .timer-steps']) {
+  for (const selector of ['.screen.brew > .brew-group', '.screen.timer > .timer-steps']) {
     const escaped = selector.replace(/[.>]/g, '\\$&');
     const list = css.match(new RegExp(`\\n${escaped}\\s*\\{([^}]*)\\}`));
     assert.ok(list, `rule for ${selector}`);
     assert.match(list[1], /flex:\s*0 1 auto/, `${selector} must be allowed to shrink`);
     assert.match(list[1], /min-height:\s*calc\(var\(--rows/, `${selector} must keep a floor from --rows`);
   }
+});
+
+test('the grind setting is drawn smaller than the dose, and Finer and Coarser keep a full tap area', () => {
+  const shared = css.match(/\n\.dose-input,\n\.num-input,\n\.grind-value\s*\{([^}]*)\}/);
+  assert.ok(shared, 'one rule for the large numbers');
+  const dosePx = Number(shared[1].match(/font-size:\s*(\d+)px/)[1]);
+  // The rule for .grind-value alone: the one whose selector is not the tail of a comma list.
+  const grind = css.match(/[^,]\n\.grind-value\s*\{([^}]*)\}/);
+  assert.ok(grind, 'a rule for .grind-value alone');
+  const grindPx = Number(grind[1].match(/font-size:\s*(\d+)px/)[1]);
+  assert.ok(grindPx < dosePx, `.grind-value (${grindPx} px) must be smaller than the dose (${dosePx} px)`);
+  // The two buttons are drawn smaller than they are. .nudge must not shrink the 56 px it gets from .btn.
+  const nudge = css.match(/\n\.nudge\s*\{([^}]*)\}/);
+  assert.ok(nudge, 'a rule for .nudge');
+  assert.doesNotMatch(nudge[1], /(^|[\s;])(min-|max-)?height:/, '.nudge must not set a height of its own');
 });
 
 test('controls are at least 56 px tall', () => {

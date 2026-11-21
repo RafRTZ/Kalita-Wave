@@ -18,6 +18,10 @@ there, answered "Looks good", and asked for it on the live app. So since the sec
 and on which phone, has not been noted. Part 6 is the short list for the live icon: the owner has
 reported that the icon shows the new look on both phones, and nothing else from that list yet.
 
+**Also since 2026-11-21:** the owner asked for a smaller grind row and for the screen to be split into a
+part for grinding and a part for brewing. That is version 2.0.0-m1.6, on the test copy only (the Kalita
+Next icon). Part 7 is its checklist. Nothing in it has been tried on a phone yet.
+
 ## Where things are
 
 - **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ gets every change first.
@@ -256,6 +260,27 @@ the old look, wait ten minutes and try again: GitHub lets phones keep files for 
 | L3 | One real brew | Brew as usual from the Kalita icon | Cues play, the screen stays on, the shade moves across the steps, and Done shows target next to actual |
 | L4 | The second phone | Open Kalita on it, then tap Start | Both screens fit, with nothing cut off and nothing to scroll to |
 
+## Part 7: Grind and Brew (version 2.0.0-m1.6)
+
+On 2026-11-21 the owner asked for the grind row to be smaller than the dose, and for the top of the
+screen (grinding) to be set apart from the bottom (brewing). This version is on the test copy only: use
+the Kalita Next icon. Close it fully first, then open it.
+
+What moved:
+
+- **Water, water temp, and finish** are now the top strip of the lower card, above the pour plan.
+- **Technique tips** open from "Wave 185 tips" (or "Wave 155 tips") to the right of the word "BREW".
+- **The label "POUR PLAN"** is gone. "BREW" stands in its place.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| G1 | The right version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.6. Tap Done at the top right to close |
+| G2 | Two parts | Look at the brew screen | A small "GRIND" label over the card with the grams of coffee and the grind. A small "BREW" label over one card with water, water temp, finish, and the pour plan |
+| G3 | The grind is smaller | Compare the two numbers in the Grind card | The grind number is clearly smaller than the grams of coffee, and still easy to read |
+| G4 | Finer and Coarser | Tap Coarser once, then tap Undo in the line that appears | Each is hit first time. The grind number goes up by one step, then back |
+| G5 | Still one screen | Try to drag the brew screen up and down, at 36 g on the Wave 185 and at 18 g on the Wave 155 | Nothing scrolls and nothing is cut off |
+| G6 | Tips | Tap "Wave 185 tips" | The tips page opens. Tap Close to come back |
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -285,6 +310,8 @@ the old look, wait ten minutes and try again: GitHub lets phones keep files for 
   that the Kalita icon shows the new look on both phones. Not reported one by one: L2 to L4 in Part 6
   (settings kept, one real brew, and the timer on the second phone). On the Mac it has only been seen in
   a desktop browser set to phone sizes, whose engine is not Safari's.
+- **Version 2.0.0-m1.6, Grind and Brew:** all of Part 7. Seen only in a desktop browser set to phone
+  sizes. How the smaller Finer and Coarser feel under a wet finger is for a phone to say.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen

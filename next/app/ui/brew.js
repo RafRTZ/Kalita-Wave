@@ -1,5 +1,7 @@
-// The brew screen in its Ready state: brewer switch, dose and grind, the recipe summary, the pour plan, and
-// one large Start button. It fits one phone screen with no scrolling: the pour plan gives up height first.
+// The brew screen in its Ready state: the brewer switch, then two labelled parts and one large Start button.
+// "Grind" is what happens at the grinder: the dose and the grind setting. "Brew" is what happens at the
+// kettle: water, temperature, finish time, and the pour plan. It fits one phone screen with no scrolling:
+// the pour plan gives up height first.
 
 import { DOSE_MAX_G, DOSE_MIN_G } from '../engine/constants.js';
 import { formatSetting, offsetInSteps } from '../engine/grind.js';
@@ -89,7 +91,7 @@ function grindRows(app, c) {
   return [
     h(
       'div',
-      { class: 'stepper grind', role: 'group', 'aria-label': 'Grind' },
+      { class: 'stepper grind', role: 'group', 'aria-label': 'Grind setting' },
       h('button', { class: 'btn nudge', type: 'button', onclick: () => app.nudgeGrind(-1) }, 'Finer'),
       h(
         'div',
@@ -116,30 +118,47 @@ function stats(c) {
   const { plan, unit } = c;
   const stat = (value, key) => h('div', { class: 'stat' }, h('div', { class: 'v' }, value), h('div', { class: 'k' }, key));
   return h(
-    'section',
-    { class: 'stats', 'aria-label': 'Recipe summary' },
+    'div',
+    { class: 'stats', role: 'group', 'aria-label': 'Recipe summary' },
     stat(formatWeight(plan.waterG, unit), 'water'),
     stat(temperature(plan.tempF), 'water temp'),
     stat(formatClock(plan.totalS), 'finish, start here'),
   );
 }
 
-function planCard(app, c) {
-  const { plan, unit, brewer } = c;
-  const card = h(
+/** A labelled part of the screen: its name, an optional action at the right of the name, and one card. */
+function group(name, extraClass, action, card) {
+  return h(
     'section',
-    { class: 'card plan', 'aria-label': 'Pour plan' },
+    { class: `group ${extraClass}`, 'aria-label': name },
+    h('div', { class: 'group-head' }, h('h2', { class: 'lbl' }, name), action),
+    card,
+  );
+}
+
+/** At the grinder: how much coffee, and the grind setting. */
+function grindGroup(app, c) {
+  return group('Grind', 'grind-group', null, h('div', { class: 'card setup' }, doseRow(app, c), grindRows(app, c)));
+}
+
+/** At the kettle: water, temperature, and finish time on top, the pour plan under them. */
+function brewGroup(app, c) {
+  const { plan, unit, brewer } = c;
+  const tips = h('button', { class: 'link', type: 'button', onclick: () => app.openSheet('technique') }, `${brewer.shortName} tips`);
+  const section = group(
+    'Brew',
+    'brew-group',
+    tips,
     h(
       'div',
-      { class: 'plan-head' },
-      h('h2', { class: 'lbl' }, 'Pour plan'),
-      h('button', { class: 'link', type: 'button', onclick: () => app.openSheet('technique') }, `${brewer.shortName} tips`),
+      { class: 'card plan' },
+      stats(c),
+      h('ol', { class: 'steps', 'aria-label': 'Pour plan' }, plan.steps.map((step) => stepRow(step, unit)), finishRow(plan)),
     ),
-    h('ol', { class: 'steps' }, plan.steps.map((step) => stepRow(step, unit)), finishRow(plan)),
   );
-  // The stylesheet uses the row count to know how small this card may get before the screen scrolls.
-  card.style.setProperty('--rows', String(plan.steps.length + 1));
-  return card;
+  // The stylesheet uses the row count to know how small this part may get before the screen scrolls.
+  section.style.setProperty('--rows', String(plan.steps.length + 1));
+  return section;
 }
 
 export function renderBrew(app) {
@@ -150,9 +169,8 @@ export function renderBrew(app) {
     header(app, c),
     brewerSwitch(app, c),
     notices(c),
-    h('section', { class: 'card setup', 'aria-label': 'Dose and grind' }, doseRow(app, c), grindRows(app, c)),
-    stats(c),
-    planCard(app, c),
+    grindGroup(app, c),
+    brewGroup(app, c),
     h(
       'div',
       { class: 'bottom-bar' },
