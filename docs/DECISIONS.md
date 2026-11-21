@@ -410,4 +410,9 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   match too, and `classic.html` is the original calculator. Opened in a desktop browser at 393 by 771,
   the live link shows the new look with no "NEXT" label, fits with no scrolling, and reports no errors.
   What the Kalita icon shows on the phones is for the owner to report: Part 6 of `TESTING.md`.
+- **The phones, 2026-11-21.** Asked "Does the Kalita icon show the new look on both phones?", the owner
+  answered "Yes, both phones". So the live icon shows the new look on both. Not stated, so not assumed:
+  that the version line was read, that the settings carried over with no grind question, that the timer
+  was looked at on the second phone, and that a real brew was run with it (L2 to L4 in Part 6 of
+  `TESTING.md`).
 

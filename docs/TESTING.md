@@ -15,7 +15,8 @@ in Part 4, and both were reported as showing the dripper.
 That is version 2.0.0-m1.5. It went to the test copy first (the Kalita Next icon). The owner tried it
 there, answered "Looks good", and asked for it on the live app. So since the second promote, also on
 2026-11-21, the live app is 2.0.0-m1.5 as well. Part 5 is its checklist; which of its checks were run,
-and on which phone, has not been noted. Part 6 is the short list for the live icon.
+and on which phone, has not been noted. Part 6 is the short list for the live icon: the owner has
+reported that the icon shows the new look on both phones, and nothing else from that list yet.
 
 ## Where things are
 
@@ -280,9 +281,10 @@ the old look, wait ten minutes and try again: GitHub lets phones keep files for 
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
 - **Version 2.0.0-m1.5, the new look:** the owner tried it on the test copy and answered "Looks good",
-  without saying which phone or which of the Part 5 checks. Nothing has been reported from the second
-  phone. On the live icon it is unproven until Part 6 is done. On the Mac it has only been seen in a
-  desktop browser set to phone sizes, whose engine is not Safari's.
+  without saying which phone or which of the Part 5 checks. After the second promote the owner reported
+  that the Kalita icon shows the new look on both phones. Not reported one by one: L2 to L4 in Part 6
+  (settings kept, one real brew, and the timer on the second phone). On the Mac it has only been seen in
+  a desktop browser set to phone sizes, whose engine is not Safari's.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen
