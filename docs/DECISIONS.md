@@ -228,3 +228,19 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   the device checklist is waiting, apart from the two items that are expected to fail for now (17 and
   18), which have not been reported. The next step is the owner's: say "promote" when ready.
 
+## Promote, 2026-11-20
+
+- **The owner said "Promote".** That closes Checkpoint 1.
+- **What was done.** `scripts/promote.sh` ran for the first time. 128 tests passed, `classic.html` was
+  confirmed as the original, and the tested app was copied from `next/` to the root: 31 files in `app/`,
+  `vendor/`, `assets/`, plus `index.html` and `manifest.webmanifest`. The live app is version 2.0.0-m1.4.
+- **Checked on the Mac before the push.** The root copies are identical to `next/`. Served locally, the
+  root opens the new app as the live copy (its storage names start `kw:live:`), runs a brew, and resets.
+  `classic.html` is the old calculator, and `/next/` is still the test copy.
+- **Not checked, because a Mac cannot.** The live Home Screen icon on the phones: Part 4 of `TESTING.md`.
+  Expected, not verified: each phone's live copy starts with fresh settings and asks the grind question
+  again, and an existing icon keeps its old picture and name until it is deleted and added again.
+- **Not promoted.** `next/audio-test.html`, the sound test page, stays on the test copy only.
+- **Undoing a promote.** Revert the promote commit and push, and the old page is back at the root. Until
+  then the old calculator is always at `classic.html`.
+

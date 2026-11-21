@@ -5,13 +5,15 @@ until it has been tried on a real phone. Do every item on both phones.
 
 **Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on one phone,
 running iOS 27.2.1. The second phone was reported as working; which checks were run there, and its iOS
-version, have not been noted. Both checks in Part 3 were reported as passing.
+version, have not been noted. Both checks in Part 3 were reported as passing. The owner then said
+"promote", so the live app is now the new app. Part 4 is the short list for the live icon.
 
 ## Where things are
 
-- **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ (only exists after a push).
-- **Live app:** https://rafrtz.github.io/Kalita-Wave/ stays exactly as it is until you say "promote".
-- **Original calculator, frozen:** https://rafrtz.github.io/Kalita-Wave/classic.html (after a push).
+- **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ gets every change first.
+- **Live app:** https://rafrtz.github.io/Kalita-Wave/ is the new app since the promote of 2026-11-20
+  (version 2.0.0-m1.4). It changes only when you say "promote".
+- **Original calculator, frozen:** https://rafrtz.github.io/Kalita-Wave/classic.html
 
 ## Set up each phone
 
@@ -61,7 +63,7 @@ Use a real brew where it says so. Tick each box on each phone.
 | 13 | Pause and Done | Pause, wait, resume. Tap Done at the end | The clock picks up where it paused. Done shows target next to actual. "Back to timer" undoes a Done tapped by accident |
 | 14 | Wet-hand taps | Use the app with wet fingers | Buttons are big enough to hit first time |
 | 15 | Home Screen icon | Look at the icon | A brown dripper with wave lines on cream |
-| 16 | The live app is untouched | Open your usual Kalita icon or the live link | It is exactly the old calculator |
+| 16 | The live app is untouched (before the promote only) | Open your usual Kalita icon or the live link | It is exactly the old calculator. Since the promote it shows the new app: see Part 4 |
 
 ## Part 3: two checks for version 2.0.0-m1.4
 
@@ -136,6 +138,28 @@ What to report:
 
 Hold Reset for one second to clear the second brew afterwards.
 
+## Part 4: after the promote
+
+The live app became the new app with the promote of 2026-11-20. Do these on each phone, with your usual
+Kalita icon, not Kalita Next. Wait two to ten minutes after the push first.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| P1 | The live icon shows the new app | Open your usual Kalita icon | The new brew screen, with no "NEXT" label beside the name. In Settings, "About this copy" says "Live copy" and Version 2.0.0-m1.4 |
+| P2 | It opens as an app | Look at the screen after opening it from the icon | Full screen, with no Safari address bar. "About this copy" says "Opened from the Home Screen" |
+| P3 | The grind question | The live copy asks its one question on first open | After you enter your real setting, the brew screen shows that number |
+| P4 | One real brew | Make coffee from the live icon | Cues play, the screen stays on, and Done shows target next to actual |
+| P5 | The old calculator is still there | Settings, "About this copy", "Original calculator" | The old calculator opens |
+
+Good to know:
+
+- The live copy keeps its own settings on each phone. Nothing carries over from Kalita Next, so set the
+  sound switches and the grind setting once more.
+- An icon added before the promote is expected to keep its old picture and name. To get the new dripper
+  icon, delete it and add it again: open the live link in Safari, tap Share, then Add to Home Screen.
+- If P2 fails and Safari's address bar shows, delete the icon and add it again the same way.
+- Kalita Next stays as the test copy. Later changes land there first.
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -160,3 +184,5 @@ Hold Reset for one second to clear the second brew afterwards.
   the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
+- **After the promote:** all of Part 4. The promoted app has only been tried in a desktop browser on the
+  Mac, never from a live Home Screen icon.
