@@ -69,8 +69,51 @@ This version changes how the app lets go of the phone's audio when a brew ends. 
 
 | # | Check | How | Pass looks like |
 |---|---|---|---|
-| A | Music after a brew | On-silent setting on, music playing, start a brew, tap Done. Then press play on the lock screen, in Control Center, or on headphones | The music restarts with that one tap. Say so if it ever comes back by itself |
+| A | Music after a brew | The steps are spelled out under "Check A, step by step" below | The music restarts with one press of play. Say so if it ever comes back by itself |
 | B | Two brews in a row | Finish a brew, tap New brew, and start another straight away | You hear the cues in the second brew too |
+
+### Check A, step by step
+
+What it is for: with the on-silent setting on, music stops when a brew starts and does not come back by
+itself. This check finds out whether one press of play brings it back, without opening the music app.
+
+Set up:
+
+1. Silent mode on the phone: on or off, it makes no difference to this check.
+2. Volume: up far enough to hear music.
+3. Open the test copy from the Kalita Next icon and tap the settings button (three sliders, top right).
+   - Scroll to the bottom, to "About this copy". It must say Version 2.0.0-m1.4.
+   - Scroll back up to "Timer and sound". "Sound cues" must be On, and "Play cues when the phone is on
+     silent" must be On. Both start that way. Leave the other settings alone.
+   - Tap Done at the top right to close Settings. That is a different Done from the one in step 7.
+
+Run it:
+
+4. Open the music or podcast app and start something playing. Leave it playing.
+5. Go back to Kalita Next. The music should still be playing.
+6. Tap Start. The music stops, and you hear ticks and then a chime. That is expected.
+7. End the brew, one of two ways:
+   - Quick, no coffee needed: after the first chime, press and hold Reset (bottom left) for one second.
+     The app goes back to the brew screen.
+   - Real brew: when you finish, tap the Done button at the bottom right. It only appears once the last
+     pour has started (2:40 for 36 g on the Wave 185, 2:00 for 18 g on the Wave 155). The app shows the
+     Done screen. Do not tap "Back to timer".
+8. Wait two seconds. Do not open the music app.
+9. Press play in one of these places:
+   - Control Center: swipe down from the top right corner of the screen (on a phone with a Home button,
+     swipe up from the bottom edge), then tap play on the music controls.
+   - Lock screen: press the side button to lock the phone, wake it, then tap play on the music controls.
+   - Headphones: press their play button.
+
+What to report:
+
+- **Pass:** the music starts again from that one press.
+- **Fail:** nothing plays, or there are no music controls, or the controls show something other than the
+  music. Say which, and where play was pressed.
+- Also say so if the music ever comes back by itself, with no press at all.
+
+The quick way and the real brew run the same code in the app, but a phone may treat four minutes of
+silence differently from ten seconds. If the quick way passes, try it once more at the end of a real brew.
 
 ## Expected to fail, by design for now
 
