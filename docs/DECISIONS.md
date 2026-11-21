@@ -659,3 +659,8 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   `TESTING.md` is the phone checklist.
 - **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
   "promote".
+- **Pushed and checked, 2026-11-21.** `0e17fe7..07cfe2d`. On the site afterward: the test copy serves
+  2.0.0-m1.9 and all 36 of its files match the push; the live app still serves 2.0.0-m1.5 and its 33
+  files are unchanged; `classic.html` is the original calculator. Opened in a desktop browser at 402 by
+  790, the test link shows the tinted lower part on the same pixels before and after Start, opens the
+  tips page from the timer, fits with no scrolling, and reports no errors.
