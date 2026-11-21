@@ -194,8 +194,9 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **So.** No web app can make the music come back by itself. The native app in brief section 7 could.
 - **What the app now does (from version 2.0.0-m1.4).** At Done, Reset, and New brew it first switches to
   the music-friendly audio type, then closes its audio half a second later. The aim is to be fully out of
-  the way, so one tap on play (lock screen, Control Center, or headphones) restarts the music. Not yet
-  tried on a phone. It is a long shot that this also brings the music back by itself.
+  the way, so one tap on play (lock screen, Control Center, or headphones) restarts the music. Not tried
+  on a phone when this was written. (Updated below: check A was reported as passing.) It is a long shot
+  that this also brings the music back by itself.
 - **Ways to ease it, as put to the owner.**
   1. On days with music or a podcast, use the "Off" side of the on-silent switch: nothing stops, and the
      cues play over it when the ringer is on. This works today.
@@ -216,7 +217,14 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **Push.** The owner pushed 2.0.0-m1.4. Checked straight after: the test copy on the site serves
   2.0.0-m1.4, all 32 files under `next/` match the repo, and `index.html` and `classic.html` on the site
   are still the original calculator.
-- **Where Checkpoint 1 stands.** Both phones are now reported as working. The audio change in 2.0.0-m1.4
-  (Part 3 of `TESTING.md`, checks A and B) has not been reported on a phone yet. The next step is the
-  owner's: say "promote" when ready.
+- **Check A, music after a brew.** Reported by the owner as passing: after a brew has stopped the music,
+  one press of play brings it back without opening the music app. Not stated, so not assumed: whether the
+  brew was ended with Reset (the quick way) or with Done after a real brew, where play was pressed, and
+  on which phone. Nothing was said about the music coming back by itself.
+- **Check B, two brews in a row.** Reported by the owner as passing: a brew started straight after
+  another one still has its cues. Not stated: whether the first brew was ended with Reset or with Done
+  and New brew.
+- **Where Checkpoint 1 stands.** Both phones are reported as working, and checks A and B pass. Nothing on
+  the device checklist is waiting, apart from the two items that are expected to fail for now (17 and
+  18), which have not been reported. The next step is the owner's: say "promote" when ready.
 

@@ -5,7 +5,7 @@ until it has been tried on a real phone. Do every item on both phones.
 
 **Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on one phone,
 running iOS 27.2.1. The second phone was reported as working; which checks were run there, and its iOS
-version, have not been noted. Part 3 (two checks for version 2.0.0-m1.4) has not been reported yet.
+version, have not been noted. Both checks in Part 3 were reported as passing.
 
 ## Where things are
 
@@ -70,7 +70,7 @@ This version changes how the app lets go of the phone's audio when a brew ends. 
 | # | Check | How | Pass looks like |
 |---|---|---|---|
 | A | Music after a brew | The steps are spelled out under "Check A, step by step" below | The music restarts with one press of play. Say so if it ever comes back by itself |
-| B | Two brews in a row | Finish a brew, tap New brew, and start another straight away | You hear the cues in the second brew too |
+| B | Two brews in a row | The steps are spelled out under "Check B, step by step" below | You hear the cues in the second brew too |
 
 ### Check A, step by step
 
@@ -115,6 +115,27 @@ What to report:
 The quick way and the real brew run the same code in the app, but a phone may treat four minutes of
 silence differently from ten seconds. If the quick way passes, try it once more at the end of a real brew.
 
+### Check B, step by step
+
+What it is for: the app now closes its audio when a brew ends. This check makes sure a brew started right
+after another one still has its sounds. No music is needed.
+
+1. Same set-up as check A: Version 2.0.0-m1.4, both sound switches On, volume up.
+2. Tap Start. You hear ticks and then a chime.
+3. End the brew, one of two ways:
+   - Quick, no coffee needed: after the first chime, press and hold Reset (bottom left) for one second.
+   - Real brew: tap Done at the end, then tap New brew on the Done screen.
+4. As soon as the brew screen is back, tap Start again.
+5. Listen for the ticks and the chime again.
+
+What to report:
+
+- **Pass:** the second brew has its ticks and chime, the same as the first.
+- **Fail:** the second brew is silent, or a red bar says "Sound is off. Tap here to turn it back on."
+  Say which.
+
+Hold Reset for one second to clear the second brew afterwards.
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -135,5 +156,7 @@ silence differently from ten seconds. If the quick way passes, try it once more 
 - **On the second phone:** it was reported as working, with no list of which checks were run. Any check
   not tried there is still unproven on that phone. The ones that depend most on the phone itself are 1 to
   5: sound on silent, sound with music, the screen staying on, switching apps, and a force-quit.
-- **On any phone:** the change in version 2.0.0-m1.4, which is Part 3, checks A and B.
+- **Part 3 after a real brew:** checks A and B were reported as passing, without saying whether that was
+  the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
+  after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
