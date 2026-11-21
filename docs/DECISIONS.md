@@ -405,4 +405,9 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   been reported about this version at all, on the test copy or the live one. Part 6 of `TESTING.md` is
   the short list.
 - **Undoing it.** Revert the promote commit and push: the live app is 2.0.0-m1.4 again.
+- **Pushed and checked, 2026-11-21.** `a77ad19..982de7b`, pushed with the key. On the site afterward:
+  the live app serves 2.0.0-m1.5 and all 33 of its files match the push, the 34 files of the test copy
+  match too, and `classic.html` is the original calculator. Opened in a desktop browser at 393 by 771,
+  the live link shows the new look with no "NEXT" label, fits with no scrolling, and reports no errors.
+  What the Kalita icon shows on the phones is for the owner to report: Part 6 of `TESTING.md`.
 
