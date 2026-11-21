@@ -248,4 +248,26 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   `classic.html` is still the original. Opened in a desktop browser, the live link shows the new app with
   its one-time grind question and no errors. What the live Home Screen icon does on the phones is for
   the owner to report: Part 4 of `TESTING.md`.
+- **First report from the phones, 2026-11-20.** The owner's words: "the old app link works, but the icon
+  didn't update. it's just a blank "K" app". Taken as: the old calculator still opens (P5 in Part 4 of
+  `TESTING.md`), and the usual Home Screen icon still has its old picture, a blank tile with the letter
+  K. Not stated, so not assumed: which phone or phones, whether the old calculator was opened from the
+  button in Settings or from its link, whether the icon opens the new app, and whether deleting the icon
+  and adding it again had been tried.
+- **Why the icon is a "K".** Checked in the files: `classic.html`, which was the front page until the
+  promote, names no icon picture at all, and its title is "Kalita Wave Calculator". With no picture to
+  use, a phone draws the first letter of the name. An iPhone copies the picture when an icon is made and
+  does not fetch it again, so a promote cannot change an icon that already exists. Both are long-standing
+  iPhone behaviour, not something tested here, and the report fits them. This was listed as expected
+  before the push.
+- **What a new icon will get.** Checked on the Mac: the live front page names `assets/icon-180.png` as
+  its icon and "Kalita Wave" as its name, and the site serves that picture, byte for byte the one the
+  Kalita Next icon uses. That icon was reported as showing the dripper (check 15). Not verified: a new
+  icon made from the live link on the phones. The steps are in Part 4 of `TESTING.md`, "Getting the
+  dripper icon, step by step". The old calculator stores nothing on the phone, so removing the old icon
+  loses only the settings the new app has saved inside it since the promote.
+- **Two things noticed on the way.** The live address typed in lower case (`kalita-wave`) is an error
+  page, so the capitals matter. And once the live icon is remade, it and Kalita Next show the same
+  picture, told apart by the name under the icon and by the "NEXT" label inside the test copy. A marked
+  icon for the test copy would be an app change, and the owner has not asked for one.
 

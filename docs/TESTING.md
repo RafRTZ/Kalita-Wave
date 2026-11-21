@@ -6,7 +6,10 @@ until it has been tried on a real phone. Do every item on both phones.
 **Status, 2026-11-20:** Part 1 is done. All 16 checks in Part 2 were reported as passing on one phone,
 running iOS 27.2.1. The second phone was reported as working; which checks were run there, and its iOS
 version, have not been noted. Both checks in Part 3 were reported as passing. The owner then said
-"promote", so the live app is now the new app. Part 4 is the short list for the live icon.
+"promote", so the live app is now the new app. Part 4 is the short list for the live icon. First report
+on it: the old calculator still opens, and the usual icon kept its old picture, a blank tile with a "K".
+That is what an icon made before the promote does. "Getting the dripper icon, step by step" in Part 4
+replaces it.
 
 ## Where things are
 
@@ -151,14 +154,53 @@ Kalita icon, not Kalita Next. Wait two to ten minutes after the push first.
 | P4 | One real brew | Make coffee from the live icon | Cues play, the screen stays on, and Done shows target next to actual |
 | P5 | The old calculator is still there | Settings, "About this copy", "Original calculator" | The old calculator opens |
 
+Reported so far, 2026-11-20: P5 passes ("the old app link works"). The usual icon did not change its
+picture ("it's just a blank "K" app"). P1 to P4 have not been reported one by one.
+
 Good to know:
 
 - The live copy keeps its own settings on each phone. Nothing carries over from Kalita Next, so set the
   sound switches and the grind setting once more.
-- An icon added before the promote is expected to keep its old picture and name. To get the new dripper
-  icon, delete it and add it again: open the live link in Safari, tap Share, then Add to Home Screen.
-- If P2 fails and Safari's address bar shows, delete the icon and add it again the same way.
+- An icon made before the promote keeps its old picture and name. An iPhone copies the picture at the
+  moment the icon is made and does not fetch it again. The old calculator page had no icon picture, so
+  the phone drew the first letter of its name, a "K" on a blank tile. The steps below make a new icon.
+- If P2 fails and Safari's address bar shows, make a new icon the same way.
 - Kalita Next stays as the test copy. Later changes land there first.
+
+### Getting the dripper icon, step by step
+
+Do this on each phone. It makes the new icon first and removes the old one last, so there is always a
+working icon.
+
+1. Open the live link in Safari, not from an icon: https://rafrtz.github.io/Kalita-Wave/
+   - Typed by hand, the capital K and the capital W matter. In lower case the site shows an error page.
+   - Tapping the link in a message or a note, or scanning a code for it with the camera, avoids typing.
+2. Check the page before going on. It must be the new brew screen, with no "NEXT" label beside the name.
+   - If it is the old calculator, the phone is showing a kept copy. Reload the page, or wait ten minutes
+     and reload.
+   - If it says "NEXT", this is the test copy. Take `next/` off the end of the address.
+3. Tap Share, then Add to Home Screen, the same way the Kalita Next icon was made.
+4. Look at the small picture beside the name before tapping Add.
+   - It should be the brown dripper on cream, and the name should read "Kalita Wave". Tap Add.
+   - If the picture is a "K", or a small snapshot of the page, tap Cancel, reload the page, and try once
+     more. If it is still not the dripper, stop and report it.
+5. The Home Screen now has two icons: the new dripper named "Kalita Wave", and the old "K". Open the
+   new one. It should fill the screen, with no Safari address bar.
+6. Answer the grind question and set the sound switches once more. A new icon is expected to start with
+   fresh settings.
+7. Remove the old "K" icon: touch and hold it until a menu appears, choose the delete or remove option,
+   and confirm. The wording differs between iPhone versions. This removes only that icon and the
+   settings saved inside it. The old calculator saved nothing, so nothing of it is lost, and it stays
+   available under Settings, "About this copy", "Original calculator".
+
+Afterwards the live icon and Kalita Next show the same dripper picture. The name under the icon tells
+them apart, and inside the app the test copy says "NEXT" beside the name. Moving Kalita Next to another
+screen, or into a folder, keeps it out of the way of the morning brew.
+
+What to report:
+
+- **Pass:** the new icon shows the dripper and opens the new app full screen.
+- **Fail:** what the small picture showed in step 4, and what the page looked like in step 2.
 
 ## Expected to fail, by design for now
 
@@ -184,5 +226,9 @@ Good to know:
   the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
-- **After the promote:** all of Part 4. The promoted app has only been tried in a desktop browser on the
-  Mac, never from a live Home Screen icon.
+- **After the promote:** P5 is reported as passing. P1 to P4 have not been reported one by one, and it
+  has not been said whether the old icon opens the new app.
+- **The new live icon:** not made yet, as far as reported. Checked on the Mac only: the live page names
+  the dripper picture and the name "Kalita Wave", and the site serves that picture, the same file the
+  Kalita Next icon uses. Expected, not verified: the new icon shows the dripper, opens full screen, and
+  starts with fresh settings.
