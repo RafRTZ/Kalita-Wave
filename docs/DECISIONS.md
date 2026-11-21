@@ -339,3 +339,19 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   adds to those two screens has to fit the same way. The Milestone 2 session was told, and it kept off
   the screen files while this was done.
 
+## Pushing without GitHub Desktop, 2026-11-21
+
+- **The owner asked:** "can you push things for me so i don't need to do anything?" A command-line push
+  is still refused on this Mac: git has no GitHub sign-in of its own, only GitHub Desktop does.
+- **Two ways were put to the owner.** A key that can push to this repo only (nothing installed, one line
+  pasted into one GitHub page). Or GitHub's command-line tool, `gh` (installed with Homebrew, which is
+  already on this Mac, then a sign-in approved in the browser; it works for every repo the owner has).
+  The owner's answer: "can i just log into github here?" Taken as a wish for a plain sign-in, which is
+  the second way. It needs an install, so the owner was asked for a yes to that before anything was
+  installed.
+- **When to ask before a push.** Asked when Claude should still ask first, the owner chose "Only for the
+  live app". So, from the moment Claude can push: changes to the test copy and to the docs are pushed
+  when they are ready, and the owner is told what went out. A push that changes the live app still needs
+  the owner's word, and that word is the same as before: "promote". This replaces rule 2 of the brief
+  ("Ask before every push"). `CLAUDE.md` is updated to say so once pushing works.
+
