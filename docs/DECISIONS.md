@@ -369,5 +369,17 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   live app". So, from the moment Claude can push: changes to the test copy and to the docs are pushed
   when they are ready, and the owner is told what went out. A push that changes the live app still needs
   the owner's word, and that word is the same as before: "promote". This replaces rule 2 of the brief
-  ("Ask before every push"). `CLAUDE.md` is updated to say so once pushing works.
+  ("Ask before every push"). `CLAUDE.md` says so since the first push with the key.
+- **The key was added, 2026-11-21.** The owner added the public half on GitHub under the title
+  "Claude on this Mac", with write access. The screenshot they sent of the Deploy keys page shows one
+  key, "Read/write", with the fingerprint written above. GitHub then accepted the key from this Mac.
+- **The first push with it, 2026-11-21.** `24ffb0f..f6f9275`, six commits: the screen rework
+  (2.0.0-m1.5) and the notes written since the promote. Before it: the difference from GitHub touched
+  none of the live app files, and all 132 tests passed. After it, checked on the site: the test copy
+  serves 2.0.0-m1.5 and all 34 of its files match the push; the 31 files of the live app match too, and
+  it still says 2.0.0-m1.4; `classic.html` is the original calculator.
+- **The owner asked what the push went to:** "so are we pushing to a test environment? is this something
+  i can keep saved on my phone to see changes before we push to the shared live file?" Yes to both. It
+  is the test copy, the Kalita Next icon. Every change goes there first, and the live app that both
+  phones use changes only on "promote".
 

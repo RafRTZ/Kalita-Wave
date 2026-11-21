@@ -12,8 +12,9 @@ That is what an icon made before the promote does. A new icon was then made on e
 in Part 4, and both were reported as showing the dripper.
 
 **Since 2026-11-21:** the owner asked for a calmer look, no vertical scrolling, and shading on the steps.
-That is version 2.0.0-m1.5, on the test copy only. Part 5 is its checklist. Nothing in it has been tried
-on a phone yet.
+That is version 2.0.0-m1.5. It was pushed on 2026-11-21 and is on the test copy only (the Kalita Next
+icon); the live app is still 2.0.0-m1.4. Part 5 is its checklist. Nothing in it has been tried on a phone
+yet.
 
 ## Where things are
 

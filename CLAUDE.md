@@ -8,13 +8,13 @@ the chat itself, numbered, with the exact setting and button names, instead of p
 - Answers to open questions and decisions made so far: `docs/DECISIONS.md`.
 - The owner's iPhone checklist: `docs/TESTING.md`.
 
-## Rules (brief section 3)
+## Rules (brief section 3; the owner replaced rule 2 on 2026-11-21)
 
 1. Never break the live app. Edit app code only under `next/`. The root app files (`index.html`, `app/`,
    `vendor/`, `assets/`, `manifest.webmanifest`) change only when the owner says "promote", and only through
    `scripts/promote.sh`. `classic.html` is frozen forever.
-2. Ask before every push. Show `git diff --stat origin/main` first and say in one line what will change on
-   the live site. Local commits are fine, with plain messages.
+2. A push that changes the live app needs the owner's word "promote". Other pushes (`next/`, tests, docs) go
+   out when ready: check the live app files are untouched, push, tell the owner what went out.
 3. No secrets anywhere; the repo is public. Never ask for a key or password in chat: give the exact
    dashboard field or command instead. Never commit `.env` files, card photos, names, or email addresses.
 4. Ask before installing anything on the Mac.
@@ -53,8 +53,8 @@ the chat itself, numbered, with the exact setting and button names, instead of p
 - Bump `APP_VERSION` in `next/app/platform/channel.js` with every change the owner will test on a phone.
 - Colours are tokens in `:root` of `styles.css`, nowhere else. Text at least 14 px (body 16), contrast at
   least 4.5:1, touch targets 56 px: tests enforce these. Brew and timer screens must not scroll vertically.
-- Writing style everywhere (UI text, comments, docs): no en dashes or em dashes, no emojis, no filler.
-- Pushing: git on this Mac has no GitHub sign-in. After approving a push, the owner clicks Push origin in
-  GitHub Desktop. Then check that `/next/` is live and the root app is unchanged.
+- Writing style everywhere (UI, comments, docs, commits): plain, no en or em dashes, no emojis, no filler.
+- Pushing: `git push deploy main` (a key for this one repo, see `docs/DECISIONS.md`), then `git fetch origin`.
+  Then check that `/next/` is live and the root app is unchanged. Push origin in GitHub Desktop still works.
 - Owed reminder: before any step toward other households or a public release, tell the owner again that
   the commit history carries a personal email address (see `docs/DECISIONS.md`).
