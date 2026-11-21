@@ -3,7 +3,7 @@
 // read from the URL instead of being baked into the code. That lets promote copy files unchanged.
 
 // Bump this with every change the owner will test on a phone. Settings shows it.
-export const APP_VERSION = '2.0.0-m1.4';
+export const APP_VERSION = '2.0.0-m1.5';
 
 export const CHANNELS = Object.freeze({ NEXT: 'next', LIVE: 'live' });
 

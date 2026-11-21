@@ -1,12 +1,15 @@
 // The timer: Get ready, Running, Paused, and Done. See docs/BUILD_BRIEF.md section 5.3.
 // sync() rebuilds the screen when the run changes state. update() runs many times a second and only
-// touches the numbers that changed. Every sound cue has a visual twin here: the countdown number and the
-// colour fill on the card of the step that is about to start, then a flash when it starts.
+// touches what changed. Every sound cue has a visual twin here: the countdown number and the colour fill
+// on the "next" strip, then a flash when the step starts. Each row of the step list is shaded from left to
+// right as its time runs, so the list shows at a glance how far the brew has come.
+// The screen fits one phone screen with no scrolling: the step list gives up height first.
 
 import { PHASE, snapshot } from '../engine/timeline.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
-import { h, segmented, setAttr, setText, toggleClass } from './dom.js';
-import { stepLabel, UNIT_OPTIONS } from './text.js';
+import { h, setAttr, setText, toggleClass } from './dom.js';
+import { finishRow, stepRow, topActions } from './parts.js';
+import { stepLabel } from './text.js';
 
 const HOLD_MS = 1000; // matches the transition in styles.css (.hold.holding .hold-fill)
 
@@ -41,28 +44,8 @@ function holdToReset(app) {
   return button;
 }
 
-function unitToggle(app) {
-  return segmented({
-    label: 'Weight unit',
-    extraClass: 'tight',
-    value: app.state.settings.unit,
-    options: UNIT_OPTIONS,
-    onChange: (unit) => app.setUnit(unit),
-  });
-}
-
 function topBar(app, phaseNode) {
-  return h(
-    'header',
-    { class: 'timer-top' },
-    phaseNode,
-    h(
-      'div',
-      { class: 'top-actions' },
-      unitToggle(app),
-      h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Scale help', onclick: () => app.openSheet('scale-help') }, '?'),
-    ),
-  );
+  return h('header', { class: 'timer-top' }, phaseNode, topActions(app));
 }
 
 function doneScreen(app, run) {
@@ -93,20 +76,42 @@ function doneScreen(app, run) {
 
   return [
     topBar(app, h('div', { class: 'phase' }, 'Done')),
-    result,
-    h('p', { class: 'done-line quiet' }, `${summary.join(', ')}.`),
-    h('p', { class: 'done-line quiet' }, `Recipe: ${plan.sourceName}. The target is a starting point.`),
+    h(
+      'div',
+      { class: 'done-body' },
+      result,
+      h('p', { class: 'done-line quiet' }, `${summary.join(', ')}.`),
+      h('p', { class: 'done-line quiet' }, `Recipe: ${plan.sourceName}. The target is a starting point.`),
+    ),
     h(
       'div',
       { class: 'bottom-bar' },
-      h(
-        'div',
-        { class: 'bar-inner' },
-        run.autoEnded ? null : h('button', { class: 'btn', type: 'button', onclick: () => app.reopen() }, 'Back to timer'),
-        h('button', { class: 'btn primary grow', type: 'button', onclick: () => app.newBrew() }, 'New brew'),
-      ),
+      run.autoEnded ? null : h('button', { class: 'btn', type: 'button', onclick: () => app.reopen() }, 'Back to timer'),
+      h('button', { class: 'btn primary grow', type: 'button', onclick: () => app.newBrew() }, 'New brew'),
     ),
   ];
+}
+
+// Styles are written only when they change, so sixty updates a second touch the page as little as possible.
+const lastWritten = new WeakMap();
+
+function changed(node, value) {
+  if (lastWritten.get(node) === value) return false;
+  lastWritten.set(node, value);
+  return true;
+}
+
+/** A cue fill: 0 is empty, 1 is full width. */
+function setFill(node, fraction) {
+  const value = `scaleX(${fraction})`;
+  if (changed(node, value)) node.style.transform = value;
+}
+
+/** The shading on a step row: a width such as "37.50%", or nothing for an empty or a finished row. */
+function setShade(row, width) {
+  if (!changed(row, width)) return;
+  if (width) row.style.setProperty('--p', width);
+  else row.style.removeProperty('--p');
 }
 
 export function createTimerView(app) {
@@ -132,53 +137,48 @@ export function createTimerView(app) {
     r.clock = h('div', { class: 'clock', role: 'timer' });
     r.clockSub = h('div', { class: 'clock-sub' });
 
+    // What to pour now, with the count-in fill behind it.
     r.nowFill = h('div', { class: 'cue-fill' });
     r.nowLabel = h('div', { class: 'now-label' });
     r.nowPour = h('div', { class: 'now-pour' });
     r.nowTarget = h('div', { class: 'now-target' });
-    r.nowCard = h(
-      'section',
-      { class: 'now-card', 'aria-live': 'polite', 'data-flash': 'false' },
+    r.nowMain = h(
+      'div',
+      { class: 'now-main', 'aria-live': 'polite' },
       r.nowFill,
       h('div', { class: 'now-body' }, r.nowLabel, r.nowPour, r.nowTarget),
     );
 
+    // What comes next and how long until it. In the last seconds it fills and shows the countdown number.
     r.nextFill = h('div', { class: 'cue-fill' });
     r.nextLabel = h('span', { class: 'next-label' });
     r.nextIn = h('span', { class: 'next-in' });
-    r.nextCount = h('div', { class: 'next-count', 'aria-hidden': 'true' });
-    r.nextCard = h('section', { class: 'next-card' }, r.nextFill, h('div', { class: 'next-text' }, r.nextLabel, r.nextIn), r.nextCount);
+    r.nextCount = h('span', { class: 'next-count', 'aria-hidden': 'true' });
+    r.nowCard = h(
+      'section',
+      { class: 'now-card', 'data-flash': 'false' },
+      r.nowMain,
+      h('div', { class: 'next-strip' }, r.nextFill, r.nextLabel, r.nextIn, r.nextCount),
+    );
 
-    r.rows = plan.steps.map((step) =>
-      h(
-        'li',
-        { class: 'step-row' },
-        h('span', { class: 't' }, formatClock(step.startS)),
-        h('span', { class: 'name' }, stepLabel(step)),
-        h('span', { class: 'g' }, `to ${formatWeight(step.targetG, unit)}`),
-      ),
-    );
-    r.finishRow = h(
-      'li',
-      { class: 'step-row finish' },
-      h('span', { class: 't' }, formatClock(plan.totalS)),
-      h('span', { class: 'name' }, 'Finish'),
-      h('span', { class: 'g' }, 'start here'),
-    );
+    r.rows = plan.steps.map((step) => stepRow(step, unit));
+    r.finishRow = finishRow(plan);
 
     r.pause = h('button', { class: 'btn grow', type: 'button', onclick: () => app.togglePause() });
     r.done = h('button', { class: 'btn primary grow', type: 'button', hidden: true, onclick: () => app.done() }, 'Done');
+
+    const list = h('section', { class: 'card timer-steps', 'aria-label': 'Pour plan' }, h('ol', { class: 'steps' }, r.rows, r.finishRow));
+    // The stylesheet uses the row count to know how small the list may get before the screen scrolls.
+    list.style.setProperty('--rows', String(plan.steps.length + 1));
 
     node.replaceChildren(
       topBar(app, r.phase),
       r.soundBar,
       r.wakeNote,
-      r.clock,
-      r.clockSub,
+      h('div', { class: 'clock-block' }, r.clock, r.clockSub),
       r.nowCard,
-      r.nextCard,
-      h('section', { class: 'card timer-steps', 'aria-label': 'Pour plan' }, h('ol', { class: 'steps' }, r.rows, r.finishRow)),
-      h('div', { class: 'bottom-bar' }, h('div', { class: 'bar-inner' }, holdToReset(app), r.pause, r.done)),
+      list,
+      h('div', { class: 'bottom-bar' }, holdToReset(app), r.pause, r.done),
     );
     refs = r;
     builtFor = 'active';
@@ -221,12 +221,12 @@ export function createTimerView(app) {
     // The step to pour now (during the count-in, the bloom that is about to start).
     const current = counting ? plan.steps[0] : snap.step;
     const drained = snap.atTarget;
-    setText(r.nowLabel, drained ? 'Let it drain' : counting ? `First: ${stepLabel(current)}` : stepLabel(current));
+    setText(r.nowLabel, drained ? 'Tap Done when the bed is dry' : counting ? `First: ${stepLabel(current)}` : stepLabel(current));
     setText(r.nowPour, drained ? '' : 'Pour to');
-    setText(r.nowTarget, drained ? 'Tap Done when the bed is dry' : formatWeight(current.targetG, unit));
+    setText(r.nowTarget, drained ? 'Let it drain' : formatWeight(current.targetG, unit));
     toggleClass(r.nowTarget, 'words', drained);
     setAttr(r.nowCard, 'data-flash', String(!paused && (snap.flash || snap.targetFlash)));
-    r.nowFill.style.transform = `scaleX(${counting ? snap.fill : 0})`;
+    setFill(r.nowFill, counting ? snap.fill : 0);
 
     // What comes next, and how long until it.
     const upcoming = counting ? plan.steps[1] ?? null : snap.nextStep;
@@ -242,12 +242,16 @@ export function createTimerView(app) {
     }
     const cueing = !counting && snap.countdown != null;
     setText(r.nextCount, cueing ? String(snap.countdown) : '');
-    r.nextFill.style.transform = `scaleX(${cueing ? snap.fill : 0})`;
+    if (r.nextIn.hidden !== cueing) r.nextIn.hidden = cueing;
+    setFill(r.nextFill, cueing ? snap.fill : 0);
 
-    // The step list: finished rows dimmed, the current row highlighted.
+    // The step list: a finished row is fully shaded and dimmed, and the shading moves across the current
+    // row as its time runs.
     r.rows.forEach((row, i) => {
-      toggleClass(row, 'is-done', i < snap.stepIndex || snap.atTarget);
-      toggleClass(row, 'is-now', i === snap.stepIndex && !snap.atTarget);
+      const p = snap.progress[i];
+      toggleClass(row, 'is-done', p >= 1);
+      toggleClass(row, 'is-now', i === snap.stepIndex && p < 1);
+      setShade(row, p > 0 && p < 1 ? `${(p * 100).toFixed(2)}%` : '');
     });
     toggleClass(r.finishRow, 'is-now', snap.atTarget);
 
