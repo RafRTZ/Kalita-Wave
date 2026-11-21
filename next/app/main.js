@@ -40,6 +40,7 @@ import { renderBrew } from './ui/brew.js';
 import { addGearSheet, calibrateSheet, customGrinderSheet } from './ui/gear.js';
 import { scaleHelpSheet } from './ui/scale-help.js';
 import { settingsSheet } from './ui/settings.js';
+import { techniqueSheet } from './ui/technique.js';
 import { createTimerView } from './ui/timer.js';
 
 const channel = currentChannel();
@@ -50,11 +51,12 @@ const wake = createWakeLock();
 const viewRoot = document.getElementById('view');
 const sheetRoot = document.getElementById('sheet');
 
-const state = { ...loadAll(store, Date.now()), sheets: [], ui: { tipsOpen: false } };
+const state = { ...loadAll(store, Date.now()), sheets: [] };
 
 const SHEETS = {
   settings: settingsSheet,
   'scale-help': scaleHelpSheet,
+  technique: techniqueSheet,
   calibrate: calibrateSheet,
   'custom-grinder': customGrinderSheet,
   'add-gear': addGearSheet,

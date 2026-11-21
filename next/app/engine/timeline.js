@@ -77,10 +77,26 @@ export function phaseOf(run, nowMs) {
 }
 
 /**
+ * How far each step has run at brew-clock time t, from 0 to 1, for the shading that moves across the step
+ * list. A step runs from its start to the start of the next one; the last pour runs to the target finish
+ * time. Every step is 0 during the count-in and 1 once the target has passed.
+ */
+export function stepProgress(plan, t) {
+  const { steps, totalS } = plan;
+  return steps.map((step, i) => {
+    const endS = i + 1 < steps.length ? steps[i + 1].startS : totalS;
+    if (t >= endS) return 1;
+    if (t <= step.startS) return 0;
+    return (t - step.startS) / (endS - step.startS);
+  });
+}
+
+/**
  * Everything the timer screen shows at one instant.
  * stepIndex is -1 during the count-in. nextInS counts down to the next pour, or to the target finish time
  * once the last pour has started. countdown and fill are the visual twin of the sound cues: a whole number
- * of seconds and a 0 to 1 fill, present only inside the heads-up window (or the count-in).
+ * of seconds and a 0 to 1 fill, present only inside the heads-up window (or the count-in). progress is
+ * stepProgress() for this instant.
  */
 export function snapshot(run, nowMs) {
   const t = elapsedS(run, nowMs);
@@ -121,6 +137,7 @@ export function snapshot(run, nowMs) {
     flash: step != null && sinceStepS < STEP_FLASH_S && !atTarget,
     targetFlash: atTarget && t - totalS < STEP_FLASH_S,
     canFinish: steps.length > 0 && t >= steps[steps.length - 1].startS,
+    progress: stepProgress(run.plan, t),
   };
 }
 

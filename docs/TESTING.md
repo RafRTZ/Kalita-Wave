@@ -11,6 +11,10 @@ on it: the old calculator still opens, and the usual icon kept its old picture, 
 That is what an icon made before the promote does. A new icon was then made on each phone with the steps
 in Part 4, and both were reported as showing the dripper.
 
+**Since 2026-11-21:** the owner asked for a calmer look, no vertical scrolling, and shading on the steps.
+That is version 2.0.0-m1.5, on the test copy only. Part 5 is its checklist. Nothing in it has been tried
+on a phone yet.
+
 ## Where things are
 
 - **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ gets every change first.
@@ -24,7 +28,8 @@ in Part 4, and both were reported as showing the dripper.
 2. Tap Share, then Add to Home Screen. If the name is not already "Kalita Next", type that, so it cannot
    be mixed up with the live icon.
 3. Open it from the new icon. From here on, always use the icon, not Safari.
-4. Tap the settings button (three sliders, top right) and scroll to "About this copy". It should say
+4. Tap the settings button (three sliders: a round button at the bottom left, beside Start, from version
+   2.0.0-m1.5; at the top right before that) and scroll to "About this copy". It should say
    "Test copy (next)", "Opened from the Home Screen", and the version named in the chat after the latest
    push (2.0.0-m1.2 after the first one).
 5. Note each phone's iOS version (Settings app, General, About). Keeping the screen awake needs iOS 18.4
@@ -86,8 +91,9 @@ Set up:
 
 1. Silent mode on the phone: on or off, it makes no difference to this check.
 2. Volume: up far enough to hear music.
-3. Open the test copy from the Kalita Next icon and tap the settings button (three sliders, top right).
-   - Scroll to the bottom, to "About this copy". It must say Version 2.0.0-m1.4.
+3. Open the test copy from the Kalita Next icon and tap the settings button (three sliders: top right in
+   version 2.0.0-m1.4, bottom left beside Start from 2.0.0-m1.5).
+   - Scroll to the bottom, to "About this copy". It must say Version 2.0.0-m1.4 or later.
    - Scroll back up to "Timer and sound". "Sound cues" must be On, and "Play cues when the phone is on
      silent" must be On. Both start that way. Leave the other settings alone.
    - Tap Done at the top right to close Settings. That is a different Done from the one in step 7.
@@ -204,6 +210,37 @@ What to report:
 - **Pass:** the new icon shows the dripper and opens the new app full screen.
 - **Fail:** what the small picture showed in step 4, and what the page looked like in step 2.
 
+## Part 5: the new look (version 2.0.0-m1.5)
+
+On 2026-11-21 the owner asked for three things: a less amateurish look, no vertical scrolling, and
+shading that moves across each step as it runs. The clock and the "Pour to" weight were also to come down
+in size while staying readable from several feet. This version is on the test copy only: use the Kalita
+Next icon.
+
+What moved:
+
+- **Settings** is the round button at the bottom left, beside Start (three sliders). It used to be at the
+  top right.
+- **g / oz** and **?** are at the top right, on the brew screen and on the timer.
+- **Technique tips** open from "Wave 185 tips" (or "Wave 155 tips") at the top right of the pour plan.
+- **The "NEXT" label** is under the name "Kalita Wave", next to the recipe's name.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| N1 | The right version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.5. Tap Done at the top right to close |
+| N2 | The brew screen fits | Look at the brew screen, then try to drag it up and down | Everything from "Kalita Wave" down to Start is on screen at once. There is nothing more to scroll to, and nothing is cut off at the bottom |
+| N3 | The timer fits | Tap Start and look | The clock, "Pour to", every step, and the Reset and Pause buttons are on screen at once. Nothing scrolls |
+| N4 | Shading on the steps | Watch the list of steps during a brew | A tan shade with a thin brown line at its edge moves from left to right across the current step. It reaches the right edge as the next pour starts. Finished steps stay shaded |
+| N5 | Countdown to the next pour | Watch the strip under the "Pour to" weight in the last 5 seconds before a pour | The strip fills with shade and a large number counts 5, 4, 3, 2, 1. The card then turns brown for two seconds as the pour starts |
+| N6 | Size of the numbers | Phone on the counter, stand where you pour | The clock and the "Pour to" weight are smaller than before and still easy to read from several feet |
+| N7 | Both brewers | Wave 185 at 36 g, then Wave 155 at 18 g | Each fits one screen with no scrolling, before and after Start |
+| N8 | Wet-hand taps | Tap the minus and plus buttons, Finer, Coarser, Start, and Pause | Each is hit first time |
+
+Known, and not a failure: a dose far outside a brewer's range (36 g on the Wave 155) adds a red warning
+and one more row, and that screen scrolls a little.
+
+What to send back: for anything that fails, which phone it was and what you saw. A screenshot helps most.
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -228,6 +265,9 @@ What to report:
   the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
+- **Version 2.0.0-m1.5, the new look:** all of Part 5. It has been seen only in a desktop browser set to
+  phone sizes, whose engine is not Safari's. This Mac has no iPhone simulator. How it lays out on a real
+  iPhone, opened from the Home Screen, is unproven until Part 5 is done.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen

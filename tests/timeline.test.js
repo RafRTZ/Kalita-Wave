@@ -16,6 +16,7 @@ import {
   resumeRun,
   shouldAutoEnd,
   snapshot,
+  stepProgress,
 } from '../next/app/engine/timeline.js';
 import { translate } from '../next/app/engine/translate.js';
 import { brewerById } from '../next/app/data/catalog/brewers.js';
@@ -139,6 +140,37 @@ test('no cue countdown for the target finish, only a flash', () => {
   assert.equal(snapshot(run, at(5 + 263)).countdown, null);
   assert.equal(snapshot(run, at(5 + 265.5)).targetFlash, true);
   assert.equal(snapshot(run, at(5 + 268)).targetFlash, false);
+});
+
+test('shading: each step fills from its start to the next one, and the last pour to the target', () => {
+  // T1 starts at 0, 40, 80, 120, 160 and its target is 265.
+  assert.deepEqual(stepProgress(T1, -3), [0, 0, 0, 0, 0], 'nothing during the count-in');
+  assert.deepEqual(stepProgress(T1, 0), [0, 0, 0, 0, 0]);
+  assert.deepEqual(stepProgress(T1, 10), [0.25, 0, 0, 0, 0]);
+  assert.deepEqual(stepProgress(T1, 40), [1, 0, 0, 0, 0], 'a finished step is full and the next one is empty');
+  assert.deepEqual(stepProgress(T1, 100), [1, 1, 0.5, 0, 0]);
+  assert.deepEqual(stepProgress(T1, 212.5), [1, 1, 1, 1, 0.5], 'the last pour runs to the target finish time');
+  assert.deepEqual(stepProgress(T1, 265), [1, 1, 1, 1, 1]);
+  assert.deepEqual(stepProgress(T1, 400), [1, 1, 1, 1, 1]);
+});
+
+test('shading: the snapshot carries it, and a pause freezes it', () => {
+  let run = start();
+  assert.deepEqual(snapshot(run, at(5 + 60)).progress, [1, 0.5, 0, 0, 0]);
+  run = pauseRun(run, at(5 + 60));
+  assert.deepEqual(snapshot(run, at(5 + 200)).progress, [1, 0.5, 0, 0, 0]);
+});
+
+test('shading: a step with no length is empty before the target and full at it', () => {
+  const plan = {
+    steps: [
+      { startS: 0, targetG: 50, style: 'bloom' },
+      { startS: 30, targetG: 100, style: 'center' },
+    ],
+    totalS: 30,
+  };
+  assert.deepEqual(stepProgress(plan, 15), [0.5, 0]);
+  assert.deepEqual(stepProgress(plan, 30), [1, 1]);
 });
 
 test('cue schedule for T1 with a 5 s count-in and a 5 s heads-up', () => {

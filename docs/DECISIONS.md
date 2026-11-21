@@ -297,3 +297,45 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **Optional, and it needs the owner's OK like any install.** GitHub's command-line tool (`gh`), so
   Claude can push without GitHub Desktop.
 
+## Screen rework, 2026-11-21 (version 2.0.0-m1.5)
+
+- **What the owner asked for.** In their words: the app "looks a bit amaturish overall", "I'd like to
+  remove the vertical scrolling", and "add a visual to each steps count down. perhaps shading moving
+  across each of the steps as they complete". Of the timer's clock and its "Pour to" card: "i like how
+  the font is big to see from several feet away, but it's unnecessarly large". A screenshot from one
+  phone came with that. It shows a Dynamic Island, and its proportions fit the iPhones that are 393
+  points wide; that width is a reading of the picture, not something the owner said.
+- **What changed.** One typeface everywhere, the phone's own, in place of the serif. The brew screen and
+  the timer are each exactly one screen tall, and the pour plan gives up height first. On the timer each
+  step row is shaded from left to right as its time runs, with a thin line at the moving edge, and a
+  finished row stays shaded. At that phone's width the clock went from about 122 px to about 75 px and
+  the "Pour to" weight from 64 px to about 55 px. Both stay above the brief's floors of 64 and 40.
+- **Decisions the owner did not specify.** Any of these can be undone.
+  1. Settings moved from the top right to a round button at the bottom left, beside Start. The top right
+     now holds the same two things on both screens: g / oz and "?".
+  2. Technique tips left the brew screen for a page of their own, opened from the pour plan ("Wave 185
+     tips"). The sentence that grind and finish time are rules of thumb is on that page.
+  3. The recipe's name ("House default") is under the app name. The footer used to carry it.
+  4. On the timer, "what is next" is a strip at the bottom of the "Pour to" card. In the heads-up window
+     the strip fills and shows the countdown number. It replaces the separate "next" card.
+  5. At the target the card reads "Let it drain", with "Tap Done when the bed is dry" above it.
+  6. A switch shows its chosen side as a white pill with a brown ring, so Start is the only solid brown
+     button on the brew screen.
+  7. The dose row and the grind row share one card, with the grind note on one line under them.
+- **Where it still scrolls.** Settings, Scale help, and the other sheets are lists and scroll as before.
+  A dose outside a brewer's hard limits (36 g on the Wave 155) adds a red warning and an eighth row, and
+  that screen scrolls by about 30 px at the screenshot phone's size. A caution (45 g on the Wave 185)
+  still fits.
+- **Checked on the Mac.** In a desktop browser at 393 by 771 (the screenshot phone, less its status bar
+  and with its home bar area allowed for), at 375 by 647 (an iPhone SE), and at 430 by 839: the brew
+  screen and the timer fit with no scrolling at 36 g on the Wave 185 and 18 g on the Wave 155, in grams
+  and in ounces. The count-in, the heads-up, the last pour, the target, pause, and Done all draw
+  correctly; the flash at the start of a pour was looked at by forcing it. Settings, Scale help, the tips
+  page, calibration, and the sound test page look right.
+- **Not verified.** Anything on an iPhone. This Mac has no iPhone simulator (Xcode is not installed), so
+  the layout has only been seen in a desktop browser, whose engine is not Safari's. Part 5 of
+  `TESTING.md` is the phone checklist.
+- **A rule from now on.** The brew screen and the timer must not scroll vertically. Whatever Milestone 2
+  adds to those two screens has to fit the same way. The Milestone 2 session was told, and it kept off
+  the screen files while this was done.
+

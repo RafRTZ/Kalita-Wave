@@ -3,7 +3,10 @@
    - every colour is a token in :root, and nothing outside :root uses a raw colour
    - every text token reaches 4.5:1 on every surface token it may sit on
    - no text under 14 px; body text is 17 px
-   - controls are at least 56 px tall (--tap) */
+   - controls are at least 56 px tall (--tap)
+   One more rule, from the owner (2026-11-21): the brew screen and the timer each fit one phone screen.
+   Both are columns exactly as tall as the screen, and their step lists shrink to take up the slack. They
+   scroll only when a screen is too small for even the shrunken list. Sheets are lists and still scroll. */
 
 :root {
   /* surfaces */
@@ -24,11 +27,11 @@
   --line: #e0d5c4;
   --edge: #8a7860;
   --shadow: rgba(60, 40, 20, 0.08);
-  /* type and sizes */
-  --serif: Georgia, 'Times New Roman', serif;
+  /* type and sizes: one typeface everywhere, the phone's own */
   --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --tap: 56px;
-  --radius: 12px;
+  --radius: 16px;
+  --radius-card: 20px;
 }
 
 * {
@@ -39,6 +42,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* A screen that fits should not rubber-band when a wet thumb drags across it. */
+  overscroll-behavior: none;
 }
 
 body {
@@ -47,9 +52,9 @@ body {
   min-height: 100dvh;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 17px;
-  line-height: 1.4;
+  line-height: 1.35;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -97,36 +102,83 @@ a {
 }
 
 .screen {
-  padding: calc(14px + env(safe-area-inset-top)) 16px calc(124px + env(safe-area-inset-bottom));
+  padding: calc(14px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+}
+
+/* ---------- one-screen layout: the brew screen and the timer ---------- */
+
+.screen.brew,
+.screen.timer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  height: 100vh;
+  height: 100dvh;
+  /* The bottom edge stops at the phone's home bar area, or 12 px up on a phone that has none. */
+  padding: calc(8px + env(safe-area-inset-top)) 16px max(12px, env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Nothing in the column shrinks or carries a margin of its own, except the step lists further down. */
+.screen.brew > *,
+.screen.timer > * {
+  flex: 0 0 auto;
+  margin: 0;
 }
 
 /* ---------- shared pieces ---------- */
 
-.top {
+.top,
+.timer-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 8px;
+  min-height: var(--tap);
+}
+
+.title {
+  min-width: 0;
 }
 
 .top h1 {
-  font-size: 30px;
-  font-weight: 400;
-  line-height: 1.1;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.title-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--sub);
+}
+
+/* The recipe on screen: the house default now, a bean's name later. A long name is cut with three dots. */
+.recipe-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .tag {
   display: inline-block;
-  font-family: var(--sans);
+  flex-shrink: 0;
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
   color: var(--on-accent);
   background: var(--accent);
-  border-radius: 5px;
-  padding: 2px 7px;
-  margin-left: 6px;
+  border-radius: 6px;
+  padding: 0 5px;
   vertical-align: middle;
 }
 
@@ -134,13 +186,13 @@ a {
   color: var(--ink);
   background: var(--soft);
   border: 1px solid var(--edge);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   font-weight: 600;
-  margin-left: 0;
 }
 
 .top-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
   flex-shrink: 0;
 }
@@ -149,13 +201,13 @@ a {
   width: var(--tap);
   height: var(--tap);
   min-height: var(--tap);
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--edge);
   background: var(--card);
   color: var(--accent);
-  font-family: var(--sans);
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -165,9 +217,9 @@ a {
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px var(--shadow);
-  margin-bottom: 14px;
+  border-radius: var(--radius-card);
+  box-shadow: 0 1px 2px var(--shadow);
+  margin: 0 0 14px;
 }
 
 .card.pad {
@@ -176,7 +228,8 @@ a {
 
 .lbl {
   font-size: 14px;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sub);
   margin-bottom: 8px;
@@ -192,13 +245,18 @@ a {
   margin-top: 8px;
 }
 
+.note.first {
+  margin: 0 0 8px;
+}
+
 .btn {
   min-height: var(--tap);
   border-radius: var(--radius);
   border: 1px solid var(--edge);
   background: var(--card);
   color: var(--ink);
-  font-size: 19px;
+  font-size: 18px;
+  font-weight: 500;
   line-height: 1.15;
   padding: 8px 16px;
   display: inline-flex;
@@ -216,9 +274,9 @@ a {
 }
 
 .btn.big {
-  min-height: 68px;
-  font-size: 26px;
-  letter-spacing: 0.02em;
+  min-height: 64px;
+  border-radius: var(--radius-card);
+  font-size: 22px;
 }
 
 .btn.grow {
@@ -238,6 +296,7 @@ a {
 .btn-row {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-top: 12px;
 }
@@ -248,36 +307,39 @@ a {
   border: 0;
   padding: 0 4px;
   color: var(--accent);
-  font-size: 17px;
+  font-size: 16px;
+  font-weight: 600;
   text-decoration: underline;
 }
 
 .seg {
   display: flex;
   gap: 4px;
-  background: var(--bg);
-  border: 1px solid var(--edge);
+  background: var(--soft);
   border-radius: var(--radius);
   padding: 4px;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 
 .seg button {
-  flex: 1;
+  flex: 1 1 0;
   min-height: var(--tap);
-  min-width: var(--tap);
+  min-width: 0;
   border: 0;
   background: transparent;
   color: var(--sub);
-  border-radius: 9px;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 500;
   line-height: 1.15;
   padding: 6px 10px;
 }
 
 .seg button[aria-pressed='true'] {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--card);
+  color: var(--ink);
   font-weight: 700;
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 
 .seg.wrap {
@@ -288,16 +350,36 @@ a {
   flex: 1 1 40%;
 }
 
+/* The small g / oz switch: a pill the same height as the round button beside it. */
 .seg.tight {
-  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0;
+  padding: 0;
+  border-radius: 28px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--edge);
 }
 
 .seg.tight button {
   flex: 0 0 auto;
-  padding: 6px 14px;
+  width: var(--tap);
+  border-radius: 28px;
+  padding: 0;
+  font-weight: 600;
 }
 
-/* ---------- brew screen ---------- */
+/* The ring sits a little inside the pill, so the two outlines do not run into each other. */
+.seg.tight button[aria-pressed='true'] {
+  background: transparent;
+  box-shadow: none;
+  outline: 2px solid var(--accent);
+  outline-offset: -6px;
+}
+
+.seg.tight button[aria-pressed='true']:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
 
 .stepper {
   display: flex;
@@ -306,16 +388,16 @@ a {
 }
 
 .step-btn {
-  width: 64px;
-  height: 64px;
+  width: var(--tap);
+  height: var(--tap);
   min-height: var(--tap);
   flex-shrink: 0;
-  border-radius: var(--radius);
+  border-radius: 50%;
   border: 1px solid var(--edge);
-  background: var(--bg);
+  background: var(--card);
   color: var(--accent);
-  font-family: var(--sans);
-  font-size: 36px;
+  font-size: 30px;
+  font-weight: 400;
   line-height: 1;
   padding: 0;
 }
@@ -327,42 +409,45 @@ a {
 }
 
 .dose-input,
-.num-input {
+.num-input,
+.grind-value {
   width: 100%;
   background: transparent;
   border: 0;
   border-radius: 8px;
   text-align: center;
-  font-family: var(--serif);
-  font-size: 52px;
+  font-size: 34px;
+  font-weight: 700;
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
   color: var(--ink);
   padding: 0;
   margin: 0;
+}
+
+.dose-input {
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
 .dose-input::-webkit-outer-spin-button,
-.dose-input::-webkit-inner-spin-button,
-.num-input::-webkit-outer-spin-button,
-.num-input::-webkit-inner-spin-button {
+.dose-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 .unit-cap {
   font-size: 14px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  line-height: 1.25;
   color: var(--sub);
 }
 
 .advisory {
-  border-radius: 10px;
-  padding: 12px 14px;
+  border-radius: 14px;
+  padding: 8px 12px;
   margin-top: 14px;
-  font-size: 17px;
+  font-size: 15px;
+  line-height: 1.3;
   color: var(--ink);
 }
 
@@ -380,95 +465,101 @@ a {
   color: var(--danger);
 }
 
+/* ---------- brew screen ---------- */
+
+.screen.brew > .note {
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Three or four brewers share the one row: smaller words, so each name stays on one line. */
+.seg.many button {
+  padding: 6px 4px;
+  font-size: 15px;
+}
+
+.setup {
+  padding: 8px 12px 10px;
+}
+
+.stepper.grind {
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.nudge {
+  flex: 0 0 96px;
+  padding: 8px 6px;
+  font-size: 17px;
+}
+
+.grind-note {
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--sub);
+  text-align: center;
+  text-wrap: balance;
+  margin-top: 6px;
+}
+
+/* A full-height tap area that does not make its line any taller. */
+.grind-note .link,
+.plan-head .link {
+  display: inline-flex;
+  align-items: center;
+  margin: -19px 0;
+  vertical-align: middle;
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
 }
 
 .stat {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 4px 10px;
   text-align: center;
+  padding: 0 4px;
+  border-left: 1px solid var(--line);
+}
+
+.stat:first-child {
+  border-left: 0;
 }
 
 .stat .v {
-  font-family: var(--sans);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .stat .k {
   font-size: 14px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  line-height: 1.25;
   color: var(--sub);
 }
 
-.stat .hint {
-  font-size: 14px;
-  font-style: italic;
-  color: var(--sub);
-}
+/* ---------- the pour plan, on the brew screen and on the timer ---------- */
 
-.grind {
-  background: var(--soft);
-  border: 1px solid var(--line);
-  border-left: 5px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 14px 16px 16px;
-  margin-bottom: 14px;
-}
-
-.grind-row {
+.plan,
+.timer-steps {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
 }
 
-.grind-name {
-  font-size: 18px;
+/* These two give up height when the screen is short. Their rows shrink from the size they would like to
+   the smallest they stay readable at, and --rows (set by the screen) keeps the card from going below
+   that: past it the whole screen scrolls instead of cutting rows off. */
+.screen.brew > .plan {
+  flex: 0 1 auto;
+  min-height: calc(var(--rows, 6) * 24px + 38px);
 }
 
-.grind-value {
-  font-family: var(--sans);
-  font-size: 60px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.grind-side {
-  flex: 1;
-  min-width: 0;
-}
-
-.grind-note {
-  font-size: 18px;
-}
-
-.grind-sub {
-  font-size: 15px;
-  color: var(--sub);
-  margin-top: 2px;
-}
-
-.grind-nudge {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.grind-adjust {
-  font-size: 16px;
-  margin-top: 8px;
+.screen.timer > .timer-steps {
+  flex: 0 1 auto;
+  min-height: calc(var(--rows, 6) * 34px);
 }
 
 .plan-head {
@@ -476,55 +567,114 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px 10px 16px;
+  padding: 10px 12px 8px 16px;
 }
 
 .plan-head .lbl {
   margin: 0;
 }
 
+.plan-head .link {
+  text-decoration: none;
+}
+
+.plan-head .link::after {
+  content: '\203A';
+  margin-left: 5px;
+  font-size: 20px;
+  line-height: 1;
+}
+
 .steps {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .step-row {
+  flex: 1 1 44px;
+  min-height: 24px;
   display: grid;
-  grid-template-columns: 58px 1fr auto;
+  grid-template-columns: 50px 1fr auto;
   gap: 10px;
-  align-items: baseline;
-  padding: 13px 16px;
+  align-items: center;
+  padding: 0 16px;
   border-top: 1px solid var(--line);
+  line-height: 1.2;
 }
 
 .step-row .t {
-  font-family: var(--sans);
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
 .step-row .name {
-  font-size: 19px;
+  font-size: 17px;
 }
 
 .step-row .g {
-  font-family: var(--sans);
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
+.step-row .to {
+  font-weight: 400;
+  color: var(--sub);
+}
+
 .step-row.finish .g {
-  font-family: var(--serif);
   font-size: 15px;
   font-weight: 400;
-  font-style: italic;
   color: var(--sub);
+}
+
+/* The cards have round corners and the rows are shaded, so the end rows are rounded to match. */
+.step-row:last-child {
+  border-radius: 0 0 19px 19px;
+}
+
+/* On the timer each row is also a progress bar. --p is how far its time has run, set by timer.js. The
+   shading ends in a thin line of the accent colour, so the moving edge is easy to see from a distance. */
+.timer-steps .step-row {
+  flex-basis: 56px;
+  min-height: 34px;
+  background-image: linear-gradient(
+    90deg,
+    var(--fill) calc(var(--p, 0%) - 2px),
+    var(--accent) calc(var(--p, 0%) - 2px),
+    var(--accent) var(--p, 0%),
+    transparent var(--p, 0%)
+  );
+}
+
+.timer-steps .step-row:first-child {
+  border-top: 0;
+  border-radius: 19px 19px 0 0;
+}
+
+.timer-steps .step-row .t,
+.timer-steps .step-row .name,
+.timer-steps .step-row .g {
+  font-size: 18px;
+}
+
+.timer-steps .step-row.finish .g {
+  font-size: 15px;
+}
+
+.step-row.is-done,
+.step-row.finish.is-now {
+  background-image: none;
+  background-color: var(--fill);
 }
 
 .step-row.is-done .t,
@@ -534,95 +684,22 @@ a {
   font-weight: 400;
 }
 
-.step-row.is-now {
-  background: var(--fill);
-}
-
 .step-row.is-now .name {
   font-weight: 700;
 }
 
-details.card > summary {
-  min-height: var(--tap);
+.bottom-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  font-size: 18px;
-  cursor: pointer;
-  list-style: none;
-}
-
-details.card > summary::-webkit-details-marker {
-  display: none;
-}
-
-details.card > summary::after {
-  content: '+';
-  margin-left: auto;
-  font-family: var(--sans);
-  font-size: 26px;
-  line-height: 1;
-  color: var(--accent);
-}
-
-details.card[open] > summary::after {
-  content: '\2212';
-}
-
-.details-body {
-  padding: 0 16px 16px;
-}
-
-.details-body ul,
-.details-body ol {
-  margin: 0;
-  padding-left: 22px;
-}
-
-.details-body li {
-  margin-bottom: 8px;
-}
-
-.foot {
-  font-size: 15px;
-  color: var(--sub);
-  text-align: center;
-  padding: 0 8px;
-}
-
-.bottom-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
-  background: var(--bg);
-  border-top: 1px solid var(--line);
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-}
-
-.bar-inner {
-  max-width: 448px;
-  margin: 0 auto;
-  display: flex;
   gap: 10px;
 }
 
 /* ---------- timer ---------- */
 
-.timer-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
 .phase {
-  font-family: var(--sans);
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -633,12 +710,11 @@ details.card[open] > summary::after {
   min-height: var(--tap);
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
   border-radius: var(--radius);
   border: 2px solid var(--danger);
   background: var(--danger-soft);
   color: var(--ink);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   padding: 8px 12px;
 }
@@ -646,39 +722,38 @@ details.card[open] > summary::after {
 .wake-note {
   font-size: 15px;
   color: var(--sub);
-  margin-top: 8px;
+  text-align: center;
+}
+
+.clock-block {
   text-align: center;
 }
 
 .clock {
-  font-family: var(--sans);
-  font-size: clamp(96px, 31vw, 156px);
+  font-size: clamp(64px, 19vw, 84px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
-  text-align: center;
   font-variant-numeric: tabular-nums;
-  margin-top: 6px;
 }
 
 .clock-sub {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--sub);
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.now-card,
-.next-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-  background: var(--card);
+  margin-top: 2px;
 }
 
 .now-card {
-  border: 3px solid var(--accent);
-  padding: 12px 16px 14px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+.now-main {
+  position: relative;
+  padding: 10px 16px;
   text-align: center;
 }
 
@@ -691,37 +766,36 @@ details.card[open] > summary::after {
   pointer-events: none;
 }
 
-.now-body,
-.next-text,
-.next-count {
+.now-body {
   position: relative;
 }
 
 .now-label {
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .now-pour {
-  font-size: 19px;
+  font-size: 15px;
+  line-height: 1.25;
   color: var(--sub);
 }
 
 .now-target {
-  font-family: var(--sans);
-  font-size: 64px;
+  font-size: clamp(44px, 14vw, 60px);
   font-weight: 700;
   line-height: 1.05;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
 
 .now-target.words {
-  font-family: var(--serif);
   font-size: 40px;
-  font-weight: 400;
   line-height: 1.15;
 }
 
-.now-card[data-flash='true'] {
+.now-card[data-flash='true'] .now-main {
   background: var(--accent);
   color: var(--on-accent);
 }
@@ -730,52 +804,48 @@ details.card[open] > summary::after {
   color: var(--on-accent);
 }
 
-.next-card {
+.next-strip {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 76px;
-  border: 1px solid var(--edge);
-  padding: 10px 16px;
-  margin-top: 10px;
+  min-height: 46px;
+  padding: 6px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--row);
+  overflow: hidden;
 }
 
 .next-label {
-  display: block;
-  font-size: 19px;
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 1.25;
 }
 
 .next-in {
-  display: block;
-  font-family: var(--sans);
-  font-size: 19px;
+  position: relative;
+  font-size: 17px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--sub);
+  white-space: nowrap;
 }
 
 .next-count {
-  font-family: var(--sans);
-  font-size: 56px;
+  position: relative;
+  font-size: 34px;
   font-weight: 700;
   line-height: 1;
   color: var(--accent);
-  min-width: 40px;
-  text-align: right;
   font-variant-numeric: tabular-nums;
-}
-
-.timer-steps {
-  margin-top: 12px;
-}
-
-.timer-steps .step-row:first-child {
-  border-top: 0;
 }
 
 .hold {
   position: relative;
   overflow: hidden;
+  flex: 0 0 96px;
   touch-action: none;
   -webkit-touch-callout: none;
 }
@@ -802,51 +872,58 @@ details.card[open] > summary::after {
 
 .hold .hold-sub {
   font-size: 14px;
+  font-weight: 400;
   white-space: nowrap;
+}
+
+.done-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .done-times {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin: 18px 0 12px;
 }
 
 .done-time {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 14px 6px;
+  border-radius: var(--radius-card);
+  box-shadow: 0 1px 2px var(--shadow);
+  padding: 12px 6px;
   text-align: center;
 }
 
 .done-time .k {
-  font-size: 15px;
-  letter-spacing: 0.14em;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sub);
 }
 
 .done-time .v {
-  font-family: var(--sans);
-  font-size: 64px;
+  font-size: 52px;
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
 
 .done-line {
-  font-size: 20px;
+  font-size: 19px;
   text-align: center;
-  margin-bottom: 8px;
+  text-wrap: balance;
 }
 
 .done-line.quiet {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--sub);
 }
 
-/* ---------- sheets (settings, scale help, calibration) ---------- */
+/* ---------- sheets (settings, scale help, technique, calibration) ---------- */
 
 .sheet-layer {
   position: fixed;
@@ -854,6 +931,7 @@ details.card[open] > summary::after {
   z-index: 20;
   background: var(--bg);
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -873,25 +951,27 @@ details.card[open] > summary::after {
   gap: 12px;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
-  padding: 12px 0 10px;
+  padding: 10px 0;
   margin-bottom: 14px;
 }
 
 .sheet-head h2 {
-  font-size: 26px;
-  font-weight: 400;
+  font-size: 22px;
+  font-weight: 700;
   line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .sheet h3 {
-  font-size: 21px;
-  font-weight: 400;
+  font-size: 19px;
+  font-weight: 700;
   margin-bottom: 4px;
 }
 
 .section-title {
   font-size: 14px;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sub);
   margin: 22px 0 8px;
@@ -921,7 +1001,8 @@ details.card[open] > summary::after {
 }
 
 .setting-title {
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
@@ -946,7 +1027,8 @@ details.card[open] > summary::after {
 }
 
 .gear-name {
-  font-size: 19px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .gear-meta {
@@ -965,12 +1047,16 @@ details.card[open] > summary::after {
   margin-bottom: 6px;
 }
 
+.field label.lbl {
+  font-size: 14px;
+}
+
 .input {
   display: block;
   width: 100%;
   min-height: var(--tap);
   border: 1px solid var(--edge);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--card);
   color: var(--ink);
   font-size: 18px;
@@ -985,7 +1071,7 @@ textarea.input {
 .problems {
   background: var(--danger-soft);
   border: 2px solid var(--danger);
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 10px 14px;
   margin-bottom: 14px;
   font-size: 17px;
@@ -994,6 +1080,19 @@ textarea.input {
 .problems ul {
   margin: 0;
   padding-left: 20px;
+}
+
+.tips {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.tips li {
+  margin-bottom: 10px;
+}
+
+.tips li:last-child {
+  margin-bottom: 0;
 }
 
 .help-list {
@@ -1009,7 +1108,7 @@ textarea.input {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 19px;
+  font-size: 18px;
   cursor: pointer;
   list-style: none;
 }
@@ -1021,7 +1120,6 @@ textarea.input {
 .help-entry > summary::after {
   content: '+';
   margin-left: auto;
-  font-family: var(--sans);
   font-size: 26px;
   line-height: 1;
   color: var(--accent);
@@ -1031,7 +1129,8 @@ textarea.input {
   content: '\2212';
 }
 
-.help-entry ol {
+.help-entry ol,
+.help-entry ul {
   margin: 0 0 10px;
   padding-left: 24px;
 }
@@ -1082,7 +1181,6 @@ textarea.input {
 }
 
 .test-name {
-  font-family: var(--sans);
   font-size: 19px;
   font-weight: 700;
 }
@@ -1104,13 +1202,39 @@ textarea.input {
 
 .results {
   white-space: pre-wrap;
-  font-family: var(--sans);
   font-size: 16px;
   background: var(--card);
   border: 1px solid var(--edge);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px;
   margin: 0 0 12px;
+}
+
+/* A short screen, such as an iPhone SE: tighten the spacing first, so the rows keep what height there is. */
+@media (max-height: 700px) {
+  .screen.brew,
+  .screen.timer {
+    gap: 6px;
+    padding-top: calc(4px + env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .setup {
+    padding: 4px 12px 8px;
+  }
+
+  .stepper.grind {
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+
+  .plan-head {
+    padding: 6px 12px 4px 16px;
+  }
+
+  .now-main {
+    padding: 6px 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

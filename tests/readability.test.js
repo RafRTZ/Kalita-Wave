@@ -122,9 +122,24 @@ test('the elapsed time is at least 64 px and the current target at least 40 px',
   assert.ok(size('.now-target.words') >= 40);
 });
 
+test('the brew screen and the timer are columns exactly as tall as the screen, so they do not scroll', () => {
+  const rule = css.match(/\n\.screen\.brew,\n\.screen\.timer\s*\{([^}]*)\}/);
+  assert.ok(rule, 'one rule for .screen.brew and .screen.timer');
+  assert.match(rule[1], /flex-direction:\s*column/);
+  assert.match(rule[1], /height:\s*100dvh/);
+  // The step lists are what gives up height, down to a floor the screens set with --rows.
+  for (const selector of ['.screen.brew > .plan', '.screen.timer > .timer-steps']) {
+    const escaped = selector.replace(/[.>]/g, '\\$&');
+    const list = css.match(new RegExp(`\\n${escaped}\\s*\\{([^}]*)\\}`));
+    assert.ok(list, `rule for ${selector}`);
+    assert.match(list[1], /flex:\s*0 1 auto/, `${selector} must be allowed to shrink`);
+    assert.match(list[1], /min-height:\s*calc\(var\(--rows/, `${selector} must keep a floor from --rows`);
+  }
+});
+
 test('controls are at least 56 px tall', () => {
   assert.ok(Number(tokens.tap.replace('px', '')) >= 56, '--tap');
-  for (const selector of ['.btn', '.icon-btn', '.step-btn', '.seg button', '.link', '.input', '.sound-bar', 'details.card > summary', '.help-entry > summary']) {
+  for (const selector of ['.btn', '.icon-btn', '.step-btn', '.seg button', '.link', '.input', '.sound-bar', '.help-entry > summary']) {
     const escaped = selector.replace(/[.>]/g, '\\$&');
     const rule = css.match(new RegExp(`\\n${escaped}\\s*\\{([^}]*)\\}`));
     assert.ok(rule, `rule for ${selector}`);

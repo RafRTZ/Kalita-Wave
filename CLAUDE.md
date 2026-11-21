@@ -51,8 +51,8 @@ the chat itself, numbered, with the exact setting and button names, instead of p
 - Storage keys are `kw:<channel>:v1:<name>`. The channel comes from the URL: `/next/` is `next`, anything
   else is `live`. Never read or write another channel's keys.
 - Bump `APP_VERSION` in `next/app/platform/channel.js` with every change the owner will test on a phone.
-- Colours are tokens in the `:root` block of `styles.css`; no raw colour values anywhere else. Text is at
-  least 14 px (body 16 px), contrast at least 4.5:1, touch targets at least 56 px. Tests enforce these.
+- Colours are tokens in `:root` of `styles.css`, nowhere else. Text at least 14 px (body 16), contrast at
+  least 4.5:1, touch targets 56 px: tests enforce these. Brew and timer screens must not scroll vertically.
 - Writing style everywhere (UI text, comments, docs): no en dashes or em dashes, no emojis, no filler.
 - Pushing: git on this Mac has no GitHub sign-in. After approving a push, the owner clicks Push origin in
   GitHub Desktop. Then check that `/next/` is live and the root app is unchanged.
