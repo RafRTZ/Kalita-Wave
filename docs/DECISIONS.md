@@ -584,3 +584,8 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **Not verified.** Anything on an iPhone. Part 9 of `TESTING.md` is the phone checklist.
 - **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
   "promote".
+- **Pushed and checked, 2026-11-21.** `5d2854b..54ecb48`. On the site afterward: the test copy serves
+  2.0.0-m1.8 and all 36 of its files match the push; the live app still serves 2.0.0-m1.5 and its 33
+  files are unchanged; `classic.html` is the original calculator. Opened in a desktop browser at 402 by
+  790, the test link puts the pour plan and the row of buttons on the same pixels before and after
+  Start, fits with no scrolling, and reports no errors.
