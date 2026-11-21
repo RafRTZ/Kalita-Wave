@@ -348,7 +348,23 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   already on this Mac, then a sign-in approved in the browser; it works for every repo the owner has).
   The owner's answer: "can i just log into github here?" Taken as a wish for a plain sign-in, which is
   the second way. It needs an install, so the owner was asked for a yes to that before anything was
-  installed.
+  installed. The owner then asked "which is better/simpler/more secure?" and, told that the key unlocks
+  this one repo while the sign-in unlocks every repo on the account, answered "Yes, use the key".
+  Nothing was installed.
+- **What was set up on this Mac.** A key pair made for this purpose: the private half is the file
+  `~/.ssh/kalita_wave_deploy`, with no passphrase so a push needs nobody at the keyboard; the public half
+  is beside it with `.pub`. Its fingerprint is `SHA256:t/S1DC6NUfTnVRHVZEiyJMHexi2UGkL54DxmPdrXagw`.
+  GitHub's own server keys, fetched from `https://api.github.com/meta`, are in
+  `~/.ssh/kalita_wave_known_hosts`. In this repo's local git settings (not committed) there is a second
+  remote named `deploy` that pushes over SSH with that key. The `origin` remote that GitHub Desktop uses
+  is unchanged, so Push origin in GitHub Desktop still works as before.
+- **The owner's part.** Adding the public half to the repo on GitHub: Settings, Deploy keys, Add deploy
+  key, with "Allow write access" ticked. Until that is done the key opens nothing.
+- **How to push with it.** `git push deploy main`, then `git fetch origin` so git's picture of GitHub is
+  up to date, then check the site.
+- **How to take it away.** Delete the key on that same GitHub page. To clean up the Mac as well: delete
+  the two key files and run `git remote remove deploy` and `git config --unset core.sshCommand` in the
+  repo.
 - **When to ask before a push.** Asked when Claude should still ask first, the owner chose "Only for the
   live app". So, from the moment Claude can push: changes to the test copy and to the docs are pushed
   when they are ready, and the owner is told what went out. A push that changes the live app still needs
