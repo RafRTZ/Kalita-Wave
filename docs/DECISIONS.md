@@ -589,3 +589,73 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   files are unchanged; `classic.html` is the original calculator. Opened in a desktop browser at 402 by
   790, the test link puts the pour plan and the row of buttons on the same pixels before and after
   Start, fits with no scrolling, and reports no errors.
+
+## The lower part gets a ground of its own and carries the tips, 2026-11-21 (version 2.0.0-m1.9)
+
+- **What the owner said about 2.0.0-m1.8.** "Yes, stays put." Then: "A couple other notes. I like the
+  Wave 185 tips, but perhaps we could have that below the brew section so that it's present on both
+  pages, even after start, so it can be quickly referenced. Also, it would be nice if there was a little
+  more space between the numbering segments at the bottom that remain on each page and the grams, water
+  temperature, and finish start here portion to give them some spatial separation and appear to be in
+  different segments. Wondering if we can have a little bit of subtle background coloring that helps
+  distinguish. That way it looks more like that top section is just being replaced when it switches to a
+  new page."
+- **Which check that answers.** S2 in Part 9 of `TESTING.md`, the list staying put at Start, is reported
+  as passing on a phone. Which phone was not said, and S3 to S7 were not reported one by one.
+- **Built without a plan first.** The three wishes were specific, and the test copy is the place to try
+  a look, so they were built and pushed there with a picture in the chat instead of a plan to approve.
+  That was my call. The owner asked for "plan before build" once before, for 2.0.0-m1.7.
+- **What changed.**
+  1. The lower part is one piece, built in one place for both screens (`lowerPart` in `parts.js`): a
+     line with the name "Pour plan" and the link to the brewer's tips, then the pour plan, then the row
+     of buttons.
+  2. The tips link is in that line, so the timer has it too. A tap opens the same tips page as before.
+     During a brew the timer keeps running under the page.
+  3. The lower part has a ground of its own: the soft cream the brewer switch already uses (`--soft`),
+     with round top corners. It runs to the left, right, and bottom edges of the screen, the phone's
+     home bar area included.
+  4. Between the three numbers and the list there were 10 px. On the owner's size there are now about
+     48 px: 16 px to the edge of the lower part, then its padding and the name line.
+  5. Spare room is shared out above the lower part as well, so the upper part does not sit on its edge.
+- **What it cost.** The name line and the padding above it take 32 px. To pay for them a row of the
+  pour plan is 48 px at most (it was 52 px). On the owner's size the list is 290 px tall (it was 314 px)
+  and the gaps in the upper part are 16 px (they were 21 px). On a screen under 700 px tall the buttons
+  along the bottom are 56 px tall (they were 64 px).
+- **Decisions the owner did not specify.** Any of these can be undone.
+  1. The words "Pour plan" at the left of the tips link. The link alone looked stranded.
+  2. The colour: `--soft`. No new colour was added.
+  3. The buttons sit on the tinted ground too. Their row stays in place, though the buttons change.
+  4. The Done screen has no lower part, so its two buttons stay on the plain page.
+  5. "Brew" keeps its label above the three numbers, now without the link.
+  6. The tips page covers the timer while it is open, and shows no clock of its own.
+- **Where the no-scrolling rule gives.** A dose inside a brewer's range, the kind that shows no notice,
+  fits at every size tried, with the message about a changed grind and without it. What scrolls is
+  always a dose that carries a caution or a warning, and more of those scroll than before:
+  - At 402 by 790, the owner's size: nothing scrolls from 8 to 60 g on either brewer. With the grind
+    message showing as well, doses far outside the limits scroll by 23 px: 50 g and up on the Wave 185,
+    29 g and up on the Wave 155.
+  - At 393 by 771 and at 390 by 775: nothing scrolls without the message. With it, doses with a warning
+    scroll by up to 42 px, and at 390 by 775 the cautions from 41 g on the Wave 185 by 12 px.
+  - At 375 by 740: doses with a warning scroll by up to 36 px. With the message, doses with a caution
+    scroll as well, and the most is 92 px.
+  - At 375 by 647, an iPhone SE: doses with a caution or a warning above the usual range scroll by 17
+    to 63 px, and with the message every dose that carries a notice scrolls, by 26 to 119 px.
+  The lower part's new line and padding account for 32 px of each figure (20 px on the short screen),
+  so by that arithmetic a case that scrolls by less than that fit in 2.0.0-m1.8. That version was not
+  scanned dose by dose, so the comparison is a calculation and not a measurement.
+- **Checked on the Mac.** In a desktop browser the place and size of the lower part, its name line, the
+  tips link, the pour plan, each row, every word, and the row of buttons were read off the brew screen
+  and again off the timer straight after Start. They are identical, and neither screen scrolls, at 36 g
+  and 40 g on the Wave 185, at 18 g and 20 g on the Wave 155, and at 36 g with the grind message, at
+  each of the ten sizes listed for 2.0.0-m1.8. At 402 by 790 also in ounces, at 60 g with its warning,
+  and through the timer's states: brewing, paused, Done showing, past the target, and "Back to timer".
+  The tips link was tapped on both screens: the page opens and closes, the clock went on counting while
+  it was open during a brew, and the lower part was where it had been afterward. The whole 56 px tap
+  area of the link answers, the part over the top of the list included. A changed screen size mid-brew
+  and a reload mid-brew still fit. 156 tests pass. `tests/layout.test.js` was rewritten for the new
+  shape and has 11; each of six mistakes they guard against was made on purpose and caught.
+- **Not verified.** Anything on an iPhone, the look of the colour on a real screen above all. Sound was
+  off in the desktop browser, so cues playing while the tips page is open are untested. Part 10 of
+  `TESTING.md` is the phone checklist.
+- **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
+  "promote".

@@ -2,17 +2,18 @@
 // "Grind" is what happens at the grinder, on one row: the dose with its minus and plus, and beside it the
 // grind as a recommendation to read. The grind is not set here. It moves after a brew, from the answer to
 // "How did it drain?" on the Done screen, and a line under the row says so until the next brew starts.
-// "Brew" is what happens at the kettle: water, temperature, and finish time, then the pour plan.
+// "Brew" is what happens at the kettle: water, temperature, and finish time.
+// Under those two sits the lower part: the pour plan with the link to the brewer's tips, and the buttons.
+// It is built and placed exactly as on the timer, on a ground of its own, so a tap on Start replaces the
+// upper part of the screen and nothing else is seen to move (owner, 2026-11-21).
 // The screen fits one phone screen with no scrolling: the pour plan gives up height first.
-// The pour plan and the buttons under it are built and placed exactly as on the timer, so a tap on Start
-// changes the upper part of the screen and nothing else is seen to move (owner, 2026-11-21).
 
 import { DOSE_MAX_G, DOSE_MIN_G } from '../engine/constants.js';
 import { DRAIN } from '../engine/dialin.js';
 import { formatSetting } from '../engine/grind.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
 import { h, icon, segmented } from './dom.js';
-import { notePlanHeight, planCard, topActions } from './parts.js';
+import { lowerPart, notePlanHeight, topActions } from './parts.js';
 import { temperature } from './text.js';
 
 function header(app, c) {
@@ -161,31 +162,33 @@ function grindGroup(app, c) {
   );
 }
 
-/** At the kettle: water, temperature, and finish time. The pour plan follows it as a card of its own. */
-function brewGroup(app, c) {
-  const tips = h('button', { class: 'link', type: 'button', onclick: () => app.openSheet('technique') }, `${c.brewer.shortName} tips`);
-  return group('Brew', 'brew-group', tips, stats(c));
+/** At the kettle: water, temperature, and finish time. The pour plan follows in the lower part. */
+function brewGroup(c) {
+  return group('Brew', 'brew-group', null, stats(c));
 }
 
 export function renderBrew(app) {
   const c = app.brewContext();
-  const plan = planCard(c.plan, c.unit);
+  let lower = null;
   const start = () => {
     // The timer puts its copy of the pour plan exactly where this one is, so note its height first.
-    notePlanHeight(plan.node);
+    notePlanHeight(lower.plan);
     app.start();
   };
+  // The lower part is the same as on the timer. Only its buttons are this screen's own.
+  lower = lowerPart(app, {
+    plan: c.plan,
+    unit: c.unit,
+    buttons: [
+      h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Settings', onclick: () => app.openSheet('settings') }, icon('settings')),
+      h('button', { class: 'btn primary big grow', type: 'button', onclick: start }, 'Start'),
+    ],
+  });
   return h(
     'div',
     { class: 'screen brew' },
-    // The upper part is this screen's own. The pour plan and the buttons are the same as on the timer.
-    h('div', { class: 'upper' }, header(app, c), brewerSwitch(app, c), notices(c), grindGroup(app, c), brewGroup(app, c)),
-    plan.node,
-    h(
-      'div',
-      { class: 'bottom-bar' },
-      h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Settings', onclick: () => app.openSheet('settings') }, icon('settings')),
-      h('button', { class: 'btn primary big grow', type: 'button', onclick: start }, 'Start'),
-    ),
+    // The upper part is this screen's own, and is what Start replaces.
+    h('div', { class: 'upper' }, header(app, c), brewerSwitch(app, c), notices(c), grindGroup(app, c), brewGroup(c)),
+    lower.node,
   );
 }

@@ -4,15 +4,16 @@
 // on the "next" strip, then a flash when the step starts. Each row of the step list is shaded from left to
 // right as its time runs, so the list shows at a glance how far the brew has come.
 // The screen fits one phone screen with no scrolling: the step list gives up height first.
-// The step list and the buttons under it are built and placed exactly as on the brew screen, and the list
-// is given the height it had there, so a tap on Start changes only the upper part (owner, 2026-11-21).
+// The lower part (the step list with the link to the brewer's tips, and the buttons) is built and placed
+// exactly as on the brew screen, and the list is given the height it had there, so a tap on Start
+// replaces only the upper part (owner, 2026-11-21).
 
 import { DRAIN, drainByClock } from '../engine/dialin.js';
 import { formatSetting } from '../engine/grind.js';
 import { PHASE, snapshot } from '../engine/timeline.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
 import { h, segmented, setAttr, setText, toggleClass } from './dom.js';
-import { planCard, topActions, usePlanHeight } from './parts.js';
+import { lowerPart, topActions, usePlanHeight } from './parts.js';
 import { stepLabel } from './text.js';
 
 const DRAIN_OPTIONS = Object.freeze([
@@ -214,20 +215,19 @@ export function createTimerView(app) {
       h('div', { class: 'next-strip' }, r.nextFill, r.nextLabel, r.nextIn, r.nextCount),
     );
 
-    // The same pour plan as on the brew screen.
-    const list = planCard(plan, unit);
-    r.rows = list.rows;
-    r.finishRow = list.finish;
-    r.plan = list.node;
-
     r.pause = h('button', { class: 'btn grow', type: 'button', onclick: () => app.togglePause() });
     r.done = h('button', { class: 'btn primary grow', type: 'button', hidden: true, onclick: () => app.done() }, 'Done');
 
+    // The lower part is the same as on the brew screen. Only its buttons are this screen's own.
+    const lower = lowerPart(app, { plan, unit, buttons: [holdToReset(app), r.pause, r.done] });
+    r.rows = lower.rows;
+    r.finishRow = lower.finish;
+    r.plan = lower.plan;
+
     node.replaceChildren(
-      // The upper part is this screen's own. The pour plan and the buttons are the same as on the brew screen.
+      // The upper part is this screen's own, and is what replaced the brew screen's at Start.
       h('div', { class: 'upper' }, topBar(app, r.phase), r.soundBar, r.wakeNote, h('div', { class: 'clock-block' }, r.clock, r.clockSub), r.nowCard),
-      r.plan,
-      h('div', { class: 'bottom-bar' }, holdToReset(app), r.pause, r.done),
+      lower.node,
     );
     refs = r;
     builtFor = 'active';

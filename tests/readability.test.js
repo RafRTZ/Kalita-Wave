@@ -127,12 +127,15 @@ test('the brew screen and the timer are columns exactly as tall as the screen, s
   assert.ok(rule, 'one rule for .screen.brew and .screen.timer');
   assert.match(rule[1], /flex-direction:\s*column/);
   assert.match(rule[1], /height:\s*100dvh/);
-  // The pour plan is what gives up height, down to a floor it sets with --rows. One rule covers both
-  // screens (tests/layout.test.js says why).
-  const plan = css.match(/\n\.screen\.brew > \.plan,\n\.screen\.timer > \.plan\s*\{([^}]*)\}/);
-  assert.ok(plan, 'one rule for the pour plan on both screens');
-  assert.match(plan[1], /flex:\s*0 1 /, 'the pour plan must be allowed to shrink');
-  assert.match(plan[1], /min-height:\s*calc\(var\(--rows/, 'the pour plan must keep a floor from --rows');
+  // The lower part, and the pour plan in it, are what gives up height, down to a floor set with --rows.
+  // One rule each covers both screens (tests/layout.test.js says why).
+  for (const selector of ['.screen > .lower', '.lower > .plan']) {
+    const escaped = selector.replace(/[.>]/g, '\\$&');
+    const rule = css.match(new RegExp(`\\n${escaped}\\s*\\{([^}]*)\\}`));
+    assert.ok(rule, `rule for ${selector}`);
+    assert.match(rule[1], /flex:\s*0 1 /, `${selector} must be allowed to shrink`);
+    assert.match(rule[1], /min-height:\s*calc\(var\(--rows/, `${selector} must keep a floor from --rows`);
+  }
 });
 
 test('the grind setting is drawn smaller than the dose, and Finer and Coarser keep a full tap area', () => {

@@ -28,7 +28,11 @@ record of the version it replaced.
 the timer just after Start, and asked that the bottom section stay exactly the same between the two. The
 screenshots show the one-row Grind part as designed and both screens fitting at 36 g on the Wave 185; no
 check from Part 8 was reported in words. Version 2.0.0-m1.8 keeps the list of pours and the buttons in
-place. It is on the test copy only. Part 9 is its checklist, and nothing in it has been tried on a phone
+place. Part 9 is its checklist. The owner tried it on a phone and answered "Yes, stays put.", which is S2.
+
+**And after that:** the owner asked for the tips link to be on both screens, for more room between the
+three numbers and the list, and for a subtle background behind the part that stays. That is version
+2.0.0-m1.9, on the test copy only. Part 10 is its checklist, and nothing in it has been tried on a phone
 yet.
 
 ## Where things are
@@ -334,6 +338,10 @@ On 2026-11-21 the owner sent a screenshot of the brew screen and one of the time
 bottom section stay exactly the same between the two, so that only the top is seen to change. This
 version is on the test copy only: use the Kalita Next icon. Close it fully first, then open it.
 
+Reported so far: S2, with the words "Yes, stays put." Which phone was not said. Since 2.0.0-m1.9 the icon
+shows that version, so S1 reads 2.0.0-m1.9 now (T1 in Part 10 is the same check), and the list sits on a
+tinted ground under a line that reads "POUR PLAN". S2 to S7 still apply as written.
+
 What moved:
 
 - **The list of pours** is one card, the same on both screens: same place, same size, same words.
@@ -352,6 +360,35 @@ What moved:
 
 What to send back: if anything in the list still shifts, the same two screenshots as before, one just
 before Start and one just after. Which phone it was helps too.
+
+## Part 10: the tinted lower part, and tips on both screens (version 2.0.0-m1.9)
+
+On 2026-11-21 the owner asked for three things: the tips link on both screens, more room between the
+three numbers and the list, and a subtle background colour behind the part that stays, so that the top
+reads as the piece that gets replaced. This version is on the test copy only: use the Kalita Next icon.
+Close it fully first, then open it.
+
+What moved:
+
+- **The lower part** (the list and the buttons) sits on a slightly darker cream ground with round top
+  corners. It is the same on both screens.
+- **The tips link** left the word "BREW" and sits at the top right of the lower part, beside the words
+  "POUR PLAN". It is there before a brew and during one.
+- **The list** is a little shorter than before, to make room for that line.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| T1 | The right version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.9. Tap Done at the top right to close |
+| T2 | The tinted part | Look at the brew screen | From "POUR PLAN" down to the bottom edge the ground is a shade darker than the page, edge to edge. Water, water temp, and finish sit above it on the plain page, with clear room between them and the list |
+| T3 | Tips before a brew | Tap "Wave 185 tips" at the right of "POUR PLAN" | The tips page opens. Tap Close to come back |
+| T4 | It stays at Start | Keep your eye on the tinted part and tap Start | Nothing in it moves, and the tips link is still there. Only the part above it is replaced |
+| T5 | Tips during a brew | Mid-brew, tap the tips link, read a tip, tap Close | The page opens at once. Back on the timer the clock has kept counting. If a pour came due while the page was open, its sound still played |
+| T6 | Still one screen | Try to drag the brew screen and the timer up and down, at 36 g on the Wave 185 and at 18 g on the Wave 155 | Nothing scrolls and nothing is cut off |
+| T7 | With the grind message | After a brew answered "Too slow", tap New brew | The message shows, everything still fits, and the list is a little shorter while it shows |
+| T8 | The colour | Look at both screens in your kitchen | Your call: enough to tell the two parts apart, not so much that it shouts |
+
+What to send back: whether the colour is too strong, too weak, or right, and whether the room above the
+list is enough. For anything that fails, which phone it was and a screenshot.
 
 ## Expected to fail, by design for now
 
@@ -387,9 +424,11 @@ before Start and one just after. Which phone it was helps too.
   it running on a phone, with the one-row Grind part and both screens fitting. Nothing else from Part 8
   has been reported. Whether one step per brew is the right size of change, and how the three answers
   feel under a wet finger, are for real brews to say.
-- **Version 2.0.0-m1.8, the list staying put:** all of Part 9. Measured only in a desktop browser set to
-  phone sizes, where the list and the buttons land on the same pixels before and after Start. That
-  browser's engine is not Safari's, so the phone has the last word.
+- **Version 2.0.0-m1.8, the list staying put:** S2 is reported as passing on a phone ("Yes, stays put."),
+  without saying which phone. S3 to S7 were not reported one by one.
+- **Version 2.0.0-m1.9, the tinted lower part and tips on both screens:** all of Part 10. Seen only in a
+  desktop browser set to phone sizes. How the colour looks on a real screen is the owner's to judge, and
+  sound while the tips page is open could not be tried on the Mac.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen
