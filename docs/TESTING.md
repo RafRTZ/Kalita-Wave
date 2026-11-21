@@ -32,14 +32,18 @@ place. Part 9 is its checklist. The owner tried it on a phone and answered "Yes,
 
 **And after that:** the owner asked for the tips link to be on both screens, for more room between the
 three numbers and the list, and for a subtle background behind the part that stays. That is version
-2.0.0-m1.9, on the test copy only. Part 10 is its checklist. The owner tried it on a phone and answered
-"Looks good", without saying which phone or which of the checks.
+2.0.0-m1.9. Part 10 is its checklist. The owner tried it on a phone and answered "Looks good", without
+saying which phone or which of the checks.
+
+**Third promote, also 2026-11-21:** asked whether to promote, the owner answered "Promote". The live app
+is 2.0.0-m1.9 since then, the same as the test copy. Part 11 is the short list for the live icon, and
+nothing in it has been reported yet.
 
 ## Where things are
 
 - **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ gets every change first.
 - **Live app:** https://rafrtz.github.io/Kalita-Wave/ is the new app since the promote of 2026-11-20,
-  and version 2.0.0-m1.5 since the second promote of 2026-11-21. It changes only when you say "promote".
+  and version 2.0.0-m1.9 since the third promote of 2026-11-21. It changes only when you say "promote".
 - **Original calculator, frozen:** https://rafrtz.github.io/Kalita-Wave/classic.html
 
 ## Set up each phone
@@ -393,6 +397,22 @@ What moved:
 What to send back: whether the colour is too strong, too weak, or right, and whether the room above the
 list is enough. For anything that fails, which phone it was and a screenshot.
 
+## Part 11: after the third promote (version 2.0.0-m1.9 on the live icon)
+
+Use the usual Kalita icon, not Kalita Next. Close the app fully first, then open it. If it still shows
+the old look, wait ten minutes and try again: GitHub lets phones keep files for ten minutes.
+
+One thing to know: each phone keeps its own grind. An answer to "How did it drain?" on one phone moves
+the grind on that phone only, so your two phones can show different grind numbers until Milestone 2.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| K1 | The live app is the new version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.9 and "Live copy." |
+| K2 | Nothing was forgotten | Look at the brew screen and at Settings | Your grind number, your usual dose, grams or ounces, and the sound choices are as you left them. The grind question is not asked again |
+| K3 | One real brew, with the question | Brew as usual from the Kalita icon, tap Done when the bed is dry, and answer "How did it drain?" | Cues play, the screen stays on, the list stays put at Start, and after your answer a line says what the grind will be next time |
+| K4 | The next brew | Open the brew screen for the brew after that | If the answer moved the grind, the message "Grind is now ..." shows with Undo, and goes by itself once that brew starts |
+| K5 | The second phone | Open Kalita on it, then tap Start | The tinted lower part is there and does not move, and both screens fit with nothing to scroll to |
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -433,6 +453,9 @@ list is enough. For anything that fails, which phone it was and a screenshot.
   and answered "Looks good", without saying which phone. Not reported one by one: T3 to T7, the tips
   page during a brew and its sound above all. Sound while the tips page is open could not be tried on
   the Mac.
+- **After the third promote:** all of Part 11. The live icon has not been reported on either phone, and
+  nobody has yet reported answering "How did it drain?" after a real brew, on the test copy or the live
+  one.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen

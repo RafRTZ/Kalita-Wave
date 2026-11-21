@@ -667,3 +667,44 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **The owner's answer, 2026-11-21.** "Looks good", after trying 2.0.0-m1.9 on a phone. Which phone, and
   which of the checks in Part 10 of `TESTING.md`, were not said. Nothing was promoted on that answer: the
   live app changes on the word "promote", and it stays at 2.0.0-m1.5.
+
+## Third promote, 2026-11-21 (version 2.0.0-m1.9)
+
+- **The phone reports behind it.** For 2.0.0-m1.8: "Yes, stays put." For 2.0.0-m1.9, asked "How does the
+  tinted lower part look on your phone?": "Looks good". Not stated, so not assumed: which phone or
+  phones, and which checks in Parts 8 to 10 of `TESTING.md` were run. Nothing has been reported about
+  the question "How did it drain?" after a real brew. The owner was told so before deciding.
+- **The owner's word.** Asked "Promote 2.0.0-m1.9 to the live app?", the owner answered "Promote".
+- **What was done.** `scripts/promote.sh` ran. 156 tests passed, `classic.html` was confirmed as the
+  original, and the test copy was copied to the root. Eleven files under `app/` changed, two of them new
+  (`engine/dialin.js`, `ui/grind.js`). The live app is now 35 files, each identical to its twin in
+  `next/`. `next/audio-test.html` stays on the test copy only, as before.
+- **What the live app gains.** Everything the test copy gathered since 2.0.0-m1.5: the grind as a small
+  number beside the grams, with a page of its own for Finer and Coarser; "How did it drain?" after Done,
+  and the message about a changed grind on the next brew; the pour plan and the buttons staying put at
+  Start; and the tinted lower part with the tips link on both screens.
+- **Checked on the Mac before the push.** Served locally at 402 by 790, the root opens as the live copy:
+  version 2.0.0-m1.9, no "NEXT" label, nothing to scroll. Its storage in that browser still held what
+  2.0.0-m1.5 had saved there, a brew with no `drain` field, and a grind adjustment in the old shape was
+  added beside it. The new version opened on that data with the adjusted grind and no message, and ran
+  a whole round: Start with the lower part unmoved, the tips page from the timer, Done, "Too slow", New
+  brew with the message, Undo. The values saved on the way were read back and are right, the old brew
+  was left as it was, the test copy's storage was not touched, and the browser reports no errors.
+- **What the phones keep.** Settings, gear, the grind answer, and any grind adjustment made with Finer
+  and Coarser. What is stored grew in two places and changed nowhere else: the grind record gains the
+  note about a change, and each new brew gains the answer to "How did it drain?". Expected on the
+  phones, and seen only in a desktop browser.
+- **What is new for two people sharing the live app.** Each phone keeps its own grind. An answer to "How
+  did it drain?" on one phone moves the grind on that phone only, so the two phones can show different
+  grind numbers until Milestone 2 brings shared storage.
+- **Not checked, because a Mac cannot.** The live icon on either phone. Part 11 of `TESTING.md` is the
+  short list.
+- **Undoing it.** Revert the promote commit and push: the live app is 2.0.0-m1.5 again. Going by its
+  code, that version keeps the grind adjustment and ignores the two additions. That was read, not tried.
+- **Pushed and checked, 2026-11-21.** `2fc07ab..ec55595`, pushed with the key. On the site afterward:
+  the live app serves 2.0.0-m1.9 and all 35 of its files match the push, the 36 files of the test copy
+  match too, and `classic.html` is the original calculator. Opened in a desktop browser at 402 by 790,
+  the live link shows the tinted lower part with no "NEXT" label, keeps it on the same pixels at Start,
+  opens the tips page from the timer, fits with no scrolling, and reports no errors. That browser had
+  no saved data for the live link, so it asked the first-run grind question, as a new phone would. What
+  the Kalita icon shows on the phones is for the owner to report: Part 11 of `TESTING.md`.
