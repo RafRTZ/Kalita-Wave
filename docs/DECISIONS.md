@@ -383,3 +383,26 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   is the test copy, the Kalita Next icon. Every change goes there first, and the live app that both
   phones use changes only on "promote".
 
+## Second promote, 2026-11-21 (version 2.0.0-m1.5)
+
+- **The phone report.** Asked "Does the new look work on your phone?", the owner answered "Looks good".
+  Not stated, so not assumed: which phone or phones, which of the Part 5 checks were run, and whether a
+  real brew was timed with it.
+- **The owner's word.** "push to live prod version". Read as "promote": it came straight after "Looks
+  good", and the live app is the only thing it can mean.
+- **What was done.** `scripts/promote.sh` ran. 132 tests passed, `classic.html` was confirmed as the
+  original, and the test copy was copied to the root. Eight files under `app/` changed, two of them new
+  (`ui/parts.js`, `ui/technique.js`). The live app is now 33 files, each identical to its twin in
+  `next/`. `next/audio-test.html` stays on the test copy only, as before.
+- **Checked on the Mac before the push.** Served locally at 393 by 771: the root opens as the live copy,
+  version 2.0.0-m1.5, with no "NEXT" label. The brew screen and the timer each fit with no scrolling,
+  the shade moves across the current step, Done and New brew work, and the browser reports no errors.
+  `classic.html` is the old calculator and `/next/` is still the test copy.
+- **What the phones keep.** Settings, gear, and the grind answer. The rework changed nothing about what
+  is stored or under which names, so the live icon should open with everything as it was. Expected, not
+  verified on a phone.
+- **Not checked, because a Mac cannot.** The live icon on either phone. For the second phone nothing has
+  been reported about this version at all, on the test copy or the live one. Part 6 of `TESTING.md` is
+  the short list.
+- **Undoing it.** Revert the promote commit and push: the live app is 2.0.0-m1.4 again.
+

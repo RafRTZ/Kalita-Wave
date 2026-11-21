@@ -12,15 +12,16 @@ That is what an icon made before the promote does. A new icon was then made on e
 in Part 4, and both were reported as showing the dripper.
 
 **Since 2026-11-21:** the owner asked for a calmer look, no vertical scrolling, and shading on the steps.
-That is version 2.0.0-m1.5. It was pushed on 2026-11-21 and is on the test copy only (the Kalita Next
-icon); the live app is still 2.0.0-m1.4. Part 5 is its checklist. Nothing in it has been tried on a phone
-yet.
+That is version 2.0.0-m1.5. It went to the test copy first (the Kalita Next icon). The owner tried it
+there, answered "Looks good", and asked for it on the live app. So since the second promote, also on
+2026-11-21, the live app is 2.0.0-m1.5 as well. Part 5 is its checklist; which of its checks were run,
+and on which phone, has not been noted. Part 6 is the short list for the live icon.
 
 ## Where things are
 
 - **Test copy:** https://rafrtz.github.io/Kalita-Wave/next/ gets every change first.
-- **Live app:** https://rafrtz.github.io/Kalita-Wave/ is the new app since the promote of 2026-11-20
-  (version 2.0.0-m1.4). It changes only when you say "promote".
+- **Live app:** https://rafrtz.github.io/Kalita-Wave/ is the new app since the promote of 2026-11-20,
+  and version 2.0.0-m1.5 since the second promote of 2026-11-21. It changes only when you say "promote".
 - **Original calculator, frozen:** https://rafrtz.github.io/Kalita-Wave/classic.html
 
 ## Set up each phone
@@ -215,8 +216,8 @@ What to report:
 
 On 2026-11-21 the owner asked for three things: a less amateurish look, no vertical scrolling, and
 shading that moves across each step as it runs. The clock and the "Pour to" weight were also to come down
-in size while staying readable from several feet. This version is on the test copy only: use the Kalita
-Next icon.
+in size while staying readable from several feet. This version went to the test copy first and has been
+on the live app too since the second promote of 2026-11-21, so either icon shows it.
 
 What moved:
 
@@ -242,6 +243,18 @@ and one more row, and that screen scrolls a little.
 
 What to send back: for anything that fails, which phone it was and what you saw. A screenshot helps most.
 
+## Part 6: after the second promote (version 2.0.0-m1.5 on the live icon)
+
+Use the usual Kalita icon, not Kalita Next. Close the app fully first, then open it. If it still shows
+the old look, wait ten minutes and try again: GitHub lets phones keep files for ten minutes.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| L1 | The live app has the new look | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.5 and "Live copy." |
+| L2 | Nothing was forgotten | Look at the brew screen and at Settings | Your grind number, your usual dose, grams or ounces, and the sound choices are as you left them. The grind question is not asked again |
+| L3 | One real brew | Brew as usual from the Kalita icon | Cues play, the screen stays on, the shade moves across the steps, and Done shows target next to actual |
+| L4 | The second phone | Open Kalita on it, then tap Start | Both screens fit, with nothing cut off and nothing to scroll to |
+
 ## Expected to fail, by design for now
 
 | # | Check | How | What to expect |
@@ -266,9 +279,10 @@ What to send back: for anything that fails, which phone it was and what you saw.
   the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
-- **Version 2.0.0-m1.5, the new look:** all of Part 5. It has been seen only in a desktop browser set to
-  phone sizes, whose engine is not Safari's. This Mac has no iPhone simulator. How it lays out on a real
-  iPhone, opened from the Home Screen, is unproven until Part 5 is done.
+- **Version 2.0.0-m1.5, the new look:** the owner tried it on the test copy and answered "Looks good",
+  without saying which phone or which of the Part 5 checks. Nothing has been reported from the second
+  phone. On the live icon it is unproven until Part 6 is done. On the Mac it has only been seen in a
+  desktop browser set to phone sizes, whose engine is not Safari's.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen
