@@ -1,7 +1,8 @@
 # Kalita Wave brew app
 
 Static web app on GitHub Pages (https://rafrtz.github.io/Kalita-Wave/), used daily by two people on iPhones.
-The owner is not a developer: explain in plain language, and ask when unsure.
+The owner is not a developer: explain in plain language, and ask when unsure. Put steps for the owner in
+the chat itself, numbered, with the exact setting and button names, instead of pointing at a file.
 
 - Full spec: `docs/BUILD_BRIEF.md` (read it before changing anything).
 - Answers to open questions and decisions made so far: `docs/DECISIONS.md`.

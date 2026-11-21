@@ -270,4 +270,30 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   page, so the capitals matter. And once the live icon is remade, it and Kalita Next show the same
   picture, told apart by the name under the icon and by the "NEXT" label inside the test copy. A marked
   icon for the test copy would be an app change, and the owner has not asked for one.
+- **The new icon, 2026-11-20.** Asked whether the newly made icon shows the brown dripper, the owner
+  answered "Yes, both phones". So an icon made from the live link gets the dripper picture on both
+  phones. Not stated, so not assumed: that it opens full screen, that the grind question and a real brew
+  went through on it (P2 to P4 in `TESTING.md`), and whether the old "K" icon was removed.
+
+## Where things stand at the end of Milestone 1, 2026-11-20
+
+- **Live.** The live app and the test copy are both version 2.0.0-m1.4. The original calculator is at
+  `classic.html`. Each phone has a live icon with the dripper picture, and a Kalita Next icon for the
+  test copy.
+- **Still unproven on the phones.** Listed under "Not verified yet" in `TESTING.md`. None of it holds up
+  Milestone 2.
+- **To settle with the owner at the start of Milestone 2.**
+  1. Service worker. Checkpoint 2b needs the app to open in airplane mode. Today a cold start with no
+     network most likely fails (item 17 in `TESTING.md`, not reported yet). Proposed at kickoff: a small
+     service worker that prefers the network and uses its saved copy only when offline.
+  2. Rounding collisions in R1. Proposed: merge two pours that round to the same target or the same
+     second. Needs a yes.
+  3. A card that prints Origami with no filter named. The bean form will have to ask which filter.
+  4. The V60 and Chemex tips are still drafts waiting for review.
+- **Owed.** Before any step toward other households or a public release, the reminder that the commit
+  history carries a personal email address.
+- **Not to be offered again** unless the owner brings the music up: the sound choice on the brew screen
+  and the "Resume music" shortcut ("Music after a brew" above).
+- **Optional, and it needs the owner's OK like any install.** GitHub's command-line tool (`gh`), so
+  Claude can push without GitHub Desktop.
 

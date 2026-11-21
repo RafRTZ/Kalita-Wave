@@ -8,8 +8,8 @@ running iOS 27.2.1. The second phone was reported as working; which checks were 
 version, have not been noted. Both checks in Part 3 were reported as passing. The owner then said
 "promote", so the live app is now the new app. Part 4 is the short list for the live icon. First report
 on it: the old calculator still opens, and the usual icon kept its old picture, a blank tile with a "K".
-That is what an icon made before the promote does. "Getting the dripper icon, step by step" in Part 4
-replaces it.
+That is what an icon made before the promote does. A new icon was then made on each phone with the steps
+in Part 4, and both were reported as showing the dripper.
 
 ## Where things are
 
@@ -155,7 +155,9 @@ Kalita icon, not Kalita Next. Wait two to ten minutes after the push first.
 | P5 | The old calculator is still there | Settings, "About this copy", "Original calculator" | The old calculator opens |
 
 Reported so far, 2026-11-20: P5 passes ("the old app link works"). The usual icon did not change its
-picture ("it's just a blank "K" app"). P1 to P4 have not been reported one by one.
+picture ("it's just a blank "K" app"). A new icon was then made from the live link with the steps below,
+and it shows the brown dripper on both phones ("Yes, both phones"). P1 to P4 have not been reported one
+by one.
 
 Good to know:
 
@@ -226,9 +228,7 @@ What to report:
   the quick way (Reset) or the end of a real brew. If it was the quick way, check A is worth one more try
   after a real brew.
 - **Not reported yet:** items 17 and 18, the two that are expected to fail for now.
-- **After the promote:** P5 is reported as passing. P1 to P4 have not been reported one by one, and it
-  has not been said whether the old icon opens the new app.
-- **The new live icon:** not made yet, as far as reported. Checked on the Mac only: the live page names
-  the dripper picture and the name "Kalita Wave", and the site serves that picture, the same file the
-  Kalita Next icon uses. Expected, not verified: the new icon shows the dripper, opens full screen, and
-  starts with fresh settings.
+- **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
+  dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
+  covers them: it should open full screen, ask the grind question once, play its cues, keep the screen
+  on, and show target next to actual at Done. Also not said: whether the old "K" icon has been removed.
