@@ -32,8 +32,8 @@ place. Part 9 is its checklist. The owner tried it on a phone and answered "Yes,
 
 **And after that:** the owner asked for the tips link to be on both screens, for more room between the
 three numbers and the list, and for a subtle background behind the part that stays. That is version
-2.0.0-m1.9, on the test copy only. Part 10 is its checklist, and nothing in it has been tried on a phone
-yet.
+2.0.0-m1.9, on the test copy only. Part 10 is its checklist. The owner tried it on a phone and answered
+"Looks good", without saying which phone or which of the checks.
 
 ## Where things are
 
@@ -368,6 +368,9 @@ three numbers and the list, and a subtle background colour behind the part that 
 reads as the piece that gets replaced. This version is on the test copy only: use the Kalita Next icon.
 Close it fully first, then open it.
 
+Reported so far: "Looks good", after the owner tried it on a phone. That speaks to the look, T2 and T8.
+Which phone was not said, and T3 to T7 were not reported one by one.
+
 What moved:
 
 - **The lower part** (the list and the buttons) sits on a slightly darker cream ground with round top
@@ -426,9 +429,10 @@ list is enough. For anything that fails, which phone it was and a screenshot.
   feel under a wet finger, are for real brews to say.
 - **Version 2.0.0-m1.8, the list staying put:** S2 is reported as passing on a phone ("Yes, stays put."),
   without saying which phone. S3 to S7 were not reported one by one.
-- **Version 2.0.0-m1.9, the tinted lower part and tips on both screens:** all of Part 10. Seen only in a
-  desktop browser set to phone sizes. How the colour looks on a real screen is the owner's to judge, and
-  sound while the tips page is open could not be tried on the Mac.
+- **Version 2.0.0-m1.9, the tinted lower part and tips on both screens:** the owner tried it on a phone
+  and answered "Looks good", without saying which phone. Not reported one by one: T3 to T7, the tips
+  page during a brew and its sound above all. Sound while the tips page is open could not be tried on
+  the Mac.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen

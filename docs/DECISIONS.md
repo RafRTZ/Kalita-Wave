@@ -664,3 +664,6 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   files are unchanged; `classic.html` is the original calculator. Opened in a desktop browser at 402 by
   790, the test link shows the tinted lower part on the same pixels before and after Start, opens the
   tips page from the timer, fits with no scrolling, and reports no errors.
+- **The owner's answer, 2026-11-21.** "Looks good", after trying 2.0.0-m1.9 on a phone. Which phone, and
+  which of the checks in Part 10 of `TESTING.md`, were not said. Nothing was promoted on that answer: the
+  live app changes on the word "promote", and it stays at 2.0.0-m1.5.
