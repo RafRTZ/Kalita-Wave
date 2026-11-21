@@ -243,4 +243,9 @@ The owner's report: with the on-silent setting on, music stops at Start and does
 - **Not promoted.** `next/audio-test.html`, the sound test page, stays on the test copy only.
 - **Undoing a promote.** Revert the promote commit and push, and the old page is back at the root. Until
   then the old calculator is always at `classic.html`.
+- **Pushed and checked, 2026-11-20.** After the owner's push the site's front page is the new app. All 31
+  promoted files on the site match the repo, the 32 files of the test copy still match, and
+  `classic.html` is still the original. Opened in a desktop browser, the live link shows the new app with
+  its one-time grind question and no errors. What the live Home Screen icon does on the phones is for
+  the owner to report: Part 4 of `TESTING.md`.
 
