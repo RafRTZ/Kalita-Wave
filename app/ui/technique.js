@@ -1,5 +1,6 @@
-// Technique tips for the brewer in use. Opened from the pour plan on the brew screen, so the tips cost the
-// brew screen no height.
+// Technique tips for the brewer in use. Opened from the link beside the name of the pour plan, on the brew
+// screen and on the timer, so the tips are one tap away during a brew and cost neither screen any height.
+// The timer keeps running under the page while it is open.
 
 import { h, sheetFrame } from './dom.js';
 

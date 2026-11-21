@@ -10,6 +10,7 @@ import {
   DOSE_MIN_G,
   HEADS_UP_OPTIONS_S,
 } from '../engine/constants.js';
+import { DRAIN, isDrain } from '../engine/dialin.js';
 import { isExpired } from '../engine/timeline.js';
 import { repairHousehold, seedHousehold } from './household.js';
 
@@ -53,10 +54,24 @@ export function repairSettings(saved) {
   };
 }
 
-/** The per-bag grind adjustment for the house default recipe (stands in for a bean until Milestone 2). */
+/**
+ * The per-bag grind adjustment for the house default recipe (stands in for a bean until Milestone 2), and
+ * the latest change that a brew's answer to "How did it drain?" made to it. grind_change is kept until
+ * the next brew starts, so the brew screen can say what changed, and why, and offer to undo it.
+ */
 export function repairHouse(saved) {
   const offset = saved && Number.isFinite(saved.grind_offset) ? saved.grind_offset : 0;
-  return { grind_offset: offset };
+  const c = saved && saved.grind_change;
+  const good = c && typeof c === 'object' && Number.isFinite(c.from_offset) && (c.drain === DRAIN.FAST || c.drain === DRAIN.SLOW);
+  const change = good
+    ? {
+        brew_id: typeof c.brew_id === 'string' ? c.brew_id : null,
+        from_offset: c.from_offset,
+        drain: c.drain,
+        changed_at: typeof c.changed_at === 'string' ? c.changed_at : null,
+      }
+    : null;
+  return { grind_offset: offset, grind_change: change };
 }
 
 /** A finished brew in the shape the Milestone 2 `brews` table will use. */
@@ -72,6 +87,9 @@ export function brewRecord(run, { grindSetting = null } = {}) {
     grind_setting: grindSetting,
     target_s: run.plan.totalS,
     actual_s: run.actualS,
+    // The answer to "How did it drain?": fast, ok, or slow. Null until it is answered. Not in the brief's
+    // table: the owner asked for the question on 2026-11-21, so Milestone 2 adds the column.
+    drain: run.drain && isDrain(run.drain.answer) ? run.drain.answer : null,
     rating: null,
     taste: null,
     note: null,
@@ -80,6 +98,11 @@ export function brewRecord(run, { grindSetting = null } = {}) {
 
 export function addBrew(brews, record) {
   return [...brews.filter((b) => b.id !== record.id), record].slice(-MAX_BREWS);
+}
+
+/** Write the answer to "How did it drain?" onto a saved brew. */
+export function setBrewDrain(brews, id, drain) {
+  return brews.map((b) => (b.id === id ? { ...b, drain: isDrain(drain) ? drain : null } : b));
 }
 
 export function removeBrew(brews, id) {

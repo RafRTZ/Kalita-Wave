@@ -4,12 +4,25 @@
 // on the "next" strip, then a flash when the step starts. Each row of the step list is shaded from left to
 // right as its time runs, so the list shows at a glance how far the brew has come.
 // The screen fits one phone screen with no scrolling: the step list gives up height first.
+// The lower part (the step list with the link to the brewer's tips, and the buttons) is built and placed
+// exactly as on the brew screen, and the list is given the height it had there, so a tap on Start
+// replaces only the upper part (owner, 2026-11-21).
 
+import { DRAIN, drainByClock } from '../engine/dialin.js';
+import { formatSetting } from '../engine/grind.js';
 import { PHASE, snapshot } from '../engine/timeline.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
-import { h, setAttr, setText, toggleClass } from './dom.js';
-import { finishRow, stepRow, topActions } from './parts.js';
+import { h, segmented, setAttr, setText, toggleClass } from './dom.js';
+import { lowerPart, topActions, usePlanHeight } from './parts.js';
 import { stepLabel } from './text.js';
+
+const DRAIN_OPTIONS = Object.freeze([
+  { value: DRAIN.FAST, label: 'Too fast' },
+  { value: DRAIN.OK, label: 'About right' },
+  { value: DRAIN.SLOW, label: 'Too slow' },
+]);
+
+const CLOCK_SAYS = Object.freeze({ [DRAIN.FAST]: 'fast', [DRAIN.OK]: 'about right', [DRAIN.SLOW]: 'slow' });
 
 const HOLD_MS = 1000; // matches the transition in styles.css (.hold.holding .hold-fill)
 
@@ -48,6 +61,46 @@ function topBar(app, phaseNode) {
   return h('header', { class: 'timer-top' }, phaseNode, topActions(app));
 }
 
+/**
+ * "How did it drain?" on the Done screen. One tap moves the grind one step for the next brew, or leaves
+ * it where it is. The clock's own reading is marked as a suggestion and is never applied by itself, and
+ * leaving the question unanswered changes nothing.
+ */
+function drainCard(app, run) {
+  const { grinder, plan } = app.brewContext();
+  if (!grinder || run.plan.grindSetting == null) return null;
+  const answer = run.drain ? run.drain.answer : null;
+  const clock = run.autoEnded ? null : drainByClock(run.plan.totalS, run.actualS);
+
+  const choices = segmented({
+    label: 'How did it drain?',
+    extraClass: 'drain-seg',
+    value: answer,
+    options: DRAIN_OPTIONS,
+    onChange: (value) => app.answerDrain(value),
+  });
+  if (!answer && clock) choices.children[DRAIN_OPTIONS.findIndex((option) => option.value === clock)].classList.add('suggested');
+
+  let hint = 'Pick one, or skip it.';
+  if (answer) hint = 'Tap another to change your answer.';
+  else if (clock) hint = `The clock says ${CLOCK_SAYS[clock]}. Tap to confirm, or pick another.`;
+
+  const next = `${grinder.shortName} ${formatSetting(grinder, plan.grind.setting)}`;
+  let result = null;
+  if (answer === DRAIN.OK) result = `No change. Next time: ${next}.`;
+  else if (answer && run.drain.atEnd) result = `${next} is the end of this grinder's range, so the grind stays there.`;
+  else if (answer) result = `Next time: ${next}, one step ${answer === DRAIN.SLOW ? 'coarser' : 'finer'} than today.`;
+
+  return h(
+    'section',
+    { class: 'card drain', 'aria-label': 'How did it drain?' },
+    h('h2', { class: 'drain-q' }, 'How did it drain?'),
+    h('p', { class: 'note' }, hint),
+    choices,
+    result ? h('p', { class: 'drain-result', role: 'status' }, result) : null,
+  );
+}
+
 function doneScreen(app, run) {
   const { plan } = run;
   const unit = app.state.settings.unit;
@@ -80,6 +133,7 @@ function doneScreen(app, run) {
       'div',
       { class: 'done-body' },
       result,
+      drainCard(app, run),
       h('p', { class: 'done-line quiet' }, `${summary.join(', ')}.`),
       h('p', { class: 'done-line quiet' }, `Recipe: ${plan.sourceName}. The target is a starting point.`),
     ),
@@ -161,27 +215,33 @@ export function createTimerView(app) {
       h('div', { class: 'next-strip' }, r.nextFill, r.nextLabel, r.nextIn, r.nextCount),
     );
 
-    r.rows = plan.steps.map((step) => stepRow(step, unit));
-    r.finishRow = finishRow(plan);
-
     r.pause = h('button', { class: 'btn grow', type: 'button', onclick: () => app.togglePause() });
     r.done = h('button', { class: 'btn primary grow', type: 'button', hidden: true, onclick: () => app.done() }, 'Done');
 
-    const list = h('section', { class: 'card timer-steps', 'aria-label': 'Pour plan' }, h('ol', { class: 'steps' }, r.rows, r.finishRow));
-    // The stylesheet uses the row count to know how small the list may get before the screen scrolls.
-    list.style.setProperty('--rows', String(plan.steps.length + 1));
+    // The lower part is the same as on the brew screen. Only its buttons are this screen's own.
+    const lower = lowerPart(app, { plan, unit, buttons: [holdToReset(app), r.pause, r.done] });
+    r.rows = lower.rows;
+    r.finishRow = lower.finish;
+    r.plan = lower.plan;
 
     node.replaceChildren(
-      topBar(app, r.phase),
-      r.soundBar,
-      r.wakeNote,
-      h('div', { class: 'clock-block' }, r.clock, r.clockSub),
-      r.nowCard,
-      list,
-      h('div', { class: 'bottom-bar' }, holdToReset(app), r.pause, r.done),
+      // The upper part is this screen's own, and is what replaced the brew screen's at Start.
+      h('div', { class: 'upper' }, topBar(app, r.phase), r.soundBar, r.wakeNote, h('div', { class: 'clock-block' }, r.clock, r.clockSub), r.nowCard),
+      lower.node,
     );
     refs = r;
     builtFor = 'active';
+    fit();
+  }
+
+  /**
+   * Give the pour plan the height it had on the brew screen, if there is one for this screen size. While
+   * it holds that height the screen is marked "held", and the stylesheet lets the upper part pack tighter
+   * to make room for it. Called again when the screen changes size.
+   */
+  function fit() {
+    const held = builtFor === 'active' && refs ? usePlanHeight(refs.plan) : false;
+    node.classList.toggle('held', held);
   }
 
   /** Rebuild for the current run and settings. Call after any change of state, unit, or sound. */
@@ -193,6 +253,7 @@ export function createTimerView(app) {
       node.dataset.phase = PHASE.DONE;
       refs = null;
       builtFor = 'done';
+      fit();
       return;
     }
     buildActive(run);
@@ -267,5 +328,5 @@ export function createTimerView(app) {
     if (r.wakeNote.hidden === wakeMissing) r.wakeNote.hidden = !wakeMissing;
   }
 
-  return { node, sync, update };
+  return { node, sync, update, fit };
 }
