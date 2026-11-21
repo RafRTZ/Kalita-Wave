@@ -452,3 +452,70 @@ The owner's report: with the on-silent setting on, music stops at Start and does
   files are unchanged; `classic.html` is the original calculator. Opened in a desktop browser at 393 by
   771, the test link shows the two parts, fits with no scrolling, and reports no errors.
 
+## Grind beside the grams, and the drain question, 2026-11-21 (version 2.0.0-m1.7)
+
+- **What the owner said about 2.0.0-m1.6.** "i don't love it. since the grind size rarely changes,
+  think we can put it on the same line as the grams just with a smaller numbering to the right of the
+  grams as a recommendation? and afterwards we can ask if it drained too fast/slow after the poiur is
+  done so we can adjust for next time? plan before build". Then, while the plan was being made: "would
+  still want an easy way to inc/dec the grams of beans though", "that would also free up vertical
+  space", "changeing the grind size (from a standard recommendation) just isn't something that i'll do
+  until after we brew", and "if we changed it recently, maybe have a popup recommendation. can that be
+  shared between my wife and I?"
+- **The plan.** Shown as a drawing of two screens and four steps, with two choices left open and a pick
+  named for each. The owner answered "Build it", so both picks stand: the message about a changed grind
+  is a line on the brew screen, not a popup that must be closed, and the small "Grind" and "Brew"
+  labels stay.
+- **Brew screen.** The Grind part is one row: minus, the grams, plus, and beside them the grind number,
+  set smaller (24 px against 34). Finer, Coarser, and the "Start here. 17 to 19 is normal" line are
+  gone from this screen. The row is 87 px shorter than the card it replaces, and the pour plan rows
+  grew from 44 px to 52 px with it. A tap on the grind number opens a grind page with the range, the
+  microns, and Finer and Coarser.
+- **After Done.** The Done screen asks "How did it drain?" with Too fast, About right, and Too slow.
+  Too slow moves the grind one step coarser for the next brew, too fast one step finer, about right
+  leaves it. The clock's own reading is ringed with a dashed line as a suggestion and is never applied
+  by itself. The change is counted from the grind the brew was made with, so a changed answer replaces
+  the earlier one and never stacks. Skipping the question changes nothing.
+- **The message.** After an answer that moved the grind, the brew screen shows a line under the row,
+  for example "Grind is now 19, was 18. Last brew drained slow." with Undo, and draws the grind number
+  in the accent colour. It stays until the next brew starts.
+- **Where the rule comes from.** Brief 6.3: more than 25 s over the target suggests one step coarser,
+  more than 25 s under suggests one step finer, "Apply or dismiss; never automatic". Both numbers are
+  in `constants.js`, and the rule is in the new `engine/dialin.js`. Nothing was invented. The brief's
+  rule also listens to taste, bitter or sour; that part waits for the bean log in Milestone 2.
+- **Where this departs from the brief, by the owner's wish.**
+  1. Brief 5.2 put "finer and coarser buttons beside the grind on the brew screen". They are on the
+     grind page now, one tap away.
+  2. Brief 5.2 wanted the grind always shown as "Virtuoso 18, start here, 17-19 is normal". The brew
+     screen shows "18" and "Virtuoso grind"; the rest of that line is on the grind page.
+  3. Brief 6.3 put the dial-in line "on the next brew of that bean". The question is asked straight
+     after Done instead, and the next brew shows what came of it.
+  4. Brief 6.2's `brews` table gains one field, `drain`: fast, ok, or slow, empty until answered.
+- **Sharing between the two phones.** Not possible in this version, and the owner was told so: each
+  phone still stores everything by itself, and shared storage is what Milestone 2 builds. What this
+  version saves is in the shape Milestone 2 will sync. The house record, which stands in for a bag
+  until then, carries `grind_offset` and `grind_change` (`brew_id`, `from_offset`, `drain`,
+  `changed_at`), and each saved brew carries `drain`. The Milestone 2 session was given this as part of
+  its work.
+- **Decisions the owner did not specify.** Any of these can be undone.
+  1. The words: "How did it drain?", "Too fast", "About right", "Too slow", and the hint "The clock
+     says slow. Tap to confirm, or pick another."
+  2. The dose reads "36 g" over "coffee". In ounces the line under it gives the dose in ounces.
+  3. A grind changed by hand on the grind page clears the message, since Undo would no longer mean one
+     thing.
+  4. "Back to timer" on the Done screen takes the answer back together with its grind change.
+  5. At the end of the grinder's range the grind stays where it is, and the Done screen says so.
+- **Checked on the Mac.** In a desktop browser at 393 by 771: the brew screen fits with the message
+  showing and without it, in grams and in ounces, at 36 g on the Wave 185, at 18 g on the Wave 155, with
+  a caution (45 g on the Wave 185), and with a warning (36 g on the Wave 155, which scrolled by 28 px
+  in 2.0.0-m1.6 and now fits). The whole round was run: Start, Done, each answer in turn, "Back to
+  timer", Done again, New brew, the message, Undo, and a new Start that clears the message. The numbers
+  saved on the way were read back and are right at each step. The brew screen, the timer, and the Done
+  screen also fit at 375 by 647 (an iPhone SE), and the brew screen at 430 by 839 and at 393 by 706.
+  One case was found that scrolls: the largest dose (60 g) on the Wave 185 at the iPhone SE size with
+  the message showing, by 79 px. Other doses outside a brewer's limits were not all tried at that size.
+  145 tests pass, 12 of them new.
+- **Not verified.** Anything on an iPhone. Part 8 of `TESTING.md` is the phone checklist.
+- **Where it is.** On the test copy only. The live app stays at 2.0.0-m1.5 until the owner says
+  "promote".
+

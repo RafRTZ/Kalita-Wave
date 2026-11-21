@@ -484,49 +484,102 @@ a {
 }
 
 .setup {
-  padding: 8px 12px 10px;
+  padding: 8px 12px;
 }
 
-.stepper.grind {
-  border-top: 1px solid var(--line);
-  margin-top: 8px;
-  padding-top: 8px;
+/* One row for the grinder: the dose with its minus and plus, then the grind to use, set smaller. */
+.dose-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Finer and Coarser are used rarely, so they are drawn smaller than they are. The outline is 44 px tall,
-   inside a tap area that keeps the full 56, and the row takes its height from the outline. */
-.nudge {
-  flex: 0 0 88px;
-  position: relative;
-  margin: -6px 0;
-  padding: 0 6px;
+/* The gaps are tight on purpose: on a 375 px phone the row has 4 px to spare. */
+.dose-row .stepper {
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+}
+
+/* "36 g": the number is a box to type in, just wide enough for two digits, with the unit beside it. */
+.dose-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.dose-line .dose-input {
+  width: 2.1ch;
+  text-align: right;
+}
+
+.dose-unit {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sub);
+}
+
+/* The grind beside the dose. It is a number to read, not a control to set, so it carries no buttons. A
+   tap on it opens the grind page. */
+.grind-chip {
+  flex: 0 1 auto;
+  min-width: var(--tap);
+  max-width: 44%;
+  min-height: var(--tap);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 10px;
   border: 0;
+  border-left: 1px solid var(--line);
   background: none;
+  color: var(--ink);
+}
+
+.grind-chip .unit-cap {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.grind-chip .unit-cap::after {
+  content: '\203A';
+  margin-left: 4px;
   font-size: 16px;
+  line-height: 1;
+  color: var(--accent);
 }
 
-.nudge::before {
-  content: '';
-  position: absolute;
-  top: 6px;
-  right: 0;
-  bottom: 6px;
-  left: 0;
-  border: 1px solid var(--edge);
-  border-radius: 12px;
+/* A grind that the last brew's answer changed is drawn in the accent colour, to go with the line under it. */
+.grind-chip.changed .grind-value {
+  color: var(--accent);
 }
 
-.grind-note {
+/* What changed since the last brew, why, and Undo. It stays until the next brew starts. */
+.grind-change {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--fill);
   font-size: 14px;
   line-height: 1.3;
-  color: var(--sub);
-  text-align: center;
-  text-wrap: balance;
-  margin-top: 6px;
+}
+
+/* Finer and Coarser, on the grind page. */
+.nudge {
+  flex: 0 0 104px;
+  padding: 8px 6px;
 }
 
 /* A full-height tap area that does not make its line any taller. */
-.grind-note .link,
+.grind-change .link,
 .group-head .link {
   display: inline-flex;
   align-items: center;
@@ -535,9 +588,10 @@ a {
 }
 
 /* Undo sits just above the tips link. Where their tap areas meet, Undo keeps all of its own. */
-.grind-note .link {
+.grind-change .link {
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 /* Water, temperature, and finish time: the top strip of the Brew card. */
@@ -657,6 +711,11 @@ a {
   padding: 0 16px;
   border-top: 1px solid var(--line);
   line-height: 1.2;
+}
+
+/* On the brew screen the rows take up the height that the slim Grind row gave back. */
+.plan .step-row {
+  flex-basis: 52px;
 }
 
 .step-row .t {
@@ -975,6 +1034,41 @@ a {
   color: var(--sub);
 }
 
+/* "How did it drain?" on the Done screen: three answers, one tap, or none. */
+.drain {
+  margin: 4px 0;
+  padding: 12px 12px 14px;
+}
+
+.drain-q {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.drain .note {
+  margin: 2px 0 10px;
+}
+
+.drain-seg button {
+  padding: 6px 4px;
+  font-size: 16px;
+}
+
+/* The answer the clock suggests, before anything is tapped: a dashed ring where a chosen answer has a
+   solid one. */
+.seg button.suggested {
+  color: var(--ink);
+  outline: 2px dashed var(--accent);
+  outline-offset: -6px;
+}
+
+.drain-result {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
 /* ---------- sheets (settings, scale help, technique, calibration) ---------- */
 
 .sheet-layer {
@@ -1272,12 +1366,7 @@ textarea.input {
   }
 
   .setup {
-    padding: 4px 12px 8px;
-  }
-
-  .stepper.grind {
-    margin-top: 4px;
-    padding-top: 4px;
+    padding: 4px 12px;
   }
 
   .group-head {

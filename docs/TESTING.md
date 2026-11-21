@@ -19,8 +19,10 @@ and on which phone, has not been noted. Part 6 is the short list for the live ic
 reported that the icon shows the new look on both phones, and nothing else from that list yet.
 
 **Also since 2026-11-21:** the owner asked for a smaller grind row and for the screen to be split into a
-part for grinding and a part for brewing. That is version 2.0.0-m1.6, on the test copy only (the Kalita
-Next icon). Part 7 is its checklist. Nothing in it has been tried on a phone yet.
+part for grinding and a part for brewing. That was version 2.0.0-m1.6. The owner looked at it and did not
+love it, and asked for the grind beside the grams and a question after each brew instead. That is version
+2.0.0-m1.7, on the test copy only (the Kalita Next icon). Part 8 is its checklist, and nothing in it has
+been tried on a phone yet. Part 7 is kept as a record of the version it replaced.
 
 ## Where things are
 
@@ -260,11 +262,13 @@ the old look, wait ten minutes and try again: GitHub lets phones keep files for 
 | L3 | One real brew | Brew as usual from the Kalita icon | Cues play, the screen stays on, the shade moves across the steps, and Done shows target next to actual |
 | L4 | The second phone | Open Kalita on it, then tap Start | Both screens fit, with nothing cut off and nothing to scroll to |
 
-## Part 7: Grind and Brew (version 2.0.0-m1.6)
+## Part 7: Grind and Brew (version 2.0.0-m1.6, replaced by Part 8)
+
+Kept as a record. Version 2.0.0-m1.7 replaced this one the same day, so G3 and G4 no longer apply: the
+grind row they describe is gone. G2, G5, and G6 are covered again in Part 8.
 
 On 2026-11-21 the owner asked for the grind row to be smaller than the dose, and for the top of the
-screen (grinding) to be set apart from the bottom (brewing). This version is on the test copy only: use
-the Kalita Next icon. Close it fully first, then open it.
+screen (grinding) to be set apart from the bottom (brewing).
 
 What moved:
 
@@ -280,6 +284,38 @@ What moved:
 | G4 | Finer and Coarser | Tap Coarser once, then tap Undo in the line that appears | Each is hit first time. The grind number goes up by one step, then back |
 | G5 | Still one screen | Try to drag the brew screen up and down, at 36 g on the Wave 185 and at 18 g on the Wave 155 | Nothing scrolls and nothing is cut off |
 | G6 | Tips | Tap "Wave 185 tips" | The tips page opens. Tap Close to come back |
+
+## Part 8: grind beside the grams, and "How did it drain?" (version 2.0.0-m1.7)
+
+On 2026-11-21 the owner asked for the grind to sit beside the grams as a smaller number to read, and for
+a question after each brew that adjusts the grind for next time. This version is on the test copy only:
+use the Kalita Next icon. Close it fully first, then open it.
+
+What moved:
+
+- **The grind** is the smaller number at the right of the grams, on the same row. It has no buttons.
+- **Finer and Coarser**, and the "Start here. 17 to 19 is normal" line, are on a page of their own. Tap
+  the grind number to open it.
+- **After Done** there is one question, "How did it drain?".
+- **Each phone keeps its own grind for now.** A change made on one phone does not reach the other until
+  Milestone 2 brings accounts.
+
+| # | Check | How | Pass looks like |
+|---|---|---|---|
+| H1 | The right version | Tap the round button at the bottom left, then scroll to "About this copy" | Version 2.0.0-m1.7. Tap Done at the top right to close |
+| H2 | One row for grinding | Look under the word "GRIND" | One row: minus, the grams, plus, then a smaller grind number with "Virtuoso grind" under it. No Finer or Coarser |
+| H3 | Grams still easy | Tap minus and plus a few times | Each tap is hit first time, and water, finish, and the pour plan change with the grams |
+| H4 | Still one screen | Try to drag the brew screen up and down, at 36 g on the Wave 185 and at 18 g on the Wave 155 | Nothing scrolls and nothing is cut off. The pour plan rows are taller than before |
+| H5 | The grind page | Tap the grind number | A page opens with the number, Finer and Coarser, and "Start here. 17 to 19 is normal". Tap Close to come back |
+| H6 | The question | Brew as usual, and tap Done when the bed is dry | Under Target and Actual: "How did it drain?" with Too fast, About right, and Too slow. If the brew ran more than 25 seconds over or under the target, one of them has a dashed ring |
+| H7 | An answer moves the grind | Tap "Too slow" | The line under the choices reads "Next time: Virtuoso 19, one step coarser than today." (your numbers may differ). Tapping "About right" instead reads "No change" |
+| H8 | The message | With "Too slow" chosen, tap New brew | Under the grams: "Grind is now 19, was 18. Last brew drained slow." with Undo, and the grind number is brown |
+| H9 | Undo | Tap Undo | The message goes and the grind is back to what it was |
+| H10 | The message leaves by itself | Answer "Too slow" after one brew and leave the message alone. Brew again, then look at the brew screen after that brew | The message is gone. The grind keeps its new number |
+
+What to send back: for anything that fails, which phone it was and what you saw. A screenshot helps most.
+Also worth a word: whether the three answers are easy to hit with a wet finger, and whether one step per
+brew feels like the right size of change.
 
 ## Expected to fail, by design for now
 
@@ -310,8 +346,10 @@ What moved:
   that the Kalita icon shows the new look on both phones. Not reported one by one: L2 to L4 in Part 6
   (settings kept, one real brew, and the timer on the second phone). On the Mac it has only been seen in
   a desktop browser set to phone sizes, whose engine is not Safari's.
-- **Version 2.0.0-m1.6, Grind and Brew:** all of Part 7. Seen only in a desktop browser set to phone
-  sizes. How the smaller Finer and Coarser feel under a wet finger is for a phone to say.
+- **Version 2.0.0-m1.6, Grind and Brew:** replaced by 2.0.0-m1.7 before any check was reported.
+- **Version 2.0.0-m1.7, grind beside the grams and the drain question:** all of Part 8. Seen only in a
+  desktop browser set to phone sizes. Whether one step per brew is the right size of change, and how the
+  three answers feel under a wet finger, are for real brews to say.
 - **After the promote:** P5 is reported as passing, and the new live icon is reported as showing the
   dripper on both phones. Not reported one by one: P1 to P4. The first real brew from the new icon
   covers them: it should open full screen, ask the grind question once, play its cues, keep the screen

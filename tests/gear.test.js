@@ -281,7 +281,7 @@ test('a finished brew is kept in the Milestone 2 brews shape', () => {
   const run = finishRun(createRun(plan, { nowMs: 1_800_000_000_000, countInS: 5, headsUpS: 5 }), 1_800_000_000_000 + 283_000);
   const record = brewRecord(run, { grindSetting: 18 });
   assert.deepEqual(Object.keys(record), [
-    'id', 'bean_id', 'member_id', 'brewed_at', 'brewer_id', 'dose_g', 'water_g', 'grind_setting', 'target_s', 'actual_s', 'rating', 'taste', 'note',
+    'id', 'bean_id', 'member_id', 'brewed_at', 'brewer_id', 'dose_g', 'water_g', 'grind_setting', 'target_s', 'actual_s', 'drain', 'rating', 'taste', 'note',
   ]);
   assert.equal(record.brewer_id, 'wave185');
   assert.equal(record.dose_g, 36);
@@ -300,7 +300,7 @@ test('loading: a run in progress is resumed, a stale one is dropped, gear and se
   const fresh = loadAll(store, 1_800_000_000_000);
   assert.equal(fresh.run, null);
   assert.deepEqual(fresh.household, seedHousehold());
-  assert.deepEqual(fresh.house, { grind_offset: 0 });
+  assert.deepEqual(fresh.house, { grind_offset: 0, grind_change: null });
   assert.deepEqual(fresh.brews, []);
 
   const plan = translate(HOUSE_RECIPE, brewerById('wave185'), 36);

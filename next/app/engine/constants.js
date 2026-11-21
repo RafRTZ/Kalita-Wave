@@ -48,6 +48,11 @@ export const STEP_FLASH_S = 2; // how long a step that just started stays highli
 export const AUTO_END_AFTER_S = 600; // a run nobody marks Done ends itself this long after the target
 export const PAUSE_EXPIRES_S = 1800; // a paused run older than this is dropped
 
+// Dial-in after a brew (brief 6.3). The brief's rule also listens to taste, bitter or sour; that part
+// arrives with the bean log in Milestone 2.
+export const DIAL_IN_TOLERANCE_S = 25; // more than this over the target is a slow drain, more than this under a fast one
+export const DIAL_IN_STEPS = 1; // the grind moves this many steps of the grinder after a brew, never more
+
 // The house default recipe, used when no bean is selected. It is the brew guide from a real roaster card
 // (device printed as "HARIO CONE").
 export const HOUSE_RECIPE = Object.freeze({

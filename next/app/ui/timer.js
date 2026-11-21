@@ -5,11 +5,21 @@
 // right as its time runs, so the list shows at a glance how far the brew has come.
 // The screen fits one phone screen with no scrolling: the step list gives up height first.
 
+import { DRAIN, drainByClock } from '../engine/dialin.js';
+import { formatSetting } from '../engine/grind.js';
 import { PHASE, snapshot } from '../engine/timeline.js';
 import { formatClock, formatDose, formatWeight } from '../engine/units.js';
-import { h, setAttr, setText, toggleClass } from './dom.js';
+import { h, segmented, setAttr, setText, toggleClass } from './dom.js';
 import { finishRow, stepRow, topActions } from './parts.js';
 import { stepLabel } from './text.js';
+
+const DRAIN_OPTIONS = Object.freeze([
+  { value: DRAIN.FAST, label: 'Too fast' },
+  { value: DRAIN.OK, label: 'About right' },
+  { value: DRAIN.SLOW, label: 'Too slow' },
+]);
+
+const CLOCK_SAYS = Object.freeze({ [DRAIN.FAST]: 'fast', [DRAIN.OK]: 'about right', [DRAIN.SLOW]: 'slow' });
 
 const HOLD_MS = 1000; // matches the transition in styles.css (.hold.holding .hold-fill)
 
@@ -48,6 +58,46 @@ function topBar(app, phaseNode) {
   return h('header', { class: 'timer-top' }, phaseNode, topActions(app));
 }
 
+/**
+ * "How did it drain?" on the Done screen. One tap moves the grind one step for the next brew, or leaves
+ * it where it is. The clock's own reading is marked as a suggestion and is never applied by itself, and
+ * leaving the question unanswered changes nothing.
+ */
+function drainCard(app, run) {
+  const { grinder, plan } = app.brewContext();
+  if (!grinder || run.plan.grindSetting == null) return null;
+  const answer = run.drain ? run.drain.answer : null;
+  const clock = run.autoEnded ? null : drainByClock(run.plan.totalS, run.actualS);
+
+  const choices = segmented({
+    label: 'How did it drain?',
+    extraClass: 'drain-seg',
+    value: answer,
+    options: DRAIN_OPTIONS,
+    onChange: (value) => app.answerDrain(value),
+  });
+  if (!answer && clock) choices.children[DRAIN_OPTIONS.findIndex((option) => option.value === clock)].classList.add('suggested');
+
+  let hint = 'Pick one, or skip it.';
+  if (answer) hint = 'Tap another to change your answer.';
+  else if (clock) hint = `The clock says ${CLOCK_SAYS[clock]}. Tap to confirm, or pick another.`;
+
+  const next = `${grinder.shortName} ${formatSetting(grinder, plan.grind.setting)}`;
+  let result = null;
+  if (answer === DRAIN.OK) result = `No change. Next time: ${next}.`;
+  else if (answer && run.drain.atEnd) result = `${next} is the end of this grinder's range, so the grind stays there.`;
+  else if (answer) result = `Next time: ${next}, one step ${answer === DRAIN.SLOW ? 'coarser' : 'finer'} than today.`;
+
+  return h(
+    'section',
+    { class: 'card drain', 'aria-label': 'How did it drain?' },
+    h('h2', { class: 'drain-q' }, 'How did it drain?'),
+    h('p', { class: 'note' }, hint),
+    choices,
+    result ? h('p', { class: 'drain-result', role: 'status' }, result) : null,
+  );
+}
+
 function doneScreen(app, run) {
   const { plan } = run;
   const unit = app.state.settings.unit;
@@ -80,6 +130,7 @@ function doneScreen(app, run) {
       'div',
       { class: 'done-body' },
       result,
+      drainCard(app, run),
       h('p', { class: 'done-line quiet' }, `${summary.join(', ')}.`),
       h('p', { class: 'done-line quiet' }, `Recipe: ${plan.sourceName}. The target is a starting point.`),
     ),

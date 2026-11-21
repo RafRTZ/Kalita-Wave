@@ -13,8 +13,20 @@ import {
   setNote,
   setOffset,
 } from './data/household.js';
-import { addBrew, brewRecord, loadAll, removeBrew, saveBrews, saveHouse, saveHousehold, saveRun, saveSettings } from './data/local.js';
+import {
+  addBrew,
+  brewRecord,
+  loadAll,
+  removeBrew,
+  saveBrews,
+  saveHouse,
+  saveHousehold,
+  saveRun,
+  saveSettings,
+  setBrewDrain,
+} from './data/local.js';
 import { DOSE_MAX_G, DOSE_MIN_G, HOUSE_RECIPE } from './engine/constants.js';
+import { isDrain, offsetAfterDrain } from './engine/dialin.js';
 import { formatSetting, nudgeOffset } from './engine/grind.js';
 import { planBrew } from './engine/plan.js';
 import {
@@ -38,6 +50,7 @@ import { createStore } from './platform/storage.js';
 import { createWakeLock } from './platform/wakelock.js';
 import { renderBrew } from './ui/brew.js';
 import { addGearSheet, calibrateSheet, customGrinderSheet } from './ui/gear.js';
+import { grindSheet } from './ui/grind.js';
 import { scaleHelpSheet } from './ui/scale-help.js';
 import { settingsSheet } from './ui/settings.js';
 import { techniqueSheet } from './ui/technique.js';
@@ -57,6 +70,7 @@ const SHEETS = {
   settings: settingsSheet,
   'scale-help': scaleHelpSheet,
   technique: techniqueSheet,
+  grind: grindSheet,
   calibrate: calibrateSheet,
   'custom-grinder': customGrinderSheet,
   'add-gear': addGearSheet,
@@ -73,23 +87,40 @@ function currentCard() {
   return HOUSE_RECIPE;
 }
 
-function brewContext() {
+/** The gear in use and the dose for it. */
+function gearNow() {
   const brewers = gearOf(state.household, 'brewer').map((item) => ({ item, profile: profileOf(item) }));
   const brewerItem = activeItem(state.household, 'brewer');
   const brewer = profileOf(brewerItem);
   const grinderItem = activeItem(state.household, 'grinder');
   const grinder = profileOf(grinderItem);
   const doseG = state.settings.doseByBrewer[brewerItem.id] ?? brewer.defaultDoseG;
-  const plan = planBrew({
+  return { brewers, brewerItem, brewer, grinderItem, grinder, doseG };
+}
+
+/** The brew for that gear, with the recipe's grind adjustment set to a given value. */
+function planAt(gear, grindOffset) {
+  return planBrew({
     card: currentCard(),
-    brewer,
-    doseG,
-    grinder,
-    grinderOffset: grinderItem ? grinderItem.offset : 0,
-    beanOffset: state.house.grind_offset,
-    otherBrewers: brewers.filter((b) => b.item.id !== brewerItem.id).map((b) => b.profile),
+    brewer: gear.brewer,
+    doseG: gear.doseG,
+    grinder: gear.grinder,
+    grinderOffset: gear.grinderItem ? gear.grinderItem.offset : 0,
+    beanOffset: grindOffset,
+    otherBrewers: gear.brewers.filter((b) => b.item.id !== gear.brewerItem.id).map((b) => b.profile),
   });
-  return { brewers, brewerItem, brewer, grinderItem, grinder, doseG, plan, unit: state.settings.unit };
+}
+
+function brewContext() {
+  const gear = gearNow();
+  const plan = planAt(gear, state.house.grind_offset);
+  // A grind that the last brew's answer changed: what it was, what it is now, and why.
+  const change = state.house.grind_change;
+  const grindChange =
+    change && gear.grinder
+      ? { drain: change.drain, was: planAt(gear, change.from_offset).grind.setting, now: plan.grind.setting }
+      : null;
+  return { ...gear, plan, grindChange, unit: state.settings.unit };
 }
 
 /** What a run remembers about its brew, so the timer never depends on later changes to settings or gear. */
@@ -249,6 +280,8 @@ function start() {
     headsUpS: state.settings.headsUpS,
   });
   setRun(run);
+  // The message about a changed grind has done its job once the next brew starts.
+  if (state.house.grind_change) setHouse({ ...state.house, grind_change: null });
   armSound();
   wake.acquire();
   renderView();
@@ -292,10 +325,50 @@ function reopen() {
   if (!run || run.doneAtMs == null) return;
   state.brews = removeBrew(state.brews, run.id);
   saveBrews(store, state.brews);
-  setRun(reopenRun(run));
+  // The brew is not over after all, so an answer to "How did it drain?" is taken back with its grind change.
+  const { drain, ...unanswered } = run;
+  if (drain) setHouse({ grind_offset: drain.fromOffset, grind_change: null });
+  setRun(reopenRun(unanswered));
   armSound();
   wake.acquire();
   renderView();
+}
+
+/**
+ * The answer to "How did it drain?" on the Done screen: fast, ok, or slow. Slow moves the grind one step
+ * coarser for the next brew and fast one step finer, counted from the grind this brew was made with, so
+ * a changed answer replaces the earlier one. Nothing moves until one of the three is tapped.
+ */
+function answerDrain(answer) {
+  const run = state.run;
+  if (!run || run.doneAtMs == null || !isDrain(answer)) return;
+  const gear = gearNow();
+  const fromOffset = run.drain ? run.drain.fromOffset : state.house.grind_offset;
+  let offset = fromOffset;
+  let atEnd = false;
+  if (gear.grinder) {
+    const wanted = offsetAfterDrain(fromOffset, gear.grinder, answer);
+    // A step that cannot move the setting, at the end of the grinder's range, is not kept.
+    if (planAt(gear, wanted).grind.setting !== planAt(gear, fromOffset).grind.setting) offset = wanted;
+    else atEnd = wanted !== fromOffset;
+  }
+  setHouse({
+    grind_offset: offset,
+    grind_change:
+      offset === fromOffset ? null : { brew_id: run.id, from_offset: fromOffset, drain: answer, changed_at: new Date().toISOString() },
+  });
+  setRun({ ...run, drain: { answer, fromOffset, atEnd } });
+  state.brews = setBrewDrain(state.brews, run.id, answer);
+  saveBrews(store, state.brews);
+  renderView();
+}
+
+/** "Undo" beside the message about a changed grind: the grind goes back to what the last brew used. */
+function undoGrindChange() {
+  const change = state.house.grind_change;
+  if (!change) return;
+  setHouse({ grind_offset: change.from_offset, grind_change: null });
+  render();
 }
 
 function clearRun() {
@@ -328,24 +401,32 @@ function stepDose(delta) {
   setDose(brewContext().doseG + delta);
 }
 
-function setHouseOffset(offset) {
-  state.house = { ...state.house, grind_offset: offset };
-  saveHouse(store, state.house);
+function setHouse(house) {
+  state.house = house;
+  saveHouse(store, house);
 }
 
-/** Finer (-1) or coarser (+1) for this recipe. A tap that cannot move the setting any further is ignored. */
+/** A grind adjustment made by hand. It replaces whatever the last brew's answer changed, message included. */
+function setHouseOffset(offset) {
+  setHouse({ grind_offset: offset, grind_change: null });
+}
+
+/**
+ * Finer (-1) or coarser (+1) for this recipe, from the grind page. A tap that cannot move the setting any
+ * further is ignored.
+ */
 function nudgeGrind(coarserOrFiner) {
-  const before = brewContext();
-  if (!before.grinder) return;
+  const gear = gearNow();
+  if (!gear.grinder) return;
   const previous = state.house.grind_offset;
-  setHouseOffset(nudgeOffset(previous, before.grinder, coarserOrFiner));
-  if (brewContext().plan.grind.setting === before.plan.grind.setting) setHouseOffset(previous);
-  renderView();
+  const wanted = nudgeOffset(previous, gear.grinder, coarserOrFiner);
+  if (planAt(gear, wanted).grind.setting !== planAt(gear, previous).grind.setting) setHouseOffset(wanted);
+  render();
 }
 
 function resetGrindNudge() {
   setHouseOffset(0);
-  renderView();
+  render();
 }
 
 function setUnit(unit) {
@@ -459,6 +540,8 @@ const app = {
   stepDose,
   nudgeGrind,
   resetGrindNudge,
+  answerDrain,
+  undoGrindChange,
   setUnit,
   setSetting,
   openSheet,
